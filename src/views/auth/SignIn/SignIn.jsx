@@ -1,7 +1,7 @@
 import Logo from '@/components/template/Logo'
 import Alert from '@/components/ui/Alert'
 import SignInForm from './components/SignInForm'
-import OauthSignIn from './components/OauthSignIn'
+// import OauthSignIn from './components/OauthSignIn'
 import ActionLink from '@/components/shared/ActionLink'
 import useTimeOutMessage from '@/utils/hooks/useTimeOutMessage'
 import { useThemeStore } from '@/store/themeStore'
@@ -59,10 +59,10 @@ export const SignInBase = ({
                     </p>
                     <div className="border-t border-gray-200 dark:border-gray-800 flex-1 mt-[1px]" />
                 </div>
-                <OauthSignIn
-                    disableSubmit={disableSubmit}
-                    setMessage={setMessage}
-                />
+                {/*<OauthSignIn*/}
+                {/*    disableSubmit={disableSubmit}*/}
+                {/*    setMessage={setMessage}*/}
+                {/*/>*/}
             </div>
             <div>
                 <div className="mt-6 text-center">
