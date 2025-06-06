@@ -5,7 +5,7 @@ const SyntaxHighlighter = (props) => {
     const { children, ...rest } = props
 
     return (
-        <Prism style={oneDark} className="not-prose text-sm" {...rest}>
+        <Prism style={oneDark} {...rest}>
             {children}
         </Prism>
     )

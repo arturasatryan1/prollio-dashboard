@@ -42,7 +42,7 @@ const RichTextEditor = (props) => {
               ],
               editorProps: {
                   attributes: {
-                      class: 'm-2! focus:outline-hidden',
+                      class: 'm-2 focus:outline-hidden',
                   },
               },
               content,

@@ -6,12 +6,7 @@ import withHeaderItem from '@/utils/hoc/withHeaderItem'
 import { useLocaleStore } from '@/store/localeStore'
 import { HiCheck } from 'react-icons/hi'
 
-const languageList = [
-    { label: 'English', value: 'en', flag: 'US' },
-    { label: 'Chinese', value: 'zh', flag: 'CN' },
-    { label: 'Espanol', value: 'es', flag: 'ES' },
-    { label: 'Arabic', value: 'ar', flag: 'SA' },
-]
+const languageList = [{ label: 'English', value: 'en', flag: 'US' }]
 
 const _LanguageSelector = ({ className }) => {
     const { currentLang: locale, setLang } = useLocaleStore((state) => state)

@@ -26,7 +26,7 @@ function AuthProvider({ children }) {
         (state) => state.setSessionSignedIn,
     )
     const { token, setToken } = useToken()
-    const [tokenState, setTokenState] = useState(token)
+    const  [tokenState, setTokenState] = useState(token)
 
     const authenticated = Boolean(tokenState && signedIn)
 

@@ -5,10 +5,6 @@ import Button from '@/components/ui/Button'
 import Dialog from '@/components/ui/Dialog'
 import ScrollBar from '@/components/ui/ScrollBar'
 import navigationIcon from '@/configs/navigation-icon.config'
-import {
-    GUIDE_PREFIX_PATH,
-    UI_COMPONENTS_PREFIX_PATH,
-} from '@/constants/route.constant'
 import { apiGetSearchResult } from '@/services/CommonService'
 import debounce from 'lodash/debounce'
 import { HiOutlineSearch, HiChevronRight } from 'react-icons/hi'
@@ -19,32 +15,7 @@ import Highlighter from 'react-highlight-words'
 const recommendedSearch = [
     {
         title: 'Recommended',
-        data: [
-            {
-                key: 'guide.documentation',
-                path: `${GUIDE_PREFIX_PATH}/documentation/introduction`,
-                title: 'Documentation',
-                icon: 'documentation',
-                category: 'Docs',
-                categoryTitle: 'Guide',
-            },
-            {
-                key: 'guide.changeLog',
-                path: `${GUIDE_PREFIX_PATH}/changelog`,
-                title: 'Changelog',
-                icon: 'changeLog',
-                category: 'Docs',
-                categoryTitle: 'Guide',
-            },
-            {
-                key: 'uiComponent.common.button',
-                path: `${UI_COMPONENTS_PREFIX_PATH}/button`,
-                title: 'Button',
-                icon: 'uiCommonButton',
-                category: 'Common',
-                categoryTitle: 'UI Components',
-            },
-        ],
+        data: [],
     },
 ]
 
@@ -154,7 +125,7 @@ const _Search = ({ className }) => {
                 <PiMagnifyingGlassDuotone />
             </div>
             <Dialog
-                contentClassName="!p-0"
+                contentClassName="p-0"
                 isOpen={searchDialogOpen}
                 closable={false}
                 onRequestClose={handleSearchClose}
