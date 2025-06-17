@@ -25,6 +25,12 @@ const authRoute = [
         component: lazy(() => import('@/views/auth/ResetPassword')),
         authority: [],
     },
+    {
+        key: 'setPassword',
+        path: `/set-password`,
+        component: lazy(() => import('@/views/auth/SetPassword/SetPassword.jsx')),
+        authority: [],
+    },
 ]
 
 export default authRoute

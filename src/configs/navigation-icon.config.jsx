@@ -1,15 +1,20 @@
-import {PiArrowsInDuotone, PiBagSimpleDuotone, PiBookBookmarkDuotone, PiBookOpenUserDuotone,} from 'react-icons/pi'
-import {FiHome, FiSettings, FiBarChart2, FiUser} from 'react-icons/fi'
-
-import {RiBroadcastLine, RiCalendarEventLine, RiCustomerService2Line, RiQuestionLine, RiUserSmileLine} from 'react-icons/ri'
+import {
+    PiArrowsInDuotone,
+    PiBagSimpleDuotone,
+    PiBookBookmarkDuotone,
+    PiBookOpenUserDuotone, PiCalendarDuotone,
+    PiChartBarDuotone, PiRocketDuotone, PiUsersDuotone,
+} from 'react-icons/pi'
+import {FiSettings, FiUser} from 'react-icons/fi'
+import {RiBroadcastLine, RiCalendarEventLine, RiCustomerService2Line, RiQuestionLine} from 'react-icons/ri'
 import {FaUsers} from 'react-icons/fa'
 import {MdOutlinePayments} from 'react-icons/md'
 
-
 const navigationIcon = {
-    home: <FiBarChart2/>,
-    channel: <RiBroadcastLine/>,
-    calendar: <RiCalendarEventLine/>,
+    overview: <PiChartBarDuotone/>,
+    experts: <PiUsersDuotone />,
+    channel: <PiRocketDuotone/>,
+    calendar: <PiCalendarDuotone/>,
     users: <FaUsers/>,
     profile: <FiUser/>,
     dollar: <MdOutlinePayments/>,

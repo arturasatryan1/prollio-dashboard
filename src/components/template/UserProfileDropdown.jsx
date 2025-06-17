@@ -3,13 +3,24 @@ import Dropdown from '@/components/ui/Dropdown'
 import withHeaderItem from '@/utils/hoc/withHeaderItem'
 import { useSessionUser } from '@/store/authStore'
 import { Link } from 'react-router'
-import { PiUserDuotone, PiSignOutDuotone } from 'react-icons/pi'
+import {PiUserDuotone, PiSignOutDuotone, PiGearDuotone, PiPulseDuotone} from 'react-icons/pi'
 import { useAuth } from '@/auth'
 
-const dropdownItemList = []
+const dropdownItemList = [
+    {
+        label: 'Profile',
+        path: '/account/settings',
+        icon: <PiUserDuotone />,
+    },
+    {
+        label: 'Activity Log',
+        path: '/account/activity-log',
+        icon: <PiPulseDuotone />,
+    },
+]
 
 const _UserDropdown = () => {
-    const { avatar, userName, email } = useSessionUser((state) => state.user)
+    const { avatar, first_name, last_name, email } = useSessionUser((state) => state.user)
 
     const { signOut } = useAuth()
 
@@ -37,7 +48,7 @@ const _UserDropdown = () => {
                     <Avatar {...avatarProps} />
                     <div>
                         <div className="font-bold text-gray-900 dark:text-gray-100">
-                            {userName || 'Anonymous'}
+                            {`${first_name} ${last_name}` || 'Anonymous'}
                         </div>
                         <div className="text-xs">
                             {email || 'No email available'}

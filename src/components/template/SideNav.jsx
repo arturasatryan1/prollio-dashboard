@@ -59,7 +59,7 @@ const SideNav = ({
                 style={{ height: HEADER_HEIGHT }}
             >
                 <Logo
-                    imgClass="max-h-10"
+                    imgClass="max-h-8"
                     mode={mode || defaultMode}
                     type={sideNavCollapse ? 'streamline' : 'full'}
                     className={classNames(
