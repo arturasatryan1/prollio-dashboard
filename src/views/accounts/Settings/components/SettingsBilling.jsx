@@ -43,15 +43,15 @@ const SettingsBilling = () => {
 
     const {
         data = {
-            currentPlan: {
-                plan: '',
+            subscription: {
+                // plan: {
+                //     name: '',
+                //     price_monthly: 0,
+                // },
                 status: '',
-                billingCycle: '',
-                nextPaymentDate: null,
-                amount: null,
+                type: '',
             },
-            paymentMethods: [],
-            transactionHistory: [],
+            transactions: []
         },
     } = useSWR('/api/settings/billing/', () => apiGetSettingsBilling(), {
         revalidateOnFocus: false,
@@ -113,25 +113,24 @@ const SettingsBilling = () => {
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
-                                <h6 className="font-bold">
-                                    {data.currentPlan.plan}
+                                <h6 className="font-bold py-3">
+                                    {data.subscription?.plan?.title}
                                 </h6>
                                 <Tag className="bg-success-subtle text-success rounded-md border-0">
                                     <span className="capitalize">
-                                        {data.currentPlan.status}
+                                        {data.subscription?.status}
                                     </span>
                                 </Tag>
                             </div>
                             <div className="font-semibold">
                                 <span>
-                                    Billing {data.currentPlan.billingCycle}
+                                    Billing {data.subscription?.type}
                                 </span>
                                 <span> | </span>
                                 <span>
                                     Next payment on{' '}
-                                    {dayjs
-                                        .unix(
-                                            data.currentPlan.nextPaymentDate ||
+                                    {dayjs(
+                                            data.subscription?.ends_at ||
                                                 0,
                                         )
                                         .format('MM/DD/YYYY')}
@@ -143,7 +142,7 @@ const SettingsBilling = () => {
                                         displayType="text"
                                         value={(
                                             Math.round(
-                                                (data.currentPlan.amount || 0) *
+                                                (data.subscription?.plan?.price_monthly || 0) *
                                                     100,
                                             ) / 100
                                         ).toFixed(2)}
@@ -154,112 +153,112 @@ const SettingsBilling = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex">
-                        <Button
-                            size="sm"
-                            variant="solid"
-                            onClick={handleChangePlan}
-                        >
-                            Change plan
-                        </Button>
-                    </div>
+                    {/*<div className="flex">*/}
+                    {/*    <Button*/}
+                    {/*        size="sm"*/}
+                    {/*        variant="solid"*/}
+                    {/*        onClick={handleChangePlan}*/}
+                    {/*    >*/}
+                    {/*        Change plan*/}
+                    {/*    </Button>*/}
+                    {/*</div>*/}
                 </div>
             </div>
-            <div className="mt-8">
-                <h5>Payment method</h5>
-                <div>
-                    {data.paymentMethods?.map((card, index) => (
-                        <div
-                            key={card.cardId}
-                            className={classNames(
-                                'flex items-center justify-between p-4',
-                                !isLastChild(data.paymentMethods, index) &&
-                                    'border-b border-gray-200 dark:border-gray-600',
-                            )}
-                        >
-                            <div className="flex items-center">
-                                {card.cardType === 'VISA' && (
-                                    <img
-                                        src="/img/others/img-8.png"
-                                        alt="visa"
-                                    />
-                                )}
-                                {card.cardType === 'MASTER' && (
-                                    <img
-                                        src="/img/others/img-9.png"
-                                        alt="master"
-                                    />
-                                )}
-                                <div className="ml-3 rtl:mr-3">
-                                    <div className="flex items-center">
-                                        <div className="text-gray-900 dark:text-gray-100 font-semibold">
-                                            {card.cardHolderName} ••••{' '}
-                                            {card.last4Number}
-                                        </div>
-                                        {card.primary && (
-                                            <Tag className="bg-primary-subtle text-primary rounded-md border-0 mx-2">
-                                                <span className="capitalize">
-                                                    {' '}
-                                                    Primary{' '}
-                                                </span>
-                                            </Tag>
-                                        )}
-                                    </div>
-                                    <span>
-                                        Expired{' '}
-                                        {months[parseInt(card.expMonth) - 1]} 20
-                                        {card.expYear}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="flex">
-                                <Button
-                                    size="sm"
-                                    type="button"
-                                    onClick={() => handleEditCreditCard(card)}
-                                >
-                                    Edit
-                                </Button>
-                            </div>
-                        </div>
-                    ))}
-                    <Button
-                        variant="plain"
-                        icon={<TbPlus />}
-                        onClick={() => {
-                            setSelectedCard({
-                                type: 'NEW',
-                                dialogOpen: true,
-                                cardInfo: {},
-                            })
-                        }}
-                    >
-                        Add payment method
-                    </Button>
-                </div>
-            </div>
+            {/*<div className="mt-8">*/}
+            {/*    <h5>Payment method</h5>*/}
+            {/*    <div>*/}
+            {/*        {data.paymentMethods?.map((card, index) => (*/}
+            {/*            <div*/}
+            {/*                key={card.cardId}*/}
+            {/*                className={classNames(*/}
+            {/*                    'flex items-center justify-between p-4',*/}
+            {/*                    !isLastChild(data.paymentMethods, index) &&*/}
+            {/*                        'border-b border-gray-200 dark:border-gray-600',*/}
+            {/*                )}*/}
+            {/*            >*/}
+            {/*                <div className="flex items-center">*/}
+            {/*                    {card.cardType === 'VISA' && (*/}
+            {/*                        <img*/}
+            {/*                            src="/img/others/img-8.png"*/}
+            {/*                            alt="visa"*/}
+            {/*                        />*/}
+            {/*                    )}*/}
+            {/*                    {card.cardType === 'MASTER' && (*/}
+            {/*                        <img*/}
+            {/*                            src="/img/others/img-9.png"*/}
+            {/*                            alt="master"*/}
+            {/*                        />*/}
+            {/*                    )}*/}
+            {/*                    <div className="ml-3 rtl:mr-3">*/}
+            {/*                        <div className="flex items-center">*/}
+            {/*                            <div className="text-gray-900 dark:text-gray-100 font-semibold">*/}
+            {/*                                {card.cardHolderName} ••••{' '}*/}
+            {/*                                {card.last4Number}*/}
+            {/*                            </div>*/}
+            {/*                            {card.primary && (*/}
+            {/*                                <Tag className="bg-primary-subtle text-primary rounded-md border-0 mx-2">*/}
+            {/*                                    <span className="capitalize">*/}
+            {/*                                        {' '}*/}
+            {/*                                        Primary{' '}*/}
+            {/*                                    </span>*/}
+            {/*                                </Tag>*/}
+            {/*                            )}*/}
+            {/*                        </div>*/}
+            {/*                        <span>*/}
+            {/*                            Expired{' '}*/}
+            {/*                            {months[parseInt(card.expMonth) - 1]} 20*/}
+            {/*                            {card.expYear}*/}
+            {/*                        </span>*/}
+            {/*                    </div>*/}
+            {/*                </div>*/}
+            {/*                <div className="flex">*/}
+            {/*                    <Button*/}
+            {/*                        size="sm"*/}
+            {/*                        type="button"*/}
+            {/*                        onClick={() => handleEditCreditCard(card)}*/}
+            {/*                    >*/}
+            {/*                        Edit*/}
+            {/*                    </Button>*/}
+            {/*                </div>*/}
+            {/*            </div>*/}
+            {/*        ))}*/}
+            {/*        <Button*/}
+            {/*            variant="plain"*/}
+            {/*            icon={<TbPlus />}*/}
+            {/*            onClick={() => {*/}
+            {/*                setSelectedCard({*/}
+            {/*                    type: 'NEW',*/}
+            {/*                    dialogOpen: true,*/}
+            {/*                    cardInfo: {},*/}
+            {/*                })*/}
+            {/*            }}*/}
+            {/*        >*/}
+            {/*            Add payment method*/}
+            {/*        </Button>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
             <div className="mt-8">
                 <h5>Transaction history</h5>
                 <BillingHistory
                     className="mt-4"
-                    data={data.transactionHistory}
+                    data={data.transactions}
                 />
             </div>
-            <CreditCardDialog
-                title={
-                    selectedCard.type === 'NEW'
-                        ? 'Add credit card'
-                        : 'Edit credit card'
-                }
-                defaultValues={selectedCard.cardInfo}
-                dialogOpen={selectedCard.dialogOpen}
-                onDialogClose={handleCreditCardDialogClose}
-                onSubmit={
-                    selectedCard.type === 'NEW'
-                        ? (values) => handleAddCreditCardSubmit(values)
-                        : handleEditCreditCardSubmit
-                }
-            />
+            {/*<CreditCardDialog*/}
+            {/*    title={*/}
+            {/*        selectedCard.type === 'NEW'*/}
+            {/*            ? 'Add credit card'*/}
+            {/*            : 'Edit credit card'*/}
+            {/*    }*/}
+            {/*    defaultValues={selectedCard.cardInfo}*/}
+            {/*    dialogOpen={selectedCard.dialogOpen}*/}
+            {/*    onDialogClose={handleCreditCardDialogClose}*/}
+            {/*    onSubmit={*/}
+            {/*        selectedCard.type === 'NEW'*/}
+            {/*            ? (values) => handleAddCreditCardSubmit(values)*/}
+            {/*            : handleEditCreditCardSubmit*/}
+            {/*    }*/}
+            {/*/>*/}
         </div>
     )
 }

@@ -6,17 +6,18 @@ import { Controller } from 'react-hook-form'
 const AccountSection = ({ control }) => {
     return (
         <Card>
-            <h4>Account</h4>
             <div className="mt-6">
                 <FormItem>
                     <Controller
-                        name="banAccount"
+                        name="allowComment"
                         control={control}
                         render={({ field }) => (
                             <div className="flex items-center justify-between gap-8">
                                 <div>
-                                    <h6>Banned</h6>
-                                    <p>Disable this account</p>
+                                    <h6>Allow Comments</h6>
+                                    <p>
+                                        Allow comments on the posts
+                                    </p>
                                 </div>
                                 <Switcher
                                     checked={field.value}
@@ -30,15 +31,14 @@ const AccountSection = ({ control }) => {
                 </FormItem>
                 <FormItem className="mb-0">
                     <Controller
-                        name="accountVerified"
+                        name="allowReaction"
                         control={control}
                         render={({ field }) => (
                             <div className="flex items-center justify-between gap-8">
                                 <div>
-                                    <h6>Account Verified</h6>
+                                    <h6>Allow Reactions</h6>
                                     <p>
-                                        Disabling sends a verification request
-                                        to the customer.
+                                        Allow reactions on the posts
                                     </p>
                                 </div>
                                 <Switcher

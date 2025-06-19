@@ -86,15 +86,16 @@ const ProfileSection = ({ data = {} }) => {
                         value={data.user?.phone}
                     />
                     <CustomerInfoField
-                        title="Date of birth"
-                        value={data.user?.date_of_birth}
+                        title="Joined At"
+                        value={dayjs(data.created_at).format('DD MMM YYYY hh:mm A')}
                     />
-                    <CustomerInfoField
-                        title="Last Online"
-                        value={dayjs
-                            .unix(data.user?.last_login_at)
-                            .format('DD MMM YYYY hh:mm A')}
-                    />
+                    {data.user?.last_login_at && (
+                        <CustomerInfoField
+                            title="Last Online"
+                            value={dayjs(data.user?.last_login_at)
+                                .format('DD MMM YYYY hh:mm A')}
+                        />
+                    ) }
                     <div className="mb-7">
                         <span>Social</span>
                         <div className="flex mt-4 gap-2">

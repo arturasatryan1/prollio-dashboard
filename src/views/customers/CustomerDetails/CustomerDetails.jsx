@@ -25,14 +25,12 @@ const CustomerDetails = () => {
         },
     )
 
-    const customer = data?.data || {}
-
     return (
         <Loading loading={isLoading}>
-            {!isEmpty(customer) && (
+            {!isEmpty(data) && (
                 <div className="flex flex-col xl:flex-row gap-4">
                     <div className="min-w-[330px] 2xl:min-w-[400px]">
-                        <ProfileSection data={customer} />
+                        <ProfileSection data={data} />
                     </div>
                     <Card className="w-full">
                         <Tabs defaultValue="billing">
@@ -42,11 +40,11 @@ const CustomerDetails = () => {
                             </TabList>
                             <div className="p-4">
                                 <TabContent value="billing">
-                                    <PaymentHistorySection data={customer} />
+                                    <PaymentHistorySection data={data} />
                                 </TabContent>
                                 {/*<TabContent value="activity">*/}
                                     {/*<ActivitySection*/}
-                                    {/*    customerName={customer.name}*/}
+                                    {/*    customerName={data.name}*/}
                                     {/*    id={id}*/}
                                     {/*/>*/}
                                 {/*</TabContent>*/}

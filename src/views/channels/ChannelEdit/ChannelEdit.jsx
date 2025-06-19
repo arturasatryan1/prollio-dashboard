@@ -1,62 +1,71 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import Container from '@/components/shared/Container'
 import Button from '@/components/ui/Button'
 import Notification from '@/components/ui/Notification'
 import toast from '@/components/ui/toast'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import { apiGetCustomer } from '@/services/CustomersService'
-import CustomerForm from '../CustomerForm'
-import sleep from '@/utils/sleep'
+import ChannelForm from '../ChannelForm'
 import NoUserFound from '@/assets/svg/NoUserFound'
-import { TbTrash, TbArrowNarrowLeft } from 'react-icons/tb'
-import { useParams, useNavigate } from 'react-router'
+import {TbArrowNarrowLeft, TbTrash} from 'react-icons/tb'
+import {useNavigate, useParams} from 'react-router'
 import useSWR from 'swr'
+import {apiGetChannel, apiUpdateChannel} from "@/services/ChannelService.js";
+import {boolean} from "zod";
 
-const CustomerEdit = () => {
-    const { id } = useParams()
+const ChannelEdit = () => {
+    const {id} = useParams()
 
     const navigate = useNavigate()
 
-    const { data, isLoading } = useSWR(
-        [`/api/customers${id}`, { id: id }],
+    const {data, isLoading} = useSWR(
+        [`/api/channels/${id}`, {id: id}],
         // eslint-disable-next-line no-unused-vars
-        ([_, params]) => apiGetCustomer(params),
+        ([_, params]) => apiGetChannel(params),
         {
             revalidateOnFocus: false,
-            revalidateIfStale: false,
         },
     )
 
     const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false)
-    const [isSubmiting, setIsSubmiting] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const handleFormSubmit = async (values) => {
-        console.log('Submitted values', values)
-        setIsSubmiting(true)
-        await sleep(800)
-        setIsSubmiting(false)
-        toast.push(<Notification type="success">Changes Saved!</Notification>, {
-            placement: 'top-center',
-        })
-        navigate('/concepts/customers/customer-list')
+        setIsSubmitting(true)
+
+        try {
+            const res = await apiUpdateChannel(id, {
+                name: values.name,
+                description: values.description,
+                img: values.img,
+                allow_comments: values.allowComment,
+                allow_reactions: values.allowReaction,
+            });
+
+            toast.push(
+                <Notification type="success">Channel saved!</Notification>,
+                {placement: 'top-center'},
+            )
+
+            navigate('/channels')
+        } catch (errors) {
+            toast.push(
+                <Notification type="danger">{errors.message}</Notification>,
+                {placement: 'top-center'},
+            )
+        }
+
+        setIsSubmitting(false)
     }
 
     const getDefaultValues = () => {
         if (data) {
-            const { firstName, lastName, email, personalInfo, img } = data
-
+            const {name, description, image, allow_comment, allow_reaction} = data
             return {
-                firstName,
-                lastName,
-                email,
-                img,
-                phoneNumber: personalInfo.phoneNumber,
-                dialCode: personalInfo.dialCode,
-                country: personalInfo.country,
-                address: personalInfo.address,
-                city: personalInfo.city,
-                postcode: personalInfo.postcode,
-                tags: [],
+                name: name,
+                description: description,
+                img: image,
+                allowComment: Boolean(allow_comment),
+                allowReaction: Boolean(allow_reaction),
             }
         }
 
@@ -67,9 +76,9 @@ const CustomerEdit = () => {
         setDeleteConfirmationOpen(true)
         toast.push(
             <Notification type="success">Customer deleted!</Notification>,
-            { placement: 'top-center' },
+            {placement: 'top-center'},
         )
-        navigate('/concepts/customers/customer-list')
+        navigate('/channels')
     }
 
     const handleDelete = () => {
@@ -88,15 +97,14 @@ const CustomerEdit = () => {
         <>
             {!isLoading && !data && (
                 <div className="h-full flex flex-col items-center justify-center">
-                    <NoUserFound height={280} width={280} />
-                    <h3 className="mt-8">No user found!</h3>
+                    <NoUserFound height={280} width={280}/>
+                    <h3 className="mt-8">No channel found!</h3>
                 </div>
             )}
             {!isLoading && data && (
                 <>
-                    <CustomerForm
+                    <ChannelForm
                         defaultValues={getDefaultValues()}
-                        newCustomer={false}
                         onFormSubmit={handleFormSubmit}
                     >
                         <Container>
@@ -105,7 +113,7 @@ const CustomerEdit = () => {
                                     className="ltr:mr-3 rtl:ml-3"
                                     type="button"
                                     variant="plain"
-                                    icon={<TbArrowNarrowLeft />}
+                                    icon={<TbArrowNarrowLeft/>}
                                     onClick={handleBack}
                                 >
                                     Back
@@ -117,7 +125,7 @@ const CustomerEdit = () => {
                                         customColorClass={() =>
                                             'border-error ring-1 ring-error text-error hover:border-error hover:ring-error hover:text-error bg-transparent'
                                         }
-                                        icon={<TbTrash />}
+                                        icon={<TbTrash/>}
                                         onClick={handleDelete}
                                     >
                                         Delete
@@ -125,25 +133,25 @@ const CustomerEdit = () => {
                                     <Button
                                         variant="solid"
                                         type="submit"
-                                        loading={isSubmiting}
+                                        loading={isSubmitting}
                                     >
                                         Save
                                     </Button>
                                 </div>
                             </div>
                         </Container>
-                    </CustomerForm>
+                    </ChannelForm>
                     <ConfirmDialog
                         isOpen={deleteConfirmationOpen}
                         type="danger"
-                        title="Remove customers"
+                        title="Delete channel"
                         onClose={handleCancel}
                         onRequestClose={handleCancel}
                         onCancel={handleCancel}
                         onConfirm={handleConfirmDelete}
                     >
                         <p>
-                            Are you sure you want to remove this customer? This
+                            Are you sure you want to remove this channel? This
                             action can&apos;t be undo.{' '}
                         </p>
                     </ConfirmDialog>
@@ -153,4 +161,4 @@ const CustomerEdit = () => {
     )
 }
 
-export default CustomerEdit
+export default ChannelEdit

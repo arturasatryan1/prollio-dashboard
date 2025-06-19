@@ -8,6 +8,7 @@ import { apiGetExpert } from '@/services/ExpertService.js'
 import useSWR from 'swr'
 import { useParams } from 'react-router'
 import isEmpty from 'lodash/isEmpty'
+import InfoSection from "@/views/experts/ExpertDetails/InfoSection.jsx";
 
 const { TabNav, TabList, TabContent } = Tabs
 
@@ -25,24 +26,26 @@ const ExpertDetails = () => {
         },
     )
 
-    const expert = data?.data || {}
-
     return (
         <Loading loading={isLoading}>
-            {!isEmpty(expert) && (
+            {!isEmpty(data) && (
                 <div className="flex flex-col xl:flex-row gap-4">
                     <div className="min-w-[330px] 2xl:min-w-[400px]">
-                        <ProfileSection data={expert} />
+                        <ProfileSection data={data} />
                     </div>
                     <Card className="w-full">
-                        <Tabs defaultValue="billing">
+                        <Tabs defaultValue="info">
                             <TabList>
-                                <TabNav value="billing">Billing</TabNav>
+                                <TabNav value="info">Expert Info</TabNav>
+                                <TabNav value="billing">Transaction History</TabNav>
                                 <TabNav value="activity">Activity</TabNav>
                             </TabList>
                             <div className="p-4">
+                                <TabContent value="info">
+                                    <InfoSection data={data} />
+                                </TabContent>
                                 <TabContent value="billing">
-                                    {/*<BillingSection data={expert} />*/}
+                                    <BillingSection data={data} />
                                 </TabContent>
                                 <TabContent value="activity">
                                     {/*<ActivitySection*/}

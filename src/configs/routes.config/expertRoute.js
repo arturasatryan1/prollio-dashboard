@@ -27,23 +27,6 @@ const expertRoute = [
     //         footer: false,
     //     },
     // },
-    // {
-    //     key: 'concepts.customers.customerCreate',
-    //     path: `${CONCEPTS_PREFIX_PATH}/customers/customer-create`,
-    //     component: lazy(
-    //         () => import('@/views/concepts/customers/CustomerCreate'),
-    //     ),
-    //     authority: [ADMIN, USER],
-    //     meta: {
-    //         header: {
-    //             title: 'Create customer',
-    //             description:
-    //                 'Manage customer details, track purchases, and update preferences easily.',
-    //             contained: true,
-    //         },
-    //         footer: false,
-    //     },
-    // },
     {
         key: 'expert.details',
         path: `/experts/:id`,

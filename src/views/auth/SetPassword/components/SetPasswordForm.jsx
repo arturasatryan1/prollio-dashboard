@@ -39,9 +39,8 @@ const SetPasswordForm = ({ token, setMessage }) => {
                 password_confirmation: values.confirmPassword,
             })
 
-            if (res?.success) {
-                navigate('/overview')
-            }
+            navigate('/overview')
+
         } catch (err) {
             setMessage?.(
                 err?.response?.data?.message || 'Սխալ տեղի ունեցավ։ Խնդրում ենք փորձել նորից։'

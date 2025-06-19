@@ -7,6 +7,7 @@ import useCustomerList from '../hooks/useCustomerList'
 import { Link, useNavigate } from 'react-router'
 import cloneDeep from 'lodash/cloneDeep'
 import { TbPencil, TbEye } from 'react-icons/tb'
+import dayjs from "dayjs";
 
 const statusColor = {
     active: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
@@ -29,7 +30,7 @@ const NameColumn = ({ row }) => {
 
 const ActionColumn = ({ onEdit, onViewDetail }) => {
     return (
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 justify-end">
             {/*<Tooltip title="Edit">*/}
             {/*    <div*/}
             {/*        className={`text-xl cursor-pointer select-none font-semibold`}*/}
@@ -45,7 +46,7 @@ const ActionColumn = ({ onEdit, onViewDetail }) => {
                     role="button"
                     onClick={onViewDetail}
                 >
-                    <TbEye />
+                    <TbEye size={25} />
                 </div>
             </Tooltip>
         </div>
@@ -111,6 +112,18 @@ const CustomerListTable = () => {
                 accessorKey: 'totalSpending',
                 cell: (props) => {
                     return <span>֏{props.row.original.spent}</span>
+                },
+            },
+            {
+                header: 'Joined At',
+                accessorKey: 'created_at',
+                cell: (props) => {
+                    const row = props.row.original
+                    return (
+                        <div>
+                            {dayjs(row.created_at).format('DD/MM/YYYY')}
+                        </div>
+                    )
                 },
             },
             {

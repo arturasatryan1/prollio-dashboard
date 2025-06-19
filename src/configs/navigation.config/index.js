@@ -3,6 +3,7 @@ import {
     NAV_ITEM_TYPE_ITEM,
     NAV_ITEM_TYPE_COLLAPSE,
 } from '@/constants/navigation.constant'
+import {ADMIN, USER} from "@/constants/roles.constant.js";
 
 const navigationConfig = [
     {
@@ -12,7 +13,7 @@ const navigationConfig = [
         translateKey: 'nav.dashboard.dashboard',
         icon: 'dashboard',
         type: NAV_ITEM_TYPE_TITLE,
-        authority: [],
+        authority: [ADMIN, USER],
         meta: {
             horizontalMenu: {
                 layout: 'default',
@@ -26,7 +27,7 @@ const navigationConfig = [
                 translateKey: 'nav.dashboard.overview',
                 icon: 'overview',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [],
+                authority: [ADMIN, USER],
                 subMenu: [],
             },
             {
@@ -36,7 +37,7 @@ const navigationConfig = [
                 translateKey: 'nav.dashboard.experts',
                 icon: 'experts',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [],
+                authority: [ADMIN],
                 subMenu: [],
             },
             {
@@ -46,17 +47,17 @@ const navigationConfig = [
                 translateKey: 'nav.dashboard.subscribers',
                 icon: 'users',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [],
+                authority: [ADMIN, USER],
                 subMenu: [],
             },
             {
-                key: 'channels',
+                key: 'channels.list',
                 path: '/channels',
                 title: 'Channels',
                 translateKey: 'nav.dashboard.channels',
                 icon: 'channel',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [],
+                authority: [ADMIN, USER],
                 subMenu: [],
             },
             {
@@ -66,7 +67,7 @@ const navigationConfig = [
                 translateKey: 'nav.dashboard.calendar',
                 icon: 'calendar',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [],
+                authority: [ADMIN, USER],
                 subMenu: [],
             },
             {
@@ -76,58 +77,68 @@ const navigationConfig = [
                 translateKey: 'nav.dashboard.earnings',
                 icon: 'dollar',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [],
+                authority: [ADMIN, USER],
+                subMenu: [],
+            },
+            {
+                key: 'requests.list',
+                path: '/requests',
+                title: 'Requests',
+                translateKey: 'nav.dashboard.requests',
+                icon: 'requests',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [ADMIN],
                 subMenu: [],
             },
         ]
     },
-    {
-        key: 'account',
-        path: '',
-        title: 'Account',
-        translateKey: 'nav.account.account',
-        icon: '',
-        type: NAV_ITEM_TYPE_TITLE,
-        authority: [],
-        meta: {
-            horizontalMenu: {
-                layout: 'default',
-            },
-        },
-        subMenu: [
-            {
-                key: 'settings',
-                path: '',
-                title: 'Settings',
-                translateKey: 'nav.settings.title',
-                icon: 'setting',
-                type: NAV_ITEM_TYPE_COLLAPSE,
-                authority: [],
-                subMenu: [
-                    {
-                        key: 'settings.profile',
-                        path: '/settings/profile',
-                        title: 'Profile',
-                        translateKey: 'nav.settings.profile',
-                        icon: 'profile',
-                        type: NAV_ITEM_TYPE_ITEM,
-                        authority: [],
-                        subMenu: [],
-                    },
-                    {
-                        key: 'settings.billing',
-                        path: '/settings/billing',
-                        title: 'Billing & Payout',
-                        translateKey: 'nav.settings.billing',
-                        icon: '',
-                        type: NAV_ITEM_TYPE_ITEM,
-                        authority: [],
-                        subMenu: [],
-                    },
-                ],
-            },
-        ]
-    },
+    // {
+    //     key: 'account',
+    //     path: '',
+    //     title: 'Account',
+    //     translateKey: 'nav.account.account',
+    //     icon: '',
+    //     type: NAV_ITEM_TYPE_TITLE,
+    //     authority: [],
+    //     meta: {
+    //         horizontalMenu: {
+    //             layout: 'default',
+    //         },
+    //     },
+    //     subMenu: [
+    //         {
+    //             key: 'settings',
+    //             path: '',
+    //             title: 'Settings',
+    //             translateKey: 'nav.settings.title',
+    //             icon: 'setting',
+    //             type: NAV_ITEM_TYPE_COLLAPSE,
+    //             authority: [],
+    //             subMenu: [
+    //                 {
+    //                     key: 'settings.profile',
+    //                     path: '/settings/profile',
+    //                     title: 'Profile',
+    //                     translateKey: 'nav.settings.profile',
+    //                     icon: 'profile',
+    //                     type: NAV_ITEM_TYPE_ITEM,
+    //                     authority: [],
+    //                     subMenu: [],
+    //                 },
+    //                 {
+    //                     key: 'settings.billing',
+    //                     path: '/settings/billing',
+    //                     title: 'Billing & Payout',
+    //                     translateKey: 'nav.settings.billing',
+    //                     icon: '',
+    //                     type: NAV_ITEM_TYPE_ITEM,
+    //                     authority: [],
+    //                     subMenu: [],
+    //                 },
+    //             ],
+    //         },
+    //     ]
+    // },
     {
         key: 'support',
         path: '',
@@ -135,7 +146,7 @@ const navigationConfig = [
         translateKey: 'nav.support.support',
         icon: 'support',
         type: NAV_ITEM_TYPE_TITLE,
-        authority: [],
+        authority: [ADMIN, USER],
         meta: {
             horizontalMenu: {
                 layout: 'default',
@@ -149,7 +160,7 @@ const navigationConfig = [
                 translateKey: 'nav.support',
                 icon: 'support',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [],
+                authority: [ADMIN, USER],
                 subMenu: [],
             },
             {
@@ -159,7 +170,7 @@ const navigationConfig = [
                 translateKey: 'nav.support',
                 icon: 'question',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [],
+                authority: [ADMIN, USER],
                 subMenu: [],
             }
         ]

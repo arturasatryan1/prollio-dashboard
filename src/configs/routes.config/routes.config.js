@@ -4,6 +4,8 @@ import othersRoute from './othersRoute'
 import accountRoute from './accountRoute.js'
 import expertRoute from "./expertRoute.js";
 import customerRoute from "./customerRoute.js";
+import requestRoute from "@/configs/routes.config/requestRoute.js";
+import channelRoute from "@/configs/routes.config/channelRoute.js";
 
 export const publicRoutes = [...authRoute]
 
@@ -14,14 +16,10 @@ export const protectedRoutes = [
         component: lazy(() => import('@/views/overview/Overview.jsx')),
         authority: [],
     },
-    {
-        key: 'channels',
-        path: '/channels',
-        component: lazy(() => import('@/views/channels/Channel.jsx')),
-        authority: [],
-    },
+    ...channelRoute,
     ...accountRoute,
     ...expertRoute,
     ...customerRoute,
+    ...requestRoute,
     ...othersRoute,
 ]

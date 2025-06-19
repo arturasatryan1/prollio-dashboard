@@ -1,12 +1,12 @@
 import Card from '@/components/ui/Card'
 import Avatar from '@/components/ui/Avatar'
 import Upload from '@/components/ui/Upload'
-import { Button } from '@/components/ui'
+import {Button} from '@/components/ui'
 import DoubleSidedImage from '@/components/shared/DoubleSidedImage'
-import { Controller } from 'react-hook-form'
-import { HiOutlineUser } from 'react-icons/hi'
+import {Controller} from 'react-hook-form'
+import {HiOutlineUser} from 'react-icons/hi'
 
-const ProfileImage = ({ control }) => {
+const ProfileImage = ({control}) => {
     const beforeUpload = (files) => {
         let valid = true
 
@@ -30,14 +30,14 @@ const ProfileImage = ({ control }) => {
                     <Controller
                         name="img"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <>
                                 <div className="flex items-center justify-center">
                                     {field.value ? (
                                         <Avatar
                                             size={100}
                                             className="border-4 border-white bg-gray-100 text-gray-300 shadow-lg"
-                                            icon={<HiOutlineUser />}
+                                            icon={<HiOutlineUser/>}
                                             src={field.value}
                                         />
                                     ) : (
@@ -54,9 +54,11 @@ const ProfileImage = ({ control }) => {
                                     beforeUpload={beforeUpload}
                                     onChange={(files) => {
                                         if (files.length > 0) {
-                                            field.onChange(
-                                                URL.createObjectURL(files[0]),
-                                            )
+                                            const reader = new FileReader()
+                                            reader.onloadend = () => {
+                                                field.onChange(reader.result)
+                                            }
+                                            reader.readAsDataURL(files[0])
                                         }
                                     }}
                                 >
@@ -65,7 +67,8 @@ const ProfileImage = ({ control }) => {
                                         className="mt-4"
                                         type="button"
                                     >
-                                        Upload Image
+                                        {field.value ? 'Change Image' : 'Upload Image'}
+
                                     </Button>
                                 </Upload>
                             </>

@@ -5,11 +5,12 @@ import { useSessionUser } from '@/store/authStore'
 import { Link } from 'react-router'
 import {PiUserDuotone, PiSignOutDuotone, PiGearDuotone, PiPulseDuotone} from 'react-icons/pi'
 import { useAuth } from '@/auth'
+// import {HiChevronDown} from "react-icons/hi";
 
 const dropdownItemList = [
     {
         label: 'Profile',
-        path: '/account/settings',
+        path: '/account/settings',  
         icon: <PiUserDuotone />,
     },
     {
@@ -39,6 +40,7 @@ const _UserDropdown = () => {
             renderTitle={
                 <div className="cursor-pointer flex items-center">
                     <Avatar size={32} {...avatarProps} />
+                    {/*<span className="font-medium ml-2">{first_name}</span>*/}
                 </div>
             }
             placement="bottom-end"

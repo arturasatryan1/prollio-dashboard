@@ -8,13 +8,29 @@ import {
 } from '@tanstack/react-table'
 import { NumericFormat } from 'react-number-format'
 import dayjs from 'dayjs'
+import Tag from "@/components/ui/Tag/index.jsx";
 
 const { Tr, Th, Td, THead, TBody } = Table
 
 const statusColor = {
-    paid: 'bg-emerald-500',
     pending: 'bg-amber-400',
-}
+    processing: 'bg-blue-200 dark:bg-blue-300 text-gray-900',
+    completed: 'bg-emerald-500',
+    failed: 'bg-red-200 dark:bg-red-300 text-gray-900',
+    cancelled: 'bg-gray-200 dark:bg-gray-300 text-gray-900',
+    refunded: 'bg-purple-200 dark:bg-purple-300 text-gray-900',
+};
+
+const purposeColor = {
+    balance_topup: 'bg-indigo-100 dark:bg-indigo-200 text-gray-900',
+    subscription: 'bg-sky-100 dark:bg-sky-200 text-gray-900',
+    system_charge: 'bg-orange-100 dark:bg-orange-200 text-gray-900',
+    payout: 'bg-rose-100 dark:bg-rose-200 text-gray-900',
+    refund: 'bg-purple-100 dark:bg-purple-200 text-gray-900',
+    admin_adjustment: 'bg-gray-100 dark:bg-gray-200 text-gray-900',
+    event_payment: 'bg-pink-100 dark:bg-pink-200 text-gray-900',
+    bonus: 'bg-green-100 dark:bg-green-200 text-gray-900',
+};
 
 const columnHelper = createColumnHelper()
 
@@ -25,16 +41,31 @@ const columns = [
             const row = props.row.original
             return (
                 <span className="heading-text font-bold cursor-pointer">
-                    {row.id}
+                    #{row.id}
                 </span>
             )
         },
     }),
-    columnHelper.accessor('item', {
-        header: 'Product',
+    columnHelper.accessor('type', {
+        header: 'Type',
         cell: (props) => {
             const row = props.row.original
-            return <span className="font-semibold">{row.item}</span>
+            return <span className="font-semibold">{row.type}</span>
+        },
+    }),
+    columnHelper.accessor('purpose', {
+        header: 'Purpose',
+        cell: (props) => {
+            const row = props.row.original
+            return (
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center">
+                        <Tag className={purposeColor[row.purpose]}>
+                            <span>{row.purpose}</span>
+                        </Tag>
+                    </div>
+                </div>
+            )
         },
     }),
     columnHelper.accessor('status', {
@@ -51,29 +82,32 @@ const columns = [
             )
         },
     }),
+    columnHelper.accessor('amount', {
+        header: 'Amount',
+        cell: (props) => {
+            const row = props.row.original;
+            const isWithdrawal = row.type === 'withdrawal';
+            const value = (Math.round(row.amount * 100) / 100).toFixed(2);
+
+            return (
+                <div className="flex items-center">
+                    <NumericFormat
+                        displayType="text"
+                        value={value}
+                        prefix={isWithdrawal ? '-' : ''}
+                        thousandSeparator={true}
+                    />
+                </div>
+            );
+        },
+    }),
     columnHelper.accessor('date', {
         header: 'Date',
         cell: (props) => {
             const row = props.row.original
             return (
                 <div className="flex items-center">
-                    {dayjs.unix(row.date).format('MM/DD/YYYY')}
-                </div>
-            )
-        },
-    }),
-    columnHelper.accessor('amount', {
-        header: 'Amount',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center">
-                    <NumericFormat
-                        displayType="text"
-                        value={(Math.round(row.amount * 100) / 100).toFixed(2)}
-                        prefix={'$'}
-                        thousandSeparator={true}
-                    />
+                    {dayjs(row.created_at).format('MM/DD/YYYY')}
                 </div>
             )
         },

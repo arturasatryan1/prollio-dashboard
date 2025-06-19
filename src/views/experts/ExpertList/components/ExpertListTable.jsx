@@ -7,6 +7,7 @@ import useExpertList from '../hooks/useExpertList.js'
 import { Link, useNavigate } from 'react-router'
 import cloneDeep from 'lodash/cloneDeep'
 import { TbPencil, TbEye } from 'react-icons/tb'
+import dayjs from "dayjs";
 
 const statusColor = {
     active: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
@@ -16,12 +17,12 @@ const statusColor = {
 const NameColumn = ({ row }) => {
     return (
         <div className="flex items-center">
-            <Avatar size={40} shape="circle" src={row.avatar} />
+            <Avatar size={50} shape="circle" src={row.user?.avatar} />
             <Link
                 className={`hover:text-primary ml-2 rtl:mr-2 font-semibold text-gray-900 dark:text-gray-100`}
                 to={`/experts/${row.id}`}
             >
-                {row.first_name} {row.last_name}
+                {row.user?.first_name} {row.user?.last_name}
             </Link>
         </div>
     )
@@ -29,7 +30,7 @@ const NameColumn = ({ row }) => {
 
 const ActionColumn = ({ onEdit, onViewDetail }) => {
     return (
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 justify-end">
             {/*<Tooltip title="Edit">*/}
             {/*    <div*/}
             {/*        className={`text-xl cursor-pointer select-none font-semibold`}*/}
@@ -45,7 +46,7 @@ const ActionColumn = ({ onEdit, onViewDetail }) => {
                     role="button"
                     onClick={onViewDetail}
                 >
-                    <TbEye />
+                    <TbEye size={25} />
                 </div>
             </Tooltip>
         </div>
@@ -81,7 +82,7 @@ const ExpertListTable = () => {
                 accessorKey: 'user.first_name',
                 cell: (props) => {
                     const row = props.row.original
-                    return <NameColumn row={row.user} />
+                    return <NameColumn row={row} />
                 },
             },
             {
@@ -125,6 +126,18 @@ const ExpertListTable = () => {
                 accessorKey: 'balance',
                 cell: (props) => {
                     return <span>${props.row.original.balance}</span>
+                },
+            },
+            {
+                header: 'Joined At',
+                accessorKey: 'created_at',
+                cell: (props) => {
+                    const row = props.row.original
+                    return (
+                        <div>
+                            {dayjs(row.created_at).format('DD/MM/YYYY')}
+                        </div>
+                    )
                 },
             },
             {

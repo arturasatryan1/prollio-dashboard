@@ -33,7 +33,7 @@ export const SetPasswordBase = ({signInUrl = '/sign-in'}) => {
             try {
                 const res = await apiCheckToken({token: tokenFromUrl})
 
-                const {request, token_valid_until} = res.data
+                const {request, token_valid_until} = res
 
                 if (token_valid_until) {
                     setExpert(request)

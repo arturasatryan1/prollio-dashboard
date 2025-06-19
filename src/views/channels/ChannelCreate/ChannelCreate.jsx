@@ -1,40 +1,55 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import Container from '@/components/shared/Container'
 import Button from '@/components/ui/Button'
 import Notification from '@/components/ui/Notification'
 import toast from '@/components/ui/toast'
-import CustomerForm from '../CustomerForm'
+import ChannelForm from '../ChannelForm'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import sleep from '@/utils/sleep'
-import { TbTrash } from 'react-icons/tb'
-import { useNavigate } from 'react-router'
+import {TbTrash} from 'react-icons/tb'
+import {useNavigate} from 'react-router'
+import {apiCreateChannel} from "@/services/ChannelService.js";
 
-const CustomerEdit = () => {
+const ChannelCreate = () => {
     const navigate = useNavigate()
 
     const [discardConfirmationOpen, setDiscardConfirmationOpen] =
         useState(false)
-    const [isSubmiting, setIsSubmiting] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const handleFormSubmit = async (values) => {
-        console.log('Submitted values', values)
-        setIsSubmiting(true)
-        await sleep(800)
-        setIsSubmiting(false)
-        toast.push(
-            <Notification type="success">Customer created!</Notification>,
-            { placement: 'top-center' },
-        )
-        navigate('/concepts/customers/customer-list')
+        setIsSubmitting(true)
+
+        try {
+            const res = await apiCreateChannel({
+                name: values.name,
+                description: values.description,
+                img: values.img,
+                allow_comments: values.allowComment,
+                allow_reactions: values.allowReaction,
+            });
+
+            setIsSubmitting(false)
+            toast.push(
+                <Notification type="success">Channel created!</Notification>,
+                {placement: 'top-center'},
+            )
+        } catch (errors) {
+            toast.push(
+                <Notification type="danger">{errors.message}</Notification>,
+                {placement: 'top-center'},
+            )
+        }
+
+        navigate('/channels')
     }
 
     const handleConfirmDiscard = () => {
         setDiscardConfirmationOpen(true)
         toast.push(
-            <Notification type="success">Customer discardd!</Notification>,
-            { placement: 'top-center' },
+            <Notification type="success">Channel discarded!</Notification>,
+            {placement: 'top-center'},
         )
-        navigate('/concepts/customers/customer-list')
+        navigate('/channels')
     }
 
     const handleDiscard = () => {
@@ -47,20 +62,13 @@ const CustomerEdit = () => {
 
     return (
         <>
-            <CustomerForm
-                newCustomer
+            <ChannelForm
                 defaultValues={{
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    img: '',
-                    phoneNumber: '',
-                    dialCode: '',
-                    country: '',
-                    address: '',
-                    city: '',
-                    postcode: '',
-                    tags: [],
+                    name: '',
+                    description: '',
+                    img: null,
+                    allowComment: false,
+                    allowReaction: false,
                 }}
                 onFormSubmit={handleFormSubmit}
             >
@@ -74,7 +82,7 @@ const CustomerEdit = () => {
                                 customColorClass={() =>
                                     'border-error ring-1 ring-error text-error hover:border-error hover:ring-error hover:text-error bg-transparent'
                                 }
-                                icon={<TbTrash />}
+                                icon={<TbTrash/>}
                                 onClick={handleDiscard}
                             >
                                 Discard
@@ -82,14 +90,14 @@ const CustomerEdit = () => {
                             <Button
                                 variant="solid"
                                 type="submit"
-                                loading={isSubmiting}
+                                loading={isSubmitting}
                             >
                                 Create
                             </Button>
                         </div>
                     </div>
                 </Container>
-            </CustomerForm>
+            </ChannelForm>
             <ConfirmDialog
                 isOpen={discardConfirmationOpen}
                 type="danger"
@@ -108,4 +116,4 @@ const CustomerEdit = () => {
     )
 }
 
-export default CustomerEdit
+export default ChannelCreate

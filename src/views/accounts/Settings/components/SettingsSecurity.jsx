@@ -1,15 +1,14 @@
-import { useState, useRef } from 'react'
-import Avatar from '@/components/ui/Avatar'
+import {useRef, useState} from 'react'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import { Form, FormItem } from '@/components/ui/Form'
-import classNames from '@/utils/classNames'
-import sleep from '@/utils/sleep'
-import isLastChild from '@/utils/isLastChild'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, Controller } from 'react-hook-form'
-import { z } from 'zod'
+import {Form, FormItem} from '@/components/ui/Form'
+import {zodResolver} from '@hookform/resolvers/zod'
+import {Controller, useForm} from 'react-hook-form'
+import {z} from 'zod'
+import {apiUpdateSettingSecurityPassword} from "@/services/AccontsService.js";
+import toast from "@/components/ui/toast/index.js";
+import Notification from "@/components/ui/Notification/index.jsx";
 
 const authenticatorList = [
     {
@@ -36,13 +35,13 @@ const validationSchema = z
     .object({
         currentPassword: z
             .string()
-            .min(1, { message: 'Please enter your current password!' }),
+            .min(1, {message: 'Please enter your current password!'}),
         newPassword: z
             .string()
-            .min(1, { message: 'Please enter your new password!' }),
+            .min(1, {message: 'Please enter your new password!'}),
         confirmNewPassword: z
             .string()
-            .min(1, { message: 'Please confirm your new password!' }),
+            .min(1, {message: 'Please confirm your new password!'}),
     })
     .refine((data) => data.confirmNewPassword === data.newPassword, {
         message: 'Password not match',
@@ -61,7 +60,7 @@ const SettingsSecurity = () => {
     const {
         getValues,
         handleSubmit,
-        formState: { errors },
+        formState: {errors},
         control,
     } = useForm({
         resolver: zodResolver(validationSchema),
@@ -69,8 +68,28 @@ const SettingsSecurity = () => {
 
     const handlePostSubmit = async () => {
         setIsSubmitting(true)
-        await sleep(1000)
-        console.log('getValues', getValues())
+
+        try {
+            const values = getValues();
+
+            const resp = await apiUpdateSettingSecurityPassword({
+                current_password: values.currentPassword,
+                password: values.newPassword,
+                password_confirmation: values.confirmNewPassword,
+            })
+
+            toast.push(
+                <Notification type="success">Password successfully updated</Notification>,
+                {placement: 'top-center'},
+            )
+
+        } catch (errors) {
+            toast.push(
+                <Notification type="danger">{errors?.response?.data?.message || errors.toString()}</Notification>,
+                {placement: 'top-center'},
+            )
+        }
+
         setConfirmationOpen(false)
         setIsSubmitting(false)
     }
@@ -101,7 +120,7 @@ const SettingsSecurity = () => {
                     <Controller
                         name="currentPassword"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <Input
                                 type="password"
                                 autoComplete="off"
@@ -119,7 +138,7 @@ const SettingsSecurity = () => {
                     <Controller
                         name="newPassword"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <Input
                                 type="password"
                                 autoComplete="off"
@@ -137,7 +156,7 @@ const SettingsSecurity = () => {
                     <Controller
                         name="confirmNewPassword"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <Input
                                 type="password"
                                 autoComplete="off"
@@ -167,7 +186,7 @@ const SettingsSecurity = () => {
             >
                 <p>Are you sure you want to change your password?</p>
             </ConfirmDialog>
-          {/*  <div className="mb-8">
+            {/*  <div className="mb-8">
                 <h4>2-Step verification</h4>
                 <p>
                     Your account holds great value to hackers. Enable two-step

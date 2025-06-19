@@ -1,40 +1,43 @@
-import { useMemo, useEffect } from 'react'
+import {useEffect, useMemo} from 'react'
 import Button from '@/components/ui/Button'
 import Upload from '@/components/ui/Upload'
 import Input from '@/components/ui/Input'
-import Select, { Option as DefaultOption } from '@/components/ui/Select'
+import Select, {Option as DefaultOption} from '@/components/ui/Select'
 import Avatar from '@/components/ui/Avatar'
-import { Form, FormItem } from '@/components/ui/Form'
+import {Form, FormItem} from '@/components/ui/Form'
 import NumericInput from '@/components/shared/NumericInput'
-import { countryList } from '@/constants/countries.constant'
-import { components } from 'react-select'
-import { apiGetSettingsProfile } from '@/services/AccontsService'
+import {countryList} from '@/constants/countries.constant'
+import {components} from 'react-select'
+import {apiGetSettingsProfile, apiUpdateSettingProfile} from '@/services/AccontsService'
 import sleep from '@/utils/sleep'
 import useSWR from 'swr'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, Controller } from 'react-hook-form'
-import { z } from 'zod'
-import { HiOutlineUser } from 'react-icons/hi'
-import { TbPlus } from 'react-icons/tb'
+import {zodResolver} from '@hookform/resolvers/zod'
+import {Controller, useForm} from 'react-hook-form'
+import {z} from 'zod'
+import {HiOutlineUser} from 'react-icons/hi'
+import {TbPlus} from 'react-icons/tb'
+import {apiSignIn} from "@/services/AuthService.js";
+import toast from "@/components/ui/toast/index.js";
+import Notification from "@/components/ui/Notification/index.jsx";
 
-const { Control } = components
+const {Control} = components
 
 const validationSchema = z.object({
-    firstName: z.string().min(1, { message: 'First name required' }),
-    lastName: z.string().min(1, { message: 'Last name required' }),
+    first_name: z.string().min(1, {message: 'First name required'}),
+    last_name: z.string().min(1, {message: 'Last name required'}),
     email: z
         .string()
-        .min(1, { message: 'Email required' })
-        .email({ message: 'Invalid email' }),
-    dialCode: z.string().min(1, { message: 'Please select your country code' }),
-    phoneNumber: z
+        .min(1, {message: 'Email required'})
+        .email({message: 'Invalid email'}),
+    // dialCode: z.string().min(1, {message: 'Please select your country code'}),
+    phone: z
         .string()
-        .min(1, { message: 'Please input your mobile number' }),
-    country: z.string().min(1, { message: 'Please select a country' }),
-    address: z.string().min(1, { message: 'Addrress required' }),
-    postcode: z.string().min(1, { message: 'Postcode required' }),
-    city: z.string().min(1, { message: 'City required' }),
-    img: z.string(),
+        .min(1, {message: 'Please input your mobile number'}),
+    // country: z.string().min(1, {message: 'Please select a country'}),
+    // address: z.string().min(1, {message: 'Addrress required'}),
+    // postcode: z.string().min(1, {message: 'Postcode required'}),
+    // city: z.string().min(1, {message: 'City required'}),
+    avatar: z.string()
 })
 
 const CustomSelectOption = (props) => {
@@ -56,7 +59,7 @@ const CustomSelectOption = (props) => {
     )
 }
 
-const CustomControl = ({ children, ...props }) => {
+const CustomControl = ({children, ...props}) => {
     const selected = props.getValue()[0]
     return (
         <Control {...props}>
@@ -74,7 +77,7 @@ const CustomControl = ({ children, ...props }) => {
 }
 
 const SettingsProfile = () => {
-    const { data, mutate } = useSWR(
+    const {data, mutate} = useSWR(
         '/api/settings/profile/',
         () => apiGetSettingsProfile(),
         {
@@ -111,7 +114,7 @@ const SettingsProfile = () => {
     const {
         handleSubmit,
         reset,
-        formState: { errors, isSubmitting },
+        formState: {errors, isSubmitting},
         control,
     } = useForm({
         resolver: zodResolver(validationSchema),
@@ -125,9 +128,20 @@ const SettingsProfile = () => {
     }, [data])
 
     const onSubmit = async (values) => {
-        await sleep(500)
-        if (data) {
-            mutate({ ...data, ...values }, false)
+        try {
+            const resp = await apiUpdateSettingProfile(values)
+            if (resp) {
+                mutate({...data, ...values}, false)
+                toast.push(
+                    <Notification type="success">Profile successfully updated</Notification>,
+                    { placement: 'top-center' },
+                )
+            }
+        } catch (errors) {
+            toast.push(
+                <Notification type="danger">{errors?.response?.data?.message || errors.toString()}</Notification>,
+                { placement: 'top-center' },
+            )
         }
     }
 
@@ -137,14 +151,14 @@ const SettingsProfile = () => {
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-8">
                     <Controller
-                        name="img"
+                        name="avatar"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <div className="flex items-center gap-4">
                                 <Avatar
                                     size={90}
                                     className="border-4 border-white bg-gray-100 text-gray-300 shadow-lg"
-                                    icon={<HiOutlineUser />}
+                                    icon={<HiOutlineUser/>}
                                     src={field.value}
                                 />
                                 <div className="flex items-center gap-2">
@@ -154,11 +168,13 @@ const SettingsProfile = () => {
                                         beforeUpload={beforeUpload}
                                         onChange={(files) => {
                                             if (files.length > 0) {
-                                                field.onChange(
-                                                    URL.createObjectURL(
-                                                        files[0],
-                                                    ),
-                                                )
+                                                const reader = new FileReader()
+
+                                                reader.onloadend = () => {
+                                                    field.onChange(reader.result)
+                                                }
+
+                                                reader.readAsDataURL(files[0])
                                             }
                                         }}
                                     >
@@ -166,7 +182,7 @@ const SettingsProfile = () => {
                                             variant="solid"
                                             size="sm"
                                             type="button"
-                                            icon={<TbPlus />}
+                                            icon={<TbPlus/>}
                                         >
                                             Upload Image
                                         </Button>
@@ -188,13 +204,13 @@ const SettingsProfile = () => {
                 <div className="grid md:grid-cols-2 gap-4">
                     <FormItem
                         label="First name"
-                        invalid={Boolean(errors.firstName)}
-                        errorMessage={errors.firstName?.message}
+                        invalid={Boolean(errors.first_name)}
+                        errorMessage={errors.first_name?.message}
                     >
                         <Controller
-                            name="firstName"
+                            name="first_name"
                             control={control}
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <Input
                                     type="text"
                                     autoComplete="off"
@@ -206,13 +222,13 @@ const SettingsProfile = () => {
                     </FormItem>
                     <FormItem
                         label="User name"
-                        invalid={Boolean(errors.lastName)}
-                        errorMessage={errors.lastName?.message}
+                        invalid={Boolean(errors.last_name)}
+                        errorMessage={errors.last_name?.message}
                     >
                         <Controller
-                            name="lastName"
+                            name="last_name"
                             control={control}
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <Input
                                     type="text"
                                     autoComplete="off"
@@ -231,7 +247,7 @@ const SettingsProfile = () => {
                     <Controller
                         name="email"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <Input
                                 type="email"
                                 autoComplete="off"
@@ -242,54 +258,56 @@ const SettingsProfile = () => {
                     />
                 </FormItem>
                 <div className="flex items-end gap-4 w-full mb-6">
-                    <FormItem
-                        invalid={
-                            Boolean(errors.phoneNumber) ||
-                            Boolean(errors.dialCode)
-                        }
-                    >
-                        <label className="form-label mb-2">Phone number</label>
-                        <Controller
-                            name="dialCode"
-                            control={control}
-                            render={({ field }) => (
-                                <Select
-                                    options={dialCodeList}
-                                    {...field}
-                                    className="w-[150px]"
-                                    components={{
-                                        Option: (props) => (
-                                            <CustomSelectOption
-                                                variant="phone"
-                                                {...props}
-                                            />
-                                        ),
-                                        Control: CustomControl,
-                                    }}
-                                    placeholder=""
-                                    value={dialCodeList.filter(
-                                        (option) =>
-                                            option.dialCode === field.value,
-                                    )}
-                                    onChange={(option) =>
-                                        field.onChange(option?.dialCode)
-                                    }
-                                />
-                            )}
-                        />
-                    </FormItem>
+                    {/*<FormItem*/}
+                    {/*    invalid={*/}
+                    {/*        Boolean(errors.phoneNumber) ||*/}
+                    {/*        Boolean(errors.dialCode)*/}
+                    {/*    }*/}
+                    {/*>*/}
+                    {/*    <label className="form-label mb-2">Phone number</label>*/}
+                    {/*    <Controller*/}
+                    {/*        name="dialCode"*/}
+                    {/*        control={control}*/}
+                    {/*        render={({ field }) => (*/}
+                    {/*            <Select*/}
+                    {/*                options={dialCodeList}*/}
+                    {/*                {...field}*/}
+                    {/*                className="w-[150px]"*/}
+                    {/*                components={{*/}
+                    {/*                    Option: (props) => (*/}
+                    {/*                        <CustomSelectOption*/}
+                    {/*                            variant="phone"*/}
+                    {/*                            {...props}*/}
+                    {/*                        />*/}
+                    {/*                    ),*/}
+                    {/*                    Control: CustomControl,*/}
+                    {/*                }}*/}
+                    {/*                placeholder=""*/}
+                    {/*                value={dialCodeList.filter(*/}
+                    {/*                    (option) =>*/}
+                    {/*                        option.dialCode === field.value,*/}
+                    {/*                )}*/}
+                    {/*                onChange={(option) =>*/}
+                    {/*                    field.onChange(option?.dialCode)*/}
+                    {/*                }*/}
+                    {/*            />*/}
+                    {/*        )}*/}
+                    {/*    />*/}
+                    {/*</FormItem>*/}
                     <FormItem
                         className="w-full"
                         invalid={
-                            Boolean(errors.phoneNumber) ||
-                            Boolean(errors.dialCode)
+                            Boolean(errors.phone) ||
+                            Boolean(errors.phone)
                         }
-                        errorMessage={errors.phoneNumber?.message}
+                        errorMessage={errors.phone?.message}
                     >
+                        <label className="form-label mb-2">Phone</label>
+
                         <Controller
-                            name="phoneNumber"
+                            name="phone"
                             control={control}
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <NumericInput
                                     autoComplete="off"
                                     placeholder="Phone Number"
@@ -301,95 +319,57 @@ const SettingsProfile = () => {
                         />
                     </FormItem>
                 </div>
-                <h4 className="mb-6">Address information</h4>
-                <FormItem
-                    label="Country"
-                    invalid={Boolean(errors.country)}
-                    errorMessage={errors.country?.message}
-                >
-                    <Controller
-                        name="country"
-                        control={control}
-                        render={({ field }) => (
-                            <Select
-                                options={countryList}
-                                {...field}
-                                components={{
-                                    Option: (props) => (
-                                        <CustomSelectOption
-                                            variant="country"
-                                            {...props}
-                                        />
-                                    ),
-                                    Control: CustomControl,
-                                }}
-                                placeholder=""
-                                value={countryList.filter(
-                                    (option) => option.value === field.value,
-                                )}
-                                onChange={(option) =>
-                                    field.onChange(option?.value)
-                                }
-                            />
-                        )}
-                    />
-                </FormItem>
-                <FormItem
-                    label="Address"
-                    invalid={Boolean(errors.address)}
-                    errorMessage={errors.address?.message}
-                >
-                    <Controller
-                        name="address"
-                        control={control}
-                        render={({ field }) => (
-                            <Input
-                                type="text"
-                                autoComplete="off"
-                                placeholder="Address"
-                                {...field}
-                            />
-                        )}
-                    />
-                </FormItem>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormItem
-                        label="City"
-                        invalid={Boolean(errors.city)}
-                        errorMessage={errors.city?.message}
-                    >
-                        <Controller
-                            name="city"
-                            control={control}
-                            render={({ field }) => (
-                                <Input
-                                    type="text"
-                                    autoComplete="off"
-                                    placeholder="City"
-                                    {...field}
-                                />
-                            )}
-                        />
-                    </FormItem>
-                    <FormItem
-                        label="Postal Code"
-                        invalid={Boolean(errors.postcode)}
-                        errorMessage={errors.postcode?.message}
-                    >
-                        <Controller
-                            name="postcode"
-                            control={control}
-                            render={({ field }) => (
-                                <Input
-                                    type="text"
-                                    autoComplete="off"
-                                    placeholder="Postal Code"
-                                    {...field}
-                                />
-                            )}
-                        />
-                    </FormItem>
-                </div>
+                {/*<h4 className="mb-6">Address information</h4>*/}
+                {/*<FormItem*/}
+                {/*    label="Country"*/}
+                {/*    invalid={Boolean(errors.country)}*/}
+                {/*    errorMessage={errors.country?.message}*/}
+                {/*>*/}
+                {/*    <Controller*/}
+                {/*        name="country"*/}
+                {/*        control={control}*/}
+                {/*        render={({field}) => (*/}
+                {/*            <Select*/}
+                {/*                options={countryList}*/}
+                {/*                {...field}*/}
+                {/*                components={{*/}
+                {/*                    Option: (props) => (*/}
+                {/*                        <CustomSelectOption*/}
+                {/*                            variant="country"*/}
+                {/*                            {...props}*/}
+                {/*                        />*/}
+                {/*                    ),*/}
+                {/*                    Control: CustomControl,*/}
+                {/*                }}*/}
+                {/*                placeholder=""*/}
+                {/*                value={countryList.filter(*/}
+                {/*                    (option) => option.value === field.value,*/}
+                {/*                )}*/}
+                {/*                onChange={(option) =>*/}
+                {/*                    field.onChange(option?.value)*/}
+                {/*                }*/}
+                {/*            />*/}
+                {/*        )}*/}
+                {/*    />*/}
+                {/*</FormItem>*/}
+                {/*<FormItem*/}
+                {/*    label="Address"*/}
+                {/*    invalid={Boolean(errors.address)}*/}
+                {/*    errorMessage={errors.address?.message}*/}
+                {/*>*/}
+                {/*    <Controller*/}
+                {/*        name="address"*/}
+                {/*        control={control}*/}
+                {/*        render={({field}) => (*/}
+                {/*            <Input*/}
+                {/*                type="text"*/}
+                {/*                autoComplete="off"*/}
+                {/*                placeholder="Address"*/}
+                {/*                {...field}*/}
+                {/*            />*/}
+                {/*        )}*/}
+                {/*    />*/}
+                {/*</FormItem>*/}
                 <div className="flex justify-end">
                     <Button
                         variant="solid"
