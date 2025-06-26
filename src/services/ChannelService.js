@@ -8,6 +8,14 @@ export async function apiGetChannelList(params) {
     })
 }
 
+export async function apiGetChannelListAll(params) {
+    return ApiService.fetchDataWithAxios({
+        url: '/dashboard/channels-list',
+        method: 'get',
+        params,
+    })
+}
+
 export async function apiGetChannel({ id, ...params }) {
     return ApiService.fetchDataWithAxios({
         url: `/dashboard/channels/${id}`,
@@ -32,10 +40,9 @@ export async function apiUpdateChannel(id, {...data }) {
     })
 }
 
-export async function apiDeleteChannel({ id, ...params }) {
+export async function apiDeleteChannel({ id }) {
     return ApiService.fetchDataWithAxios({
         url: `/dashboard/channels/${id}`,
-        method: 'delete',
-        params,
+        method: 'delete'
     })
 }

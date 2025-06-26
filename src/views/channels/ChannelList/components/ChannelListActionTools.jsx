@@ -3,6 +3,7 @@ import { TbCloudDownload, TbUserPlus } from 'react-icons/tb'
 import { useNavigate } from 'react-router'
 import useChannelList from '../hooks/useChannelList.js'
 import { CSVLink } from 'react-csv'
+import {FaPlus} from "react-icons/fa";
 
 const ChannelListActionTools = () => {
     const navigate = useNavigate()
@@ -25,10 +26,10 @@ const ChannelListActionTools = () => {
             {/*</CSVLink>*/}
             <Button
                 variant="solid"
-                icon={<TbUserPlus className="text-xl" />}
+                icon={<FaPlus className="text-xs" />}
                 onClick={() => navigate('/channels/create')}
             >
-                Add new
+               Create Channel
             </Button>
         </div>
     )

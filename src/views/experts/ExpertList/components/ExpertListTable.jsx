@@ -109,7 +109,7 @@ const ExpertListTable = () => {
                 },
             },
             {
-                header: 'Active Plan',
+                header: 'Plan',
                 accessorKey: 'plan.name',
                 cell: (props) => {
                     const row = props.row.original

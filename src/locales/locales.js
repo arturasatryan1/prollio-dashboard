@@ -24,6 +24,7 @@ i18n.use(initReactI18next).init({
 
 export const dateLocales = {
     en: () => import('dayjs/locale/en'),
+    hy: () => import('dayjs/locale/hy-am'),
 }
 
 export default i18n

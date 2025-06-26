@@ -50,9 +50,9 @@ const ProfileSection = ({data = {}}) => {
                     <CustomerInfoField title="Total Spent" value={data.spent} decimal={true}/>
                 </div>
                 <div className="flex flex-col gap-4 mt-10">
-                    <Button block variant="solid" onClick={handleSendMessage}>
-                        Send Message
-                    </Button>
+                    {/*<Button block variant="solid" onClick={handleSendMessage}>*/}
+                    {/*    Send Message*/}
+                    {/*</Button>*/}
                     {/*<Button*/}
                     {/*    block*/}
                     {/*    customColorClass={() =>*/}

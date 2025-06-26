@@ -18,12 +18,11 @@ const CustomerEdit = () => {
     const navigate = useNavigate()
 
     const { data, isLoading } = useSWR(
-        [`/api/customers${id}`, { id: id }],
+        [`/api/customers/${id}`, { id: id }],
         // eslint-disable-next-line no-unused-vars
         ([_, params]) => apiGetCustomer(params),
         {
             revalidateOnFocus: false,
-            revalidateIfStale: false,
         },
     )
 

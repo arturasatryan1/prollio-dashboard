@@ -3,16 +3,16 @@ import { ADMIN, USER } from '@/constants/roles.constant'
 
 const customerRoute = [
     {
-        key: 'subscriber.list',
-        path: `/subscribers`,
+        key: 'members.list',
+        path: `/members`,
         component: lazy(
             () => import('@/views/customers/CustomerList'),
         ),
         authority: [ADMIN, USER],
     },
     {
-        key: 'subscriber.details',
-        path: `/subscribers/:id`,
+        key: 'members.list',
+        path: `/members/:id`,
         component: lazy(
             () => import('@/views/customers/CustomerDetails'),
         ),

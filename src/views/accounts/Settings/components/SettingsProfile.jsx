@@ -82,8 +82,6 @@ const SettingsProfile = () => {
         () => apiGetSettingsProfile(),
         {
             revalidateOnFocus: false,
-            revalidateIfStale: false,
-            revalidateOnReconnect: false,
         },
     )
 

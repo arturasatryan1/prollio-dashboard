@@ -66,18 +66,18 @@ export const SignInBase = ({
             {/*        setMessage={setMessage}*/}
             {/*    />*/}
             {/*</div>*/}
-            <div>
-                <div className="mt-6 text-center">
-                    <span>{t(`Don't have an account yet?`)} </span>
-                    <ActionLink
-                        to={signUpUrl}
-                        className="heading-text font-bold"
-                        themeColor={false}
-                    >
-                        {t('Sign up')}
-                    </ActionLink>
-                </div>
-            </div>
+            {/*<div>*/}
+            {/*    <div className="mt-6 text-center">*/}
+            {/*        <span>{t(`Don't have an account yet?`)} </span>*/}
+            {/*        <ActionLink*/}
+            {/*            to={signUpUrl}*/}
+            {/*            className="heading-text font-bold"*/}
+            {/*            themeColor={false}*/}
+            {/*        >*/}
+            {/*            {t('Sign up')}*/}
+            {/*        </ActionLink>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
         </>
     )
 }

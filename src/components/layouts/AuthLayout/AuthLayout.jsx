@@ -13,6 +13,7 @@ const AuthLayout = ({ children }) => {
         return layouts[currentLayoutType]
     }, [])
 
+
     return <Layout>{children}</Layout>
 }
 

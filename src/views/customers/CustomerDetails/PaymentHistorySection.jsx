@@ -23,17 +23,6 @@ const statusColor = {
 const columnHelper = createColumnHelper()
 
 const columns = [
-    columnHelper.accessor('channel', {
-        header: 'Channel',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center gap-2">
-                    <span className="font-semibold">{row.channel.name}</span>
-                </div>
-            )
-        },
-    }),
     columnHelper.accessor('event', {
         header: 'Event',
         cell: (props) => {
@@ -60,7 +49,7 @@ const columns = [
         },
     }),
     columnHelper.accessor('date', {
-        header: 'Date',
+        header: 'Jined At',
         cell: (props) => {
             const row = props.row.original
             return (

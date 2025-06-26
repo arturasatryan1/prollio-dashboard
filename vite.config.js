@@ -7,6 +7,9 @@ import dynamicImport from 'vite-plugin-dynamic-import'
 export default defineConfig({
   plugins: [react(), dynamicImport()],
   assetsInclude: ['**/*.md'],
+  optimizeDeps: {
+    include: ['@fullcalendar/core/locales/hy-am']
+  },
   resolve: {
     alias: {
       '@': path.join(__dirname, 'src'),

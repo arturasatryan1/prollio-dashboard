@@ -8,6 +8,7 @@ const endpointConfig = {
     resetPassword: '/reset-password',
     setPassword: '/set-password',
     checkToken: '/check-request-token',
+    checkout: '/checkout',
 }
 
 export default endpointConfig

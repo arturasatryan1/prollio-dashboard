@@ -10,8 +10,9 @@ import useChannelList from "@/views/channels/ChannelList/hooks/useChannelList.js
 import Avatar from "../../../../components/ui/Avatar/index.jsx";
 
 const statusColor = {
-    0: 'bg-red-200 dark:bg-red-300 text-gray-900 dark:text-gray-900',
-    1: 'bg-green-200 dark:bg-green-300 text-gray-900 dark:text-gray-900',
+    pending: 'bg-amber-200 dark:bg-amber-300 text-gray-900 dark:text-gray-900',
+    active: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
+    inactive: 'bg-red-200 dark:bg-red-200 text-gray-900 dark:text-gray-900',
 }
 
 const NameColumn = ({row}) => {
@@ -91,24 +92,22 @@ const ChannelListTable = () => {
                 size: 300
             },
             {
-                header: 'Active',
-                accessorKey: 'active',
+                header: 'Status',
+                accessorKey: 'status',
                 cell: (props) => {
                     const row = props.row.original
                     return (
                         <div className="flex items-center">
-                            <Tag className={statusColor[row.active]}>
-                                {row.active ? <span className="capitalize">Yes</span> :
-                                    <span className="capitalize">No</span>}
-
+                            <Tag className={statusColor[row.status]}>
+                                {<span className="capitalize">{row.status}</span>}
                             </Tag>
                         </div>
                     )
                 },
             },
             {
-                header: 'Subscribers',
-                accessorKey: 'subscriber_count',
+                header: 'members',
+                accessorKey: 'members_count',
             },
             {
                 header: 'Created Date',

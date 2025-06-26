@@ -53,27 +53,8 @@ const ProfileSection = ({ data = {} }) => {
         )
     }
 
-    const handleSendMessage = () => {
-        navigate('/concepts/chat')
-    }
-
-    const handleEdit = () => {
-        navigate(`/concepts/customers/customer-edit/${data.id}`)
-    }
-
     return (
         <Card className="w-full">
-            <div className="flex justify-end">
-                <Tooltip title="Edit customer">
-                    <button
-                        className="close-button button-press-feedback"
-                        type="button"
-                        onClick={handleEdit}
-                    >
-                        <HiPencil />
-                    </button>
-                </Tooltip>
-            </div>
             <div className="flex flex-col xl:justify-between h-full 2xl:min-w-[360px] mx-auto">
                 <div className="flex xl:flex-col items-center gap-4 mt-6">
                     <Avatar size={90} shape="circle" src={data.user.avatar} />

@@ -1,15 +1,26 @@
-import { useMemo } from 'react'
+import {useMemo} from 'react'
 import Avatar from '@/components/ui/Avatar'
 import Dropdown from '@/components/ui/Dropdown'
 import classNames from 'classnames'
 import withHeaderItem from '@/utils/hoc/withHeaderItem'
-import { useLocaleStore } from '@/store/localeStore'
-import { HiCheck } from 'react-icons/hi'
+import {useLocaleStore} from '@/store/localeStore'
+import {HiCheck} from 'react-icons/hi'
 
-const languageList = [{ label: 'English', value: 'en', flag: 'US' }]
+const languageList = [
+    {
+        label: 'English',
+        value: 'en',
+        flag: 'US'
+    },
+    {
+        label: 'Հայերեն',
+        value: 'hy',
+        flag: 'AM'
+    }
+]
 
-const _LanguageSelector = ({ className }) => {
-    const { currentLang: locale, setLang } = useLocaleStore((state) => state)
+const _LanguageSelector = ({className}) => {
+    const {currentLang: locale, setLang} = useLocaleStore((state) => state)
 
     const selectLangFlag = useMemo(() => {
         return languageList.find((lang) => lang.value === locale)?.flag
@@ -43,7 +54,7 @@ const _LanguageSelector = ({ className }) => {
                         <span className="ltr:ml-2 rtl:mr-2">{lang.label}</span>
                     </span>
                     {locale === lang.value && (
-                        <HiCheck className="text-emerald-500 text-lg" />
+                        <HiCheck className="text-emerald-500 text-lg"/>
                     )}
                 </Dropdown.Item>
             ))}

@@ -10,7 +10,7 @@ import { useAuth } from '@/auth'
 const dropdownItemList = [
     {
         label: 'Profile',
-        path: '/account/settings',  
+        path: '/settings/account',
         icon: <PiUserDuotone />,
     },
     {

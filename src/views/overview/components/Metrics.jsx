@@ -1,12 +1,13 @@
 import Card from '@/components/ui/Card'
 import GrowShrinkValue from '@/components/shared/GrowShrinkValue'
 import classNames from '@/utils/classNames'
-import { NumericFormat } from 'react-number-format'
-import { TbUsers, TbCoins, TbPlus } from 'react-icons/tb'
+import {NumericFormat} from 'react-number-format'
+import {TbCoins} from 'react-icons/tb'
 import useTranslation from "@/utils/hooks/useTranslation.js";
 import {FaUserFriends} from "react-icons/fa";
+import {BsPersonCheck} from "react-icons/bs";
 
-const Widget = ({ title, growShrink, value, compareFrom, icon, iconClass }) => {
+const Widget = ({title, growShrink, value, compareFrom, icon, iconClass}) => {
     return (
         <Card className="flex-1">
             <div className="flex justify-between gap-2 relative">
@@ -37,38 +38,51 @@ const Widget = ({ title, growShrink, value, compareFrom, icon, iconClass }) => {
     )
 }
 
-const Metrics = ({ data, selectedPeriod }) => {
-
+const Metrics = ({data, selectedPeriod}) => {
     const {t} = useTranslation()
 
     const vsPeriod = {
-        thisMonth: t('vs last month'),
-        thisWeek: t('vs last week'),
-        thisYear: t('vs last year')
+        weekly: t('vs last week'),
+        monthly: t('vs last month'),
+        annually: t('vs last year')
     }
 
     return (
         <div className="flex flex-col 2xl:flex-col xl:flex-row gap-4">
             <Widget
+                title={t('Active Members')}
+                value={
+                    <NumericFormat
+                        displayType="text"
+                        value={data?.active_members}
+                        thousandSeparator={true}
+                    />
+                }
+                // growShrink={10}
+                compareFrom={vsPeriod[selectedPeriod]}
+                icon={<BsPersonCheck/>}
+                iconClass="bg-orange-200"
+            />
+            <Widget
                 title={t('Total visitors')}
                 value={
                     <NumericFormat
                         displayType="text"
-                        value={data.visitors.value}
+                        value={data?.total_visitors}
                         thousandSeparator={true}
                     />
                 }
-                growShrink={data.visitors.growShrink}
+                // growShrink={0}
                 compareFrom={vsPeriod[selectedPeriod]}
-                icon={<FaUserFriends />}
-                iconClass="bg-orange-200"
+                icon={<FaUserFriends/>}
+                iconClass="bg-blue-200"
             />
             <Widget
                 title={t('Visitors joined')}
-                value={`${data.conversionRate.value}%`}
-                growShrink={data.conversionRate.growShrink}
+                value={`${data?.total_visitors ? Math.round((data?.active_members / data?.total_visitors) * 100, 1) : 0}%`}
+                // growShrink={0}
                 compareFrom={vsPeriod[selectedPeriod]}
-                icon={<TbCoins />}
+                icon={<BsPersonCheck/>}
                 iconClass="bg-emerald-200"
             />
             {/*<Widget*/}

@@ -28,7 +28,7 @@ const expertRoute = [
     //     },
     // },
     {
-        key: 'expert.details',
+        key: 'experts.list',
         path: `/experts/:id`,
         component: lazy(
             () => import('@/views/experts/ExpertDetails'),

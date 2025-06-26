@@ -1,15 +1,13 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import StickyFooter from '@/components/shared/StickyFooter'
 import Button from '@/components/ui/Button'
 import Dialog from '@/components/ui/Dialog'
-import Avatar from '@/components/ui/Avatar'
-import Tooltip from '@/components/ui/Tooltip'
 import Notification from '@/components/ui/Notification'
 import toast from '@/components/ui/toast'
-import RichTextEditor from '@/components/shared/RichTextEditor'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import useCustomerList from '../hooks/useCustomerList'
-import { TbChecks } from 'react-icons/tb'
+import {TbChecks} from 'react-icons/tb'
+import {Input} from "@/components/ui/index.js";
 
 const CustomerListSelected = () => {
     const {
@@ -54,7 +52,7 @@ const CustomerListSelected = () => {
         setTimeout(() => {
             toast.push(
                 <Notification type="success">Message sent!</Notification>,
-                { placement: 'top-center' },
+                {placement: 'top-center'},
             )
             setSendMessageLoading(false)
             setSendMessageDialogOpen(false)
@@ -76,7 +74,7 @@ const CustomerListSelected = () => {
                                 {selectedCustomer.length > 0 && (
                                     <span className="flex items-center gap-2">
                                         <span className="text-lg text-primary">
-                                            <TbChecks />
+                                            <TbChecks/>
                                         </span>
                                         <span className="font-semibold flex items-center gap-1">
                                             <span className="heading-text">
@@ -136,9 +134,13 @@ const CustomerListSelected = () => {
                 onClose={() => setSendMessageDialogOpen(false)}
             >
                 <h5 className="mb-2">Send Message</h5>
-                <p>Send message to the selected subscribers</p>
+                <p>Send message to the selected members</p>
                 <div className="my-4">
-                    <RichTextEditor content={''} />
+                    <Input
+                        textArea
+                        className={'border-gray-200 dark:border-gray-700'}
+                    />
+                    {/*<RichTextEditor content={''}  />*/}
                 </div>
                 <div className="ltr:justify-end flex items-center gap-2">
                     <Button

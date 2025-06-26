@@ -49,7 +49,7 @@ const ProfileSection = ({data = {}}) => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-y-7 gap-x-4">
                     <CustomerInfoField title="Name" value={`${data.name}`}/>
                     <CustomerInfoField title="Description" value={data.description}/>
-                    <CustomerInfoField title="Subscribers Count" value={data.subscriber_count}/>
+                    <CustomerInfoField title="Subscribers Count" value={data.members_count}/>
                     <CustomerInfoField title="Allow Comments" value={data.allow_comment ? 'YES': 'NO'}/>
                     <CustomerInfoField title="Allow Reactions" value={data.allow_reaction ? 'YES': 'NO'}/>
                 </div>

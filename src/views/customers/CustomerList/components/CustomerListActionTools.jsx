@@ -23,13 +23,13 @@ const CustomerListActionTools = () => {
                     Download
                 </Button>
             </CSVLink>
-            <Button
-                variant="solid"
-                icon={<TbUserPlus className="text-xl" />}
-                onClick={() => navigate('/concepts/customers/customer-create')}
-            >
-                Add new
-            </Button>
+            {/*<Button*/}
+            {/*    variant="solid"*/}
+            {/*    icon={<TbUserPlus className="text-xl" />}*/}
+            {/*    onClick={() => navigate('/concepts/customers/customer-create')}*/}
+            {/*>*/}
+            {/*    Add new*/}
+            {/*</Button>*/}
         </div>
     )
 }

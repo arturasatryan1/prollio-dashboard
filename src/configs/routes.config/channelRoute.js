@@ -3,15 +3,15 @@ import {ADMIN, USER} from '@/constants/roles.constant'
 
 const channelRoute = [
     {
-        key: 'channel.list',
+        key: 'channels.list',
         path: `/channels`,
         component: lazy(
-            () => import('@/views/channels/ChannelList/ChannalList.jsx'),
+            () => import('@/views/channels/ChannelList/ChannelList.jsx'),
         ),
         authority: [ADMIN, USER],
     },
     {
-        key: 'channel.details',
+        key: 'channels.list',
         path: `/channels/:id`,
         component: lazy(
             () => import('@/views/channels/ChannelDetails/ChannelDetails.jsx'),
@@ -22,7 +22,7 @@ const channelRoute = [
         },
     },
     {
-        key: 'channel.create',
+        key: 'channels.list',
         path: `/channels/create`,
         component: lazy(
             () => import('@/views/channels/ChannelCreate/ChannelCreate.jsx'),
@@ -33,7 +33,7 @@ const channelRoute = [
         },
     },
     {
-        key: 'channel.edit',
+        key: 'channels.list',
         path: `/channels/:id/edit`,
         component: lazy(
             () => import('@/views/channels/ChannelEdit/ChannelEdit.jsx'),

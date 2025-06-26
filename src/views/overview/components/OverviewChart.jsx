@@ -6,7 +6,10 @@ import {COLORS} from '@/constants/chart.constant'
 import {useThemeStore} from '@/store/themeStore'
 import {NumericFormat} from 'react-number-format'
 import useTranslation from "@/utils/hooks/useTranslation.js";
-const WebAnalytic = ({data}) => {
+import dayjs from "dayjs";
+
+const OverviewChart = ({data}) => {
+
     const isFirstRender = useRef(true)
 
     const sideNavCollapse = useThemeStore(
@@ -29,79 +32,85 @@ const WebAnalytic = ({data}) => {
     return (
         <Card className="h-full">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                {/*<h4>Web analytic</h4>*/}
-                {/*<div className="inline-flex items-center gap-6">*/}
-                {/*    <div className="flex items-center gap-1.5">*/}
-                {/*        <div*/}
-                {/*            className="h-3.5 w-3.5 rounded-sm"*/}
-                {/*            style={{backgroundColor: COLORS[0]}}*/}
-                {/*        />*/}
-                {/*        <div>Natural</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-center gap-1.5">*/}
-                {/*        <div*/}
-                {/*            className="h-3.5 w-3.5 rounded-sm"*/}
-                {/*            style={{backgroundColor: COLORS[7]}}*/}
-                {/*        />*/}
-                {/*        <div>Referral</div>*/}
-                {/*    </div>*/}
-                {/*    <div className="flex items-center gap-1.5">*/}
-                {/*        <div*/}
-                {/*            className="h-3.5 w-3.5 rounded-sm"*/}
-                {/*            style={{backgroundColor: COLORS[8]}}*/}
-                {/*        />*/}
-                {/*        <div>Direct</div>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
+                <h4></h4>
+                <div className="inline-flex items-center gap-6">
+                    <div className="flex items-center gap-1.5">
+                        <div
+                            className="h-3.5 w-3.5 rounded-sm"
+                            style={{backgroundColor: COLORS[0]}}
+                        />
+                        <div>Total Earnings</div>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                        <div
+                            className="h-3.5 w-3.5 rounded-sm"
+                            style={{backgroundColor: COLORS[7]}}
+                        />
+                        <div>Net Earnings</div>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                        <div
+                            className="h-3.5 w-3.5 rounded-sm"
+                            style={{backgroundColor: COLORS[8]}}
+                        />
+                        <div>Fees</div>
+                    </div>
+                </div>
             </div>
-            <div className="mt-8">
+            <div className="mt-5">
                 <div className="flex items-center gap-10">
                     <div>
-                        <div className="mb-2">{t('Total Revenue')}</div>
+                        <div className="mb-2">
+                            <div className="flex items-center gap-1">
+                                <span>{t('Total Earned')}</span>
+                            </div>
+                        </div>
                         <div className="flex items-end gap-2">
                             <h3>
                                 <NumericFormat
                                     displayType="text"
-                                    value={'12000'}
-                                    prefix={'$'}
+                                    value={data?.summary?.total_earned}
+                                    prefix={'֏'}
                                     thousandSeparator={true}
                                 />
                             </h3>
-                            <GrowShrinkValue
-                                className="font-bold"
-                                value={'10'}
-                                suffix="%"
-                                positiveIcon="+"
-                                negativeIcon=""
-                            />
+                            {/*<GrowShrinkValue*/}
+                            {/*    className="font-bold"*/}
+                            {/*    value={'10'}*/}
+                            {/*    suffix="%"*/}
+                            {/*    positiveIcon="+"*/}
+                            {/*    negativeIcon=""*/}
+                            {/*/>*/}
                         </div>
                     </div>
                     <div>
-                        <div className="mb-2">{t('Active Subscribers')}</div>
+                        <div className="mb-2">{t('Pending Payout')}</div>
                         <div className="flex items-end gap-2">
-                            <h3>{12}</h3>
+                            <h3>
+                                <NumericFormat
+                                    displayType="text"
+                                    value={data?.summary?.pending_payout}
+                                    prefix={'֏'}
+                                    thousandSeparator={true}
+                                />
+                            </h3>
                         </div>
                     </div>
-                    <div>
-                        <div className="mb-2">{t('Avg. Subscribers per Event')}</div>
-                        <div className="flex items-end gap-2">
-                            <h3>{28}</h3>
-                            <GrowShrinkValue
-                                className="font-bold"
-                                value={12}
-                                suffix=""
-                                positiveIcon="+"
-                                negativeIcon=""
-                            />
-                        </div>
-                    </div>
+                    {/*<div>*/}
+                    {/*    <div className="mb-2">{t('Next Payout')}</div>*/}
+                    {/*    <div className="flex items-end gap-2">*/}
+                    {/*        <h3>*/}
+                    {/*            {dayjs(data?.summary?.next_payout_date).format('DD MMM YYYY')}*/}
+                    {/*        </h3>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                 </div>
             </div>
             <div className="mt-4">
                 <Chart
                     type="line"
-                    series={data.series}
-                    xAxis={data.date}
+                    series={data?.series}
+                    xAxis={data?.date}
                     height="330px"
                     customOptions={{
                         legend: {show: false},
@@ -113,4 +122,4 @@ const WebAnalytic = ({data}) => {
     )
 }
 
-export default WebAnalytic
+export default OverviewChart

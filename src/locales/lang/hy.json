@@ -1,5 +1,9 @@
 {
   "nav": {
+    "dashboard" : {
+      "dashboard": "Վահանակ",
+      "overview": "Ընդհանուր"
+    },
     "home": "Գլխավոր",
     "singleMenuItem": "Մենյուի առանձին կետ",
     "collapseMenu": {

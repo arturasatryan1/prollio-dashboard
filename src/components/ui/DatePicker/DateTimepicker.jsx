@@ -9,7 +9,7 @@ import BasePicker from './BasePicker'
 import Button from '../Button/Button'
 import { useConfig } from '../ConfigProvider'
 
-const DEFAULT_INPUT_FORMAT = 'DD-MMM-YYYY hh:mm a'
+const DEFAULT_INPUT_FORMAT = 'DD MMMM YYYY HH:mm'
 
 const DateTimepicker = (props) => {
     const {

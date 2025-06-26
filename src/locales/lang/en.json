@@ -1,22 +1,29 @@
 {
-    "nav": {
-        "home": "Home",
-        "singleMenuItem": "Single menu item",
-        "collapseMenu": {
-            "collapseMenu": "Collapse menu item",
-            "item1": "Collapse menu item 1",
-            "item2": "Collapse menu item 2"
-        },
-        "groupMenu": {
-            "groupMenu": "Group menu",
-            "single": "Group single menu item",
-            "collapse": {
-                "collapse": "Group collapse menu",
-                "item1": "Group collapse menu item 1",
-                "item2": "Group collapse menu item 2"
-            }
-        }
+  "nav": {
+    "dashboard" : {
+      "dashboard": "Dashboard",
+      "overview": "Overview",
+      "support": "Support",
+      "finance": "Finance",
+      "payout": "Payouts"
     },
-    "Welcome back!": "Welcome back!",
-    "Please enter your credentials to sign in!": "Please enter your credentials to sign in!"
+    "home": "Home",
+    "singleMenuItem": "Single menu item",
+    "collapseMenu": {
+      "collapseMenu": "Collapse menu item",
+      "item1": "Collapse menu item 1",
+      "item2": "Collapse menu item 2"
+    },
+    "groupMenu": {
+      "groupMenu": "Group menu",
+      "single": "Group single menu item",
+      "collapse": {
+        "collapse": "Group collapse menu",
+        "item1": "Group collapse menu item 1",
+        "item2": "Group collapse menu item 2"
+      }
+    }
+  },
+  "Welcome back!": "Welcome back!",
+  "Please enter your credentials to sign in!": "Please enter your credentials to sign in!"
 }

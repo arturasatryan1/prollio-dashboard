@@ -1,36 +1,27 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import Button from '@/components/ui/Button'
 import Tag from '@/components/ui/Tag'
 import Avatar from '@/components/ui/Avatar'
 import Notification from '@/components/ui/Notification'
 import toast from '@/components/ui/toast'
-import CreditCardDialog from '@/components/view/CreditCardDialog'
 import BillingHistory from './BillingHistory'
-import { apiGetSettingsBilling } from '@/services/AccontsService'
-import classNames from '@/utils/classNames'
-import isLastChild from '@/utils/isLastChild'
+import {apiGetSettingsBilling} from '@/services/AccontsService'
 import sleep from '@/utils/sleep'
-import { TbPlus } from 'react-icons/tb'
 import useSWR from 'swr'
 import dayjs from 'dayjs'
-import { useNavigate } from 'react-router'
-import { PiLightningFill } from 'react-icons/pi'
-import { NumericFormat } from 'react-number-format'
+import {useNavigate} from 'react-router'
+import {PiLightningFill} from 'react-icons/pi'
+import {NumericFormat} from 'react-number-format'
+import Badge from "@/components/ui/Badge/index.jsx";
 
-const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-]
+const statusColor = {
+    pending: 'bg-amber-400',
+    processing: 'bg-blue-200 dark:bg-blue-300 text-gray-900',
+    completed: 'bg-emerald-500',
+    failed: 'bg-red-200 dark:bg-red-300 text-gray-900',
+    cancelled: 'bg-gray-200 dark:bg-gray-300 text-gray-900',
+    refunded: 'bg-purple-200 dark:bg-purple-300 text-gray-900',
+};
 
 const SettingsBilling = () => {
     const navigate = useNavigate()
@@ -44,10 +35,10 @@ const SettingsBilling = () => {
     const {
         data = {
             subscription: {
-                // plan: {
-                //     name: '',
-                //     price_monthly: 0,
-                // },
+                plan: {
+                    name: '',
+                    price_monthly: 0,
+                },
                 status: '',
                 type: '',
             },
@@ -80,7 +71,7 @@ const SettingsBilling = () => {
         handleCreditCardDialogClose()
         toast.push(
             <Notification type="success">Credit card updated!</Notification>,
-            { placement: 'top-center' },
+            {placement: 'top-center'},
         )
     }
 
@@ -90,12 +81,12 @@ const SettingsBilling = () => {
         handleCreditCardDialogClose()
         toast.push(
             <Notification type="success">Credit card added!</Notification>,
-            { placement: 'top-center' },
+            {placement: 'top-center'},
         )
     }
 
     const handleChangePlan = () => {
-        navigate('/concepts/account/pricing?subcription=basic&cycle=monthly')
+        navigate('/settings/pricing')
     }
 
     return (
@@ -108,31 +99,31 @@ const SettingsBilling = () => {
                             <Avatar
                                 className="bg-emerald-500"
                                 shape="circle"
-                                icon={<PiLightningFill />}
+                                icon={<PiLightningFill/>}
                             />
                         </div>
                         <div>
-                            <div className="flex items-center gap-2">
-                                <h6 className="font-bold py-3">
+                            <div className="flex items-center mb-2">
+                                <h6 className="font-bold">
                                     {data.subscription?.plan?.title}
                                 </h6>
-                                <Tag className="bg-success-subtle text-success rounded-md border-0">
-                                    <span className="capitalize">
+                                <Tag className={`rounded-md border-0 ${statusColor[data.subscription?.status]}`}>
+                                    <span className={`capitalize`}>
                                         {data.subscription?.status}
                                     </span>
                                 </Tag>
                             </div>
                             <div className="font-semibold">
-                                <span>
+                                    <span>
                                     Billing {data.subscription?.type}
                                 </span>
                                 <span> | </span>
                                 <span>
                                     Next payment on{' '}
                                     {dayjs(
-                                            data.subscription?.ends_at ||
-                                                0,
-                                        )
+                                        data.subscription?.ends_at ||
+                                        0,
+                                    )
                                         .format('MM/DD/YYYY')}
                                 </span>
                                 <span>
@@ -143,25 +134,26 @@ const SettingsBilling = () => {
                                         value={(
                                             Math.round(
                                                 (data.subscription?.plan?.price_monthly || 0) *
-                                                    100,
+                                                100,
                                             ) / 100
                                         ).toFixed(2)}
                                         prefix={'$'}
                                         thousandSeparator={true}
                                     />
                                 </span>
+
                             </div>
                         </div>
                     </div>
-                    {/*<div className="flex">*/}
-                    {/*    <Button*/}
-                    {/*        size="sm"*/}
-                    {/*        variant="solid"*/}
-                    {/*        onClick={handleChangePlan}*/}
-                    {/*    >*/}
-                    {/*        Change plan*/}
-                    {/*    </Button>*/}
-                    {/*</div>*/}
+                    <div className="flex">
+                        <Button
+                            size="sm"
+                            variant="solid"
+                            onClick={handleChangePlan}
+                        >
+                            Change plan
+                        </Button>
+                    </div>
                 </div>
             </div>
             {/*<div className="mt-8">*/}

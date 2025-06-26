@@ -30,13 +30,15 @@ const _Notification = ({ className }) => {
     const navigate = useNavigate()
 
     const getNotificationCount = async () => {
-        const resp = await apiGetNotificationCount()
-        if (resp.count > 0) {
-            setNoResult(false)
-            setUnreadNotification(true)
-        } else {
-            setNoResult(true)
-        }
+        // const resp = await apiGetNotificationCount()
+        setNoResult(true);
+
+        // if (resp.count > 0) {
+        //     setNoResult(false)
+        //     setUnreadNotification(true)
+        // } else {
+        //     setNoResult(true)
+        // }
     }
 
     useEffect(() => {
@@ -46,9 +48,9 @@ const _Notification = ({ className }) => {
     const onNotificationOpen = async () => {
         if (notificationList.length === 0) {
             setLoading(true)
-            const resp = await apiGetNotificationList()
+            // const resp = await apiGetNotificationList()
             setLoading(false)
-            setNotificationList(resp)
+            setNotificationList([])
         }
     }
 
@@ -177,22 +179,21 @@ const _Notification = ({ className }) => {
                                 alt="no-notification"
                             />
                             <h6 className="font-semibold">No notifications!</h6>
-                            <p className="mt-1">Please Try again later</p>
                         </div>
                     </div>
                 )}
             </ScrollBar>
-            <Dropdown.Item variant="header">
-                <div className="pt-4">
-                    <Button
-                        block
-                        variant="solid"
-                        onClick={handleViewAllActivity}
-                    >
-                        View All Activity
-                    </Button>
-                </div>
-            </Dropdown.Item>
+            {/*<Dropdown.Item variant="header">*/}
+            {/*    <div className="pt-4">*/}
+            {/*        <Button*/}
+            {/*            block*/}
+            {/*            variant="solid"*/}
+            {/*            onClick={handleViewAllActivity}*/}
+            {/*        >*/}
+            {/*            View All Activity*/}
+            {/*        </Button>*/}
+            {/*    </div>*/}
+            {/*</Dropdown.Item>*/}
         </Dropdown>
     )
 }

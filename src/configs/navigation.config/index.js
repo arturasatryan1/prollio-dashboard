@@ -21,7 +21,7 @@ const navigationConfig = [
         },
         subMenu: [
             {
-                key: 'dashboard.overview',
+                key: 'overview',
                 path: `/overview`,
                 title: 'Overview',
                 translateKey: 'nav.dashboard.overview',
@@ -41,10 +41,10 @@ const navigationConfig = [
                 subMenu: [],
             },
             {
-                key: 'subscribers.list',
-                path: '/subscribers',
-                title: 'Subscribers',
-                translateKey: 'nav.dashboard.subscribers',
+                key: 'members.list',
+                path: '/members',
+                title: 'Members',
+                translateKey: 'nav.dashboard.members',
                 icon: 'users',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [ADMIN, USER],
@@ -61,21 +61,21 @@ const navigationConfig = [
                 subMenu: [],
             },
             {
-                key: 'calendar',
-                path: '/calendar',
-                title: 'Event Calendar',
-                translateKey: 'nav.dashboard.calendar',
-                icon: 'calendar',
+                key: 'events.list',
+                path: '/events',
+                title: 'Events',
+                translateKey: 'nav.dashboard.events',
+                icon: 'event',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [ADMIN, USER],
                 subMenu: [],
             },
             {
-                key: 'earnings',
-                path: '/earnings',
-                title: 'Earnings',
-                translateKey: 'nav.dashboard.earnings',
-                icon: 'dollar',
+                key: 'calendar',
+                path: '/calendar',
+                title: 'Event Calendar',
+                translateKey: 'nav.dashboard.calendar',
+                icon: 'calendar',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [ADMIN, USER],
                 subMenu: [],
@@ -92,59 +92,11 @@ const navigationConfig = [
             },
         ]
     },
-    // {
-    //     key: 'account',
-    //     path: '',
-    //     title: 'Account',
-    //     translateKey: 'nav.account.account',
-    //     icon: '',
-    //     type: NAV_ITEM_TYPE_TITLE,
-    //     authority: [],
-    //     meta: {
-    //         horizontalMenu: {
-    //             layout: 'default',
-    //         },
-    //     },
-    //     subMenu: [
-    //         {
-    //             key: 'settings',
-    //             path: '',
-    //             title: 'Settings',
-    //             translateKey: 'nav.settings.title',
-    //             icon: 'setting',
-    //             type: NAV_ITEM_TYPE_COLLAPSE,
-    //             authority: [],
-    //             subMenu: [
-    //                 {
-    //                     key: 'settings.profile',
-    //                     path: '/settings/profile',
-    //                     title: 'Profile',
-    //                     translateKey: 'nav.settings.profile',
-    //                     icon: 'profile',
-    //                     type: NAV_ITEM_TYPE_ITEM,
-    //                     authority: [],
-    //                     subMenu: [],
-    //                 },
-    //                 {
-    //                     key: 'settings.billing',
-    //                     path: '/settings/billing',
-    //                     title: 'Billing & Payout',
-    //                     translateKey: 'nav.settings.billing',
-    //                     icon: '',
-    //                     type: NAV_ITEM_TYPE_ITEM,
-    //                     authority: [],
-    //                     subMenu: [],
-    //                 },
-    //             ],
-    //         },
-    //     ]
-    // },
     {
-        key: 'support',
+        key: 'finance',
         path: '',
-        title: 'Support',
-        translateKey: 'nav.support.support',
-        icon: 'support',
+        title: 'Finance',
+        translateKey: 'nav.dashboard.finance',
         type: NAV_ITEM_TYPE_TITLE,
         authority: [ADMIN, USER],
         meta: {
@@ -154,26 +106,105 @@ const navigationConfig = [
         },
         subMenu: [
             {
-                key: 'support',
-                path: '/support',
+                key: 'finance.payments',
+                path: '/payments',
+                title: 'Payments',
+                translateKey: 'nav.dashboard.payments',
+                icon: 'coin',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [ADMIN, USER],
+                subMenu: [],
+            },
+            {
+                key: 'finance.payouts',
+                path: '/payouts',
+                title: 'Payouts',
+                translateKey: 'nav.dashboard.payouts',
+                icon: 'dollar',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [ADMIN, USER],
+                subMenu: [],
+            },
+        ]
+    },
+    {
+        key: 'settings',
+        path: '',
+        title: 'Settings',
+        translateKey: '',
+        icon: 'settings',
+        type: NAV_ITEM_TYPE_TITLE,
+        authority: [ADMIN, USER],
+        meta: {
+            horizontalMenu: {
+                layout: 'default',
+            },
+        },
+        subMenu: [
+            {
+                key: 'account.settings',
+                path: `/settings/account`,
+                title: 'Account',
+                translateKey: '',
+                icon: 'account',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [ADMIN, USER],
+                meta: {
+                    description: {
+                        translateKey:
+                            'nav.conceptsAccount.settingsDesc',
+                        label: 'Configure your settings',
+                    },
+                },
+                subMenu: [],
+            },
+            {
+                key: 'account.pricing',
+                path: `/settings/pricing`,
+                title: 'Pricing',
+                translateKey: 'nav.pricing',
+                icon: 'pricing',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [ADMIN, USER],
+                meta: {
+                    description: {
+                        translateKey: 'nav.conceptsAccount.pricingDesc',
+                        label: 'View pricing plans',
+                    },
+                },
+                subMenu: [],
+            }
+        ]
+    },
+    {
+        key: 'support',
+        path: '',
+        title: 'Support',
+        translateKey: '',
+        type: NAV_ITEM_TYPE_TITLE,
+        authority: [ADMIN, USER],
+        subMenu: [
+            {
+                key: 'contactUs',
+                path: '/support/contact-us',
                 title: 'Contact Us',
-                translateKey: 'nav.support',
+                translateKey: 'nav.contactUs',
                 icon: 'support',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [ADMIN, USER],
                 subMenu: [],
             },
             {
-                key: 'support',
-                path: '/support',
+                key: 'faq',
+                path: '/support/faq',
                 title: 'FAQ',
-                translateKey: 'nav.support',
+                translateKey: 'nav.faq',
                 icon: 'question',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [ADMIN, USER],
                 subMenu: [],
             }
-        ]
+        ],
     },
 ]
 

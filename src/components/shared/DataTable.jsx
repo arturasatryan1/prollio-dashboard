@@ -1,10 +1,4 @@
-import {
-    useMemo,
-    useRef,
-    useEffect,
-    useState,
-    useImperativeHandle,
-} from 'react'
+import {useEffect, useImperativeHandle, useMemo, useRef, useState,} from 'react'
 import classNames from 'classnames'
 import Table from '@/components/ui/Table'
 import Pagination from '@/components/ui/Pagination'
@@ -14,15 +8,15 @@ import TableRowSkeleton from './loaders/TableRowSkeleton'
 import Loading from './Loading'
 import FileNotFound from '@/assets/svg/FileNotFound'
 import {
-    useReactTable,
+    flexRender,
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    flexRender,
+    useReactTable,
 } from '@tanstack/react-table'
 
-const { Tr, Th, Td, THead, TBody, Sorter } = Table
+const {Tr, Th, Td, THead, TBody, Sorter} = Table
 
 const IndeterminateCheckbox = (props) => {
     const {
@@ -71,6 +65,7 @@ function DataTable(props) {
         onPaginationChange,
         onSelectChange,
         onSort,
+        paginate = true,
         pageSizes = [10, 25, 50, 100],
         selectable = false,
         skeletonAvatarProps,
@@ -86,7 +81,7 @@ function DataTable(props) {
         ...rest
     } = props
 
-    const { pageSize, pageIndex, total } = pagingData
+    const {pageSize, pageIndex, total} = pagingData
 
     const [sorting, setSorting] = useState(null)
 
@@ -104,7 +99,7 @@ function DataTable(props) {
             const sortOrder =
                 sorting.length > 0 ? (sorting[0].desc ? 'desc' : 'asc') : ''
             const id = sorting.length > 0 ? sorting[0].id : ''
-            onSort?.({ order: sortOrder, key: id })
+            onSort?.({order: sortOrder, key: id})
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sorting])
@@ -129,13 +124,13 @@ function DataTable(props) {
                 {
                     id: 'select',
                     maxSize: 50,
-                    header: ({ table }) => (
+                    header: ({table}) => (
                         <IndeterminateCheckbox
                             checked={
                                 indeterminateCheckboxChecked
                                     ? indeterminateCheckboxChecked(
-                                          table.getRowModel().rows,
-                                      )
+                                        table.getRowModel().rows,
+                                    )
                                     : table.getIsAllRowsSelected()
                             }
                             indeterminate={table.getIsSomeRowsSelected()}
@@ -148,7 +143,7 @@ function DataTable(props) {
                             }}
                         />
                     ),
-                    cell: ({ row }) => (
+                    cell: ({row}) => (
                         <IndeterminateCheckbox
                             checked={
                                 checkboxChecked
@@ -233,9 +228,9 @@ function DataTable(props) {
                                             <div
                                                 className={classNames(
                                                     header.column.getCanSort() &&
-                                                        'cursor-pointer select-none point',
+                                                    'cursor-pointer select-none point',
                                                     loading &&
-                                                        'pointer-events-none',
+                                                    'pointer-events-none',
                                                 )}
                                                 onClick={header.column.getToggleSortingHandler()}
                                             >
@@ -277,7 +272,7 @@ function DataTable(props) {
                                             customNoDataIcon
                                         ) : (
                                             <>
-                                                <FileNotFound />
+                                                <FileNotFound/>
                                                 <span className="font-semibold">
                                                     No data found!
                                                 </span>
@@ -319,27 +314,32 @@ function DataTable(props) {
                     </TBody>
                 )}
             </Table>
-            <div className="flex items-center justify-between mt-4">
-                <Pagination
-                    pageSize={pageSize}
-                    currentPage={pageIndex}
-                    total={total}
-                    onChange={handlePaginationChange}
-                />
-                <div style={{ minWidth: 130 }}>
-                    <Select
-                        instanceId={instanceId}
-                        size="sm"
-                        menuPlacement="top"
-                        isSearchable={false}
-                        value={pageSizeOption.filter(
-                            (option) => option.value === pageSize,
-                        )}
-                        options={pageSizeOption}
-                        onChange={(option) => handleSelectChange(option?.value)}
-                    />
-                </div>
-            </div>
+            {
+                paginate && (
+                    <div className="flex items-center justify-between mt-4">
+                        <Pagination
+                            pageSize={pageSize}
+                            currentPage={pageIndex}
+                            total={total}
+                            onChange={handlePaginationChange}
+                        />
+                        <div style={{minWidth: 130}}>
+                            <Select
+                                instanceId={instanceId}
+                                size="sm"
+                                menuPlacement="top"
+                                isSearchable={false}
+                                value={pageSizeOption.filter(
+                                    (option) => option.value === pageSize,
+                                )}
+                                options={pageSizeOption}
+                                onChange={(option) => handleSelectChange(option?.value)}
+                            />
+                        </div>
+                    </div>
+
+                )
+            }
         </Loading>
     )
 }

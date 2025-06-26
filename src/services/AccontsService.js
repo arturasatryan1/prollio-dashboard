@@ -45,7 +45,7 @@ export async function apiGetRolesPermissionsRoles() {
 
 export async function apiGetPricingPlans() {
     return ApiService.fetchDataWithAxios({
-        url: '/pricing',
+        url: '/setting/pricing',
         method: 'get',
     })
 }

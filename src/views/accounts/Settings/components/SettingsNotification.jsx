@@ -9,9 +9,9 @@ import {useEffect} from "react";
 
 const emailNotificationOption = [
     {
-        label: 'New subscriber alert',
+        label: 'New member alert',
         value: 'newSubscriber',
-        desc: 'Get notified when a new user subscribes to your channel or event.',
+        desc: 'Get notified when a new user subscribes to your event.',
     },
     {
         label: 'Platform updates',

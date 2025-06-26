@@ -19,9 +19,7 @@ const CustomerDetails = () => {
         // eslint-disable-next-line no-unused-vars
         ([_, params]) => apiGetCustomer(params),
         {
-            revalidateOnFocus: false,
-            revalidateIfStale: false,
-            revalidateOnReconnect: false,
+            revalidateOnFocus: false
         },
     )
 
@@ -33,13 +31,13 @@ const CustomerDetails = () => {
                         <ProfileSection data={data} />
                     </div>
                     <Card className="w-full">
-                        <Tabs defaultValue="billing">
+                        <Tabs defaultValue="history">
                             <TabList>
-                                <TabNav value="billing">Payment history</TabNav>
+                                <TabNav value="history">Events & Payments</TabNav>
                                 {/*<TabNav value="activity">Activity</TabNav>*/}
                             </TabList>
                             <div className="p-4">
-                                <TabContent value="billing">
+                                <TabContent value="history">
                                     <PaymentHistorySection data={data} />
                                 </TabContent>
                                 {/*<TabContent value="activity">*/}

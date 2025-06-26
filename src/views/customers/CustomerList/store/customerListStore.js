@@ -10,7 +10,11 @@ export const initialTableData = {
     },
 }
 
-export const initialFilterData = {}
+export const initialFilterData = {
+    channel: null,
+    event: null,
+    status: [],
+}
 
 const initialState = {
     tableData: initialTableData,

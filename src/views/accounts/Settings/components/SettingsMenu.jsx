@@ -9,6 +9,7 @@ import {
     TbFileDollar,
     TbRefreshDot,
 } from 'react-icons/tb'
+import {AiOutlineDollar} from "react-icons/ai";
 
 const { MenuItem } = Menu
 
@@ -17,6 +18,7 @@ const menuList = [
     { label: 'Security', value: 'security', icon: <TbLock /> },
     { label: 'Notification', value: 'notification', icon: <TbBell /> },
     { label: 'Billing', value: 'billing', icon: <TbFileDollar /> },
+    { label: 'Payout Setup', value: 'business', icon: <AiOutlineDollar /> },
     // { label: 'Integration', value: 'integration', icon: <TbRefreshDot /> },
 ]
 

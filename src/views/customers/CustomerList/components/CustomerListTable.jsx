@@ -1,12 +1,11 @@
-import { useMemo } from 'react'
-import Avatar from '@/components/ui/Avatar'
+import {useMemo} from 'react'
 import Tag from '@/components/ui/Tag'
 import Tooltip from '@/components/ui/Tooltip'
 import DataTable from '@/components/shared/DataTable'
 import useCustomerList from '../hooks/useCustomerList'
-import { Link, useNavigate } from 'react-router'
+import {Link, useNavigate} from 'react-router'
 import cloneDeep from 'lodash/cloneDeep'
-import { TbPencil, TbEye } from 'react-icons/tb'
+import {TbEye} from 'react-icons/tb'
 import dayjs from "dayjs";
 
 const statusColor = {
@@ -14,13 +13,13 @@ const statusColor = {
     blocked: 'bg-red-200 dark:bg-red-200 text-gray-900 dark:text-gray-900',
 }
 
-const NameColumn = ({ row }) => {
+const NameColumn = ({row}) => {
     return (
         <div className="flex items-center">
             {/*<Avatar size={40} shape="circle" src={row.img} />*/}
             <Link
                 className={`hover:text-primary font-semibold text-gray-900 dark:text-gray-100`}
-                to={`/subscribers/${row.id}`}
+                to={`/members/${row.id}`}
             >
                 {row.first_name} {row.last_name}
             </Link>
@@ -28,25 +27,16 @@ const NameColumn = ({ row }) => {
     )
 }
 
-const ActionColumn = ({ onEdit, onViewDetail }) => {
+const ActionColumn = ({onEdit, onViewDetail}) => {
     return (
         <div className="flex items-center gap-3 justify-end">
-            {/*<Tooltip title="Edit">*/}
-            {/*    <div*/}
-            {/*        className={`text-xl cursor-pointer select-none font-semibold`}*/}
-            {/*        role="button"*/}
-            {/*        onClick={onEdit}*/}
-            {/*    >*/}
-            {/*        <TbPencil />*/}
-            {/*    </div>*/}
-            {/*</Tooltip>*/}
             <Tooltip title="View">
                 <div
                     className={`text-xl cursor-pointer select-none font-semibold`}
                     role="button"
                     onClick={onViewDetail}
                 >
-                    <TbEye size={25} />
+                    <TbEye size={25}/>
                 </div>
             </Tooltip>
         </div>
@@ -72,7 +62,7 @@ const CustomerListTable = () => {
     }
 
     const handleViewDetails = (customer) => {
-        navigate(`/subscribers/${customer.id}`)
+        navigate(`/members/${customer.id}`)
     }
 
     const columns = useMemo(
@@ -82,7 +72,7 @@ const CustomerListTable = () => {
                 accessorKey: 'name',
                 cell: (props) => {
                     const row = props.row.original
-                    return <NameColumn row={row} />
+                    return <NameColumn row={row}/>
                 },
             },
             {
@@ -111,7 +101,7 @@ const CustomerListTable = () => {
                 header: 'Spent',
                 accessorKey: 'totalSpending',
                 cell: (props) => {
-                    return <span>֏{props.row.original.spent}</span>
+                    return <span>֏{props.row.original.spent.toFixed(2)}</span>
                 },
             },
             {
@@ -188,8 +178,9 @@ const CustomerListTable = () => {
             data={customerList}
             noData={!isLoading && customerList.length === 0}
             skeletonAvatarColumns={[0]}
-            skeletonAvatarProps={{ width: 28, height: 28 }}
+            skeletonAvatarProps={{width: 28, height: 28}}
             loading={isLoading}
+            paginate={customerListTotal > tableData.pageSize}
             pagingData={{
                 total: customerListTotal,
                 pageIndex: tableData.pageIndex,

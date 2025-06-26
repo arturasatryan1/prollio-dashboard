@@ -9,6 +9,7 @@ const Profile = lazy(() => import('./components/SettingsProfile'))
 const Security = lazy(() => import('./components/SettingsSecurity'))
 const Notification = lazy(() => import('./components/SettingsNotification'))
 const Billing = lazy(() => import('./components/SettingsBilling'))
+const Business = lazy(() => import('./components/SettingsBusiness.jsx'))
 const Integration = lazy(() => import('./components/SettingIntegration'))
 
 const Settings = () => {
@@ -35,6 +36,7 @@ const Settings = () => {
                         {currentView === 'security' && <Security />}
                         {currentView === 'notification' && <Notification />}
                         {currentView === 'billing' && <Billing />}
+                        {currentView === 'business' && <Business />}
                         {/*{currentView === 'integration' && <Integration />}*/}
                     </Suspense>
                 </div>

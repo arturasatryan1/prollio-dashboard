@@ -1,32 +1,90 @@
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import Button from '@/components/ui/Button'
 import Dialog from '@/components/ui/Dialog'
 import Checkbox from '@/components/ui/Checkbox'
-import Input from '@/components/ui/Input'
-import { Form, FormItem } from '@/components/ui/Form'
-import useCustomerList from '../hooks/useCustomerList'
-import { TbFilter } from 'react-icons/tb'
-import { useForm, Controller } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import {Form, FormItem} from '@/components/ui/Form'
+import {TbFilter} from 'react-icons/tb'
+import {Controller, useForm} from 'react-hook-form'
+import {zodResolver} from '@hookform/resolvers/zod'
+import {nullable, z} from 'zod'
+import {apiGetChannelListAll} from "@/services/ChannelService.js";
+import Select from "@/components/ui/Select/index.jsx";
+import useCustomerList from "@/views/customers/CustomerList/hooks/useCustomerList.js";
+import {apiGetEventListAll} from "@/services/EventService.js";
 
-const channelList = [
-    'Retail Stores',
-    'Online Retailers',
-    'Resellers',
-    'Mobile Apps',
-    'Direct Sales',
+const statusList = [
+    'active',
+    'inactive'
 ]
 
 const validationSchema = z.object({
-    purchasedProducts: z.string(),
-    purchaseChannel: z.array(z.string()),
+    status: z.array(z.string()).optional(),
+    channel: z.number().nullable().optional(),
+    event: z.number().nullable().optional(),
 })
 
 const CustomerListTableFilter = () => {
     const [dialogIsOpen, setIsOpen] = useState(false)
+    const [channels, setChannels] = useState([])
+    const [events, setEvents] = useState([])
+    const [channelFetching, setChannelFetching] = useState(false)
+    const [eventFetching, setEventFetching] = useState(false)
+    const [selectedChannel, setSelectedChannel] = useState(null)
 
-    const { filterData, setFilterData } = useCustomerList()
+    const {filterData, setFilterData} = useCustomerList()
+
+    const {
+        handleSubmit,
+        reset,
+        resetField,
+        formState: { errors },
+        control
+    } = useForm({
+        defaultValues: filterData,
+        resolver: zodResolver(validationSchema),
+    })
+
+    const fetchChannels = async () => {
+        setChannelFetching(true)
+
+        try {
+            const data = await apiGetChannelListAll()
+            setChannels(data)
+        } catch (err) {
+            console.error('Failed to fetch channels', err)
+        } finally {
+            setChannelFetching(false)
+        }
+    }
+
+    const fetchEvents = async () => {
+        setEventFetching(true)
+        try {
+            const data = await apiGetEventListAll({
+                channel: selectedChannel?.value
+            })
+            setEvents(data)
+        } catch (err) {
+            console.error('Failed to fetch channels', err)
+        } finally {
+            setEventFetching(false)
+        }
+    }
+
+    const onChannelFieldFocus = () => {
+        if (channels.length === 0) {
+            fetchChannels().then(res => {
+            })
+        }
+    }
+
+    const onEventFieldFocus = () => {
+        if (events.length === 0) {
+            fetchEvents().then(res => {
+            })
+        }
+    }
+
 
     const openDialog = () => {
         setIsOpen(true)
@@ -36,11 +94,6 @@ const CustomerListTableFilter = () => {
         setIsOpen(false)
     }
 
-    const { handleSubmit, reset, control } = useForm({
-        defaultValues: filterData,
-        resolver: zodResolver(validationSchema),
-    })
-
     const onSubmit = (values) => {
         setFilterData(values)
         setIsOpen(false)
@@ -48,7 +101,7 @@ const CustomerListTableFilter = () => {
 
     return (
         <>
-            <Button icon={<TbFilter />} onClick={() => openDialog()}>
+            <Button icon={<TbFilter/>} onClick={() => openDialog()}>
                 Filter
             </Button>
             <Dialog
@@ -58,31 +111,58 @@ const CustomerListTableFilter = () => {
             >
                 <h4 className="mb-4">Filter</h4>
                 <Form onSubmit={handleSubmit(onSubmit)}>
-                    <FormItem label="Products">
+                    {/*<FormItem label={'Channel'}>*/}
+                    {/*    <Controller*/}
+                    {/*        name="channel"*/}
+                    {/*        control={control}*/}
+                    {/*        render={({field}) => (*/}
+                    {/*            <Select*/}
+                    {/*                placeholder="Select Channel"*/}
+                    {/*                options={channels}*/}
+                    {/*                invalid={Boolean(errors.channel)}*/}
+                    {/*                onFocus={onChannelFieldFocus}*/}
+                    {/*                isLoading={channelFetching}*/}
+                    {/*                value={channels?.filter((option) => option.value === field.value)}*/}
+                    {/*                onChange={(selected) => {*/}
+                    {/*                    setSelectedChannel(selected)*/}
+                    {/*                    setEvents([])*/}
+                    {/*                    resetField("event", { defaultValue: null });*/}
+                    {/*                    field.onChange(selected?.value)*/}
+                    {/*                }}*/}
+                    {/*            />*/}
+                    {/*        )}*/}
+                    {/*    />*/}
+                    {/*</FormItem>*/}
+                    <FormItem label={'Event'}>
                         <Controller
-                            name="purchasedProducts"
+                            name="event"
                             control={control}
-                            render={({ field }) => (
-                                <Input
-                                    type="text"
-                                    autoComplete="off"
-                                    placeholder="Search by purchased product"
-                                    {...field}
+                            render={({field}) => (
+                                <Select
+                                    placeholder="Select Event"
+                                    invalid={Boolean(errors.event)}
+                                    value={events?.filter((option) => option.value === field.value)}
+                                    options={events}
+                                    onFocus={onEventFieldFocus}
+                                    isLoading={eventFetching}
+                                    onChange={(selected) => {
+                                        field.onChange(selected?.value)
+                                    }}
                                 />
                             )}
                         />
                     </FormItem>
-                    <FormItem label="Purchase Channel">
+                    <FormItem label="Status">
                         <Controller
-                            name="purchaseChannel"
+                            name="status"
                             control={control}
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <Checkbox.Group
-                                    vertical
+                                    // horizontal
                                     className="flex mt-4"
                                     {...field}
                                 >
-                                    {channelList.map((source, index) => (
+                                    {statusList.map((source, index) => (
                                         <Checkbox
                                             key={source + index}
                                             name={field.name}

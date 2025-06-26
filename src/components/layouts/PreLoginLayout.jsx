@@ -1,6 +1,7 @@
 import authRoute from '@/configs/routes.config/authRoute'
 import { useLocation } from 'react-router'
 import AuthLayout from './AuthLayout'
+import LanguageSelector from "@/components/template/LanguageSelector.jsx";
 
 const PreLoginLayout = ({ children }) => {
     const location = useLocation()

@@ -5,7 +5,7 @@ const appConfig = {
     locale: 'en',
     accessTokenPersistStrategy: 'localStorage',
     enableMock: false,
-    activeNavTranslation: false,
+    activeNavTranslation: true,
 }
 
 export default appConfig

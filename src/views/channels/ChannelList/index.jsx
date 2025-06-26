@@ -1,3 +1,3 @@
-import ChannalList from './ChannalList.jsx'
+import ChannelList from './ChannelList.jsx'
 
-export default ChannalList
+export default ChannelList

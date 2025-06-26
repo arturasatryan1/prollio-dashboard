@@ -9,7 +9,7 @@ import NoUserFound from '@/assets/svg/NoUserFound'
 import {TbArrowNarrowLeft, TbTrash} from 'react-icons/tb'
 import {useNavigate, useParams} from 'react-router'
 import useSWR from 'swr'
-import {apiGetChannel, apiUpdateChannel} from "@/services/ChannelService.js";
+import {apiDeleteChannel, apiGetChannel, apiUpdateChannel} from "@/services/ChannelService.js";
 import {boolean} from "zod";
 
 const ChannelEdit = () => {
@@ -72,12 +72,16 @@ const ChannelEdit = () => {
         return {}
     }
 
-    const handleConfirmDelete = () => {
-        setDeleteConfirmationOpen(true)
+    const handleConfirmDelete = async () => {
+        await apiDeleteChannel({id: data?.id});
+
+        setDeleteConfirmationOpen(false)
+
         toast.push(
-            <Notification type="success">Customer deleted!</Notification>,
+            <Notification type="success">Channel deleted!</Notification>,
             {placement: 'top-center'},
         )
+
         navigate('/channels')
     }
 

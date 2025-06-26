@@ -3,14 +3,13 @@ import Select from '@/components/ui/Select'
 import useTranslation from "@/utils/hooks/useTranslation.js";
 
 export const options = [
-    { value: 'thisMonth', label: 'Monthly' },
-    { value: 'thisWeek', label: 'Weekly' },
-    { value: 'thisYear', label: 'Annualy' },
+    { value: 'monthly', label: 'Monthly' },
+    { value: 'weekly', label: 'Weekly' },
+    { value: 'annually', label: 'Annually' },
 ]
 
-const OverviewHeader = ({ selectedPeriod, onSelectedPeriodChange }) => {
+const OverviewHeader = ({ selectedPeriod, handlePeriodChange }) => {
     const { t } = useTranslation()
-
     return (
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-2 gap-4">
             <div>
@@ -28,12 +27,9 @@ const OverviewHeader = ({ selectedPeriod, onSelectedPeriodChange }) => {
                     )}
                     options={options}
                     isSearchable={false}
-                    onChange={(option) => {
-                        if (option?.value) {
-                            onSelectedPeriodChange(option?.value)
-                        }
-                    }}
+                    onChange={(option) => handlePeriodChange(option)}
                 />
+
             </div>
         </div>
     )
