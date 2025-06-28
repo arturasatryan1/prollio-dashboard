@@ -5,6 +5,7 @@ import { useSessionUser } from '@/store/authStore'
 import { Link } from 'react-router'
 import {PiUserDuotone, PiSignOutDuotone, PiGearDuotone, PiPulseDuotone} from 'react-icons/pi'
 import { useAuth } from '@/auth'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 // import {HiChevronDown} from "react-icons/hi";
 
 const dropdownItemList = [
@@ -25,6 +26,7 @@ const _UserDropdown = () => {
 
     const { signOut } = useAuth()
 
+    const {t} = useTranslation()
     const handleSignOut = () => {
         signOut()
     }
@@ -68,7 +70,7 @@ const _UserDropdown = () => {
                     <Link className="flex h-full w-full px-2" to={item.path}>
                         <span className="flex gap-2 items-center w-full">
                             <span className="text-xl">{item.icon}</span>
-                            <span>{item.label}</span>
+                            <span>{t(item.label)}</span>
                         </span>
                     </Link>
                 </Dropdown.Item>
@@ -81,7 +83,7 @@ const _UserDropdown = () => {
                 <span className="text-xl">
                     <PiSignOutDuotone />
                 </span>
-                <span>Sign Out</span>
+                <span>{t('Sign Out')}</span>
             </Dropdown.Item>
         </Dropdown>
     )

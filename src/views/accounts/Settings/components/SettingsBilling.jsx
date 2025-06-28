@@ -12,7 +12,7 @@ import dayjs from 'dayjs'
 import {useNavigate} from 'react-router'
 import {PiLightningFill} from 'react-icons/pi'
 import {NumericFormat} from 'react-number-format'
-import Badge from "@/components/ui/Badge/index.jsx";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const statusColor = {
     pending: 'bg-amber-400',
@@ -26,11 +26,13 @@ const statusColor = {
 const SettingsBilling = () => {
     const navigate = useNavigate()
 
-    const [selectedCard, setSelectedCard] = useState({
-        type: '',
-        dialogOpen: false,
-        cardInfo: {},
-    })
+    const {t} = useTranslation()
+
+    // const [selectedCard, setSelectedCard] = useState({
+    //     type: '',
+    //     dialogOpen: false,
+    //     cardInfo: {},
+    // })
 
     const {
         data = {
@@ -91,7 +93,7 @@ const SettingsBilling = () => {
 
     return (
         <div>
-            <h4 className="mb-4">Billing</h4>
+            <h4 className="mb-4">{t('Billing')}</h4>
             <div className="bg-gray-100 dark:bg-gray-700 rounded-xl p-6">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
@@ -109,17 +111,17 @@ const SettingsBilling = () => {
                                 </h6>
                                 <Tag className={`rounded-md border-0 ${statusColor[data.subscription?.status]}`}>
                                     <span className={`capitalize`}>
-                                        {data.subscription?.status}
+                                        {t(data.subscription?.status)}
                                     </span>
                                 </Tag>
                             </div>
                             <div className="font-semibold">
                                     <span>
-                                    Billing {data.subscription?.type}
+                                    {t('Billing')} {t(data.subscription?.type)}
                                 </span>
                                 <span> | </span>
                                 <span>
-                                    Next payment on{' '}
+                                    {t('Next payment on')}
                                     {dayjs(
                                         data.subscription?.ends_at ||
                                         0,
@@ -127,7 +129,9 @@ const SettingsBilling = () => {
                                         .format('MM/DD/YYYY')}
                                 </span>
                                 <span>
-                                    <span className="mx-1">for</span>
+                                    <span className="mx-1">
+                                            {t('for')}
+                                    </span>
                                     <NumericFormat
                                         className="font-bold heading-text"
                                         displayType="text"
@@ -137,7 +141,7 @@ const SettingsBilling = () => {
                                                 100,
                                             ) / 100
                                         ).toFixed(2)}
-                                        prefix={'$'}
+                                        prefix={'֏'}
                                         thousandSeparator={true}
                                     />
                                 </span>
@@ -151,7 +155,7 @@ const SettingsBilling = () => {
                             variant="solid"
                             onClick={handleChangePlan}
                         >
-                            Change plan
+                            {t('Change Plan')}
                         </Button>
                     </div>
                 </div>
@@ -230,7 +234,7 @@ const SettingsBilling = () => {
             {/*    </div>*/}
             {/*</div>*/}
             <div className="mt-8">
-                <h5>Transaction history</h5>
+                <h5>{t('Transaction history')}</h5>
                 <BillingHistory
                     className="mt-4"
                     data={data.transactions}

@@ -16,6 +16,7 @@ import {
 import isLastChild from '@/utils/isLastChild'
 import useResponsive from '@/utils/hooks/useResponsive'
 import { useNavigate } from 'react-router'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const notificationHeight = 'h-[280px]'
 
@@ -26,6 +27,7 @@ const _Notification = ({ className }) => {
     const [loading, setLoading] = useState(false)
 
     const { larger } = useResponsive()
+    const { t } = useTranslation()
 
     const navigate = useNavigate()
 
@@ -104,7 +106,7 @@ const _Notification = ({ className }) => {
         >
             <Dropdown.Item variant="header">
                 <div className="dark:border-gray-700 px-2 flex items-center justify-between mb-1">
-                    <h6>Notifications</h6>
+                    <h6>{t('Notifications')}</h6>
                     <Button
                         variant="plain"
                         shape="circle"
@@ -178,7 +180,7 @@ const _Notification = ({ className }) => {
                                 src="/img/others/no-notification.png"
                                 alt="no-notification"
                             />
-                            <h6 className="font-semibold">No notifications!</h6>
+                            <h6 className="font-semibold">{t('No notifications!')}</h6>
                         </div>
                     </div>
                 )}

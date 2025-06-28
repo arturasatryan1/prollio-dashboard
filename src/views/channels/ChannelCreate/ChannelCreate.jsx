@@ -8,12 +8,13 @@ import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import {TbTrash} from 'react-icons/tb'
 import {useNavigate} from 'react-router'
 import {apiCreateChannel} from "@/services/ChannelService.js";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const ChannelCreate = () => {
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
-    const [discardConfirmationOpen, setDiscardConfirmationOpen] =
-        useState(false)
+    const [discardConfirmationOpen, setDiscardConfirmationOpen] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const handleFormSubmit = async (values) => {
@@ -85,14 +86,14 @@ const ChannelCreate = () => {
                                 icon={<TbTrash/>}
                                 onClick={handleDiscard}
                             >
-                                Discard
+                                {t('Cancel')}
                             </Button>
                             <Button
                                 variant="solid"
                                 type="submit"
                                 loading={isSubmitting}
                             >
-                                Create
+                                {t('Create')}
                             </Button>
                         </div>
                     </div>

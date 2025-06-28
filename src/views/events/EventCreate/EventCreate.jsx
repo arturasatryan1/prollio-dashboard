@@ -15,10 +15,13 @@ import Dialog from "@/components/ui/Dialog/index.jsx";
 import StatusIcon from "@/components/ui/StatusIcon/StatusIcon.jsx";
 import {FiCheck, FiCopy} from "react-icons/fi";
 import {Input} from "@/components/ui/index.js";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const EventCreate = () => {
     const navigate = useNavigate()
     const location = useLocation()
+    const {t} = useTranslation()
+
     const searchParams = new URLSearchParams(location.search)
     const start = searchParams.get('start')
     const end = searchParams.get('end')
@@ -108,7 +111,7 @@ const EventCreate = () => {
                             icon={<TbArrowNarrowLeft/>}
                             onClick={() => history.back()}
                         >
-                            Back
+                            {t('Back')}
                         </Button>
                         <div className="flex items-center">
                             <Button
@@ -120,14 +123,14 @@ const EventCreate = () => {
                                 icon={<TbTrash/>}
                                 onClick={handleDiscard}
                             >
-                                Discard
+                                {t('Cancel')}
                             </Button>
                             <Button
                                 variant="solid"
                                 type="submit"
                                 loading={isSubmitting}
                             >
-                                Create
+                                {t('Create')}
                             </Button>
                         </div>
                     </div>
@@ -136,7 +139,7 @@ const EventCreate = () => {
             <ConfirmDialog
                 isOpen={discardConfirmationOpen}
                 type="danger"
-                title="Discard changes"
+                title={t('Discard changes')}
                 onClose={handleCancel}
                 onRequestClose={handleCancel}
                 onCancel={handleCancel}

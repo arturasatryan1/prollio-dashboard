@@ -20,6 +20,7 @@ import {Link} from "react-router";
 import {submitCheckout} from "@/services/CheckoutService.js";
 import toast from "@/components/ui/toast/index.js";
 import Notification from "@/components/ui/Notification/index.jsx";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 
 const validationSchema = z
@@ -38,6 +39,8 @@ const validationSchema = z
 const Checkout = (props) => {
     const searchParams = new URLSearchParams(location.search)
     const [isSubmitting, setSubmitting] = useState(false)
+
+    const {t} = useTranslation()
 
     const memberId = searchParams.get('mid');
     const eventId = searchParams.get('eid');
@@ -117,28 +120,28 @@ const Checkout = (props) => {
                             <Card className={``}>
                                 <h4 className="mb-4 font-bold">
                                     <p>
-                                        {`Welcome! You're about to join the event `}
+                                        {t(`Welcome! You're about to join the event`)}
                                     </p>
                                     <p>
-                                        {`Secure your spot by completing the payment below.`}
+                                        {t(`Secure your spot by completing the payment below.`)}
                                     </p>
                                 </h4>
 
                                 <address className="not-italic">
                                     <div className="mb-3">
-                                        <h6>Event Title</h6>
+                                        <h6>{t('Event Title')}</h6>
                                         <p>{event?.title}</p>
                                     </div>
                                     <div className="mb-3">
-                                        <h6>Description</h6>
+                                        <h6>{t('Description')}</h6>
                                         <p>{event?.description}</p>
                                     </div>
                                     <div className="mb-3">
-                                        <h6>Duration</h6>
+                                        <h6>{t('Duration')}</h6>
                                         <p>{dayjs(event?.start_time).format('DD MMM YYYY hh:mm')} - {dayjs(event?.end_time).format('DD MMM YYYY hh:mm')}</p>
                                     </div>
                                     <div className="mb-3">
-                                        <h6>Price</h6>
+                                        <h6>{t('Price')}</h6>
                                         <p>
                                             <NumericFormat
                                                 displayType="text"
@@ -154,7 +157,7 @@ const Checkout = (props) => {
                                     <input type="hidden" {...register('event_id')} />
 
                                     <FormItem
-                                        label="Email"
+                                        label={t('Email')}
                                         size={100}
                                     >
                                         <Controller
@@ -163,7 +166,7 @@ const Checkout = (props) => {
                                             render={({field}) => (
                                                 <Input
                                                     type="email"
-                                                    placeholder="Your Email (optional)"
+                                                    placeholder={`${t('Email')}  (${t('optional')})`}
                                                     autoComplete="off"
                                                     {...field}
                                                 />
@@ -171,7 +174,7 @@ const Checkout = (props) => {
                                         />
                                     </FormItem>
                                     <FormItem
-                                        label="Promo Code"
+                                        label={t('Promo Code')}
                                         size={100}
 
                                     >
@@ -181,7 +184,7 @@ const Checkout = (props) => {
                                             render={({field}) => (
                                                 <Input
                                                     type="text"
-                                                    placeholder="Promo Code (optional)"
+                                                    placeholder={`${t('Promo Code')}  (${t('optional')})`}
                                                     autoComplete="off"
                                                     {...field}
                                                 />
@@ -190,7 +193,7 @@ const Checkout = (props) => {
                                     </FormItem>
                                     <FormItem
                                         invalid={Boolean(errors.agree)}
-                                        errorMessage={errors.agree?.message}
+                                        errorMessage={t(errors.agree?.message)}
                                     >
                                         <Controller
                                             name="agree"
@@ -199,19 +202,19 @@ const Checkout = (props) => {
                                                 <Checkbox
                                                     {...field}
                                                 >
-                                                    I agree to the {''}
+                                                    {t('I agree to the')} {''}
                                                     <Link to={`/terms`} className={'underline'}>
-                                                        Terms of Use
+                                                        {t('Terms of Use')}
                                                     </Link>
                                                     {', '}
                                                     <Link to={`/terms`} className={'underline'}>
-                                                        Privacy Policy
+                                                        {t('Privacy Policy')}
                                                     </Link>
                                                     {' '}
-                                                    and
+                                                    {t('and')}
                                                     {' '}
                                                     <Link to={`/terms`} className={'underline'}>
-                                                        Refund Policy
+                                                        {t('Refund Policy')}
                                                     </Link>
                                                 </Checkbox>
                                             )}
@@ -223,7 +226,7 @@ const Checkout = (props) => {
                                         variant="solid"
                                         type="submit"
                                     >
-                                        {isSubmitting ? 'Redirecting...' : 'Submit'}
+                                        {t(isSubmitting ? 'Redirecting...' : 'Submit')}
                                     </Button>
                                 </Form>
                             </Card>

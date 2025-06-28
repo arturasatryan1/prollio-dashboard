@@ -8,11 +8,13 @@ import { apiGetChannel } from '@/services/ChannelService.js'
 import useSWR from 'swr'
 import { useParams } from 'react-router'
 import isEmpty from 'lodash/isEmpty'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const { TabNav, TabList, TabContent } = Tabs
 
 const ChannelDetails = () => {
     const { id } = useParams()
+    const { t } = useTranslation()
 
     const { data, isLoading } = useSWR(
         ['/api/channels', { id: id }],
@@ -35,7 +37,7 @@ const ChannelDetails = () => {
                     <Card className="w-full">
                         <Tabs defaultValue="billing">
                             <TabList>
-                                <TabNav value="billing">History</TabNav>
+                                <TabNav value="billing">{t('Event History')}</TabNav>
                                 {/*<TabNav value="activity">Activity</TabNav>*/}
                             </TabList>
                             <div className="p-4">

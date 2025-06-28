@@ -8,6 +8,7 @@ import Privacy from "@/views/terms/Terms/Privacy.jsx";
 import Refund from "@/views/terms/Terms/Refund.jsx";
 import {APP_NAME} from "@/constants/app.constant.js";
 import {Container} from "@/components/shared/index.jsx";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const demos = [
     {
@@ -63,6 +64,9 @@ const pageContainerDefaultClass =
     'page-container relative h-full flex flex-auto flex-col px-4 sm:px-6 py-6 sm:py-8 md:px-8 container mx-auto'
 
 const Terms = () => {
+
+    const {t} = useTranslation()
+
     return (
         <div>
             <Header
@@ -95,9 +99,9 @@ const Terms = () => {
                 <Container>
                     <div className="flex items-center justify-between flex-auto w-full">
                         <span>
-                            Copyright &copy; {`${new Date().getFullYear()}`}{' '}
-                            <span className="font-semibold">{`${APP_NAME}`}</span> All
-                            rights reserved.
+                            {t('Copyright')} &copy; {`${new Date().getFullYear()}`}{' '}
+                            <span className="font-semibold">{`${APP_NAME}`}</span>{' '}
+                            {t('All rights reserved.')}
                         </span>
                     </div>
                 </Container>

@@ -10,12 +10,13 @@ import {TbArrowNarrowLeft, TbTrash} from 'react-icons/tb'
 import {useNavigate, useParams} from 'react-router'
 import useSWR from 'swr'
 import {apiDeleteChannel, apiGetChannel, apiUpdateChannel} from "@/services/ChannelService.js";
-import {boolean} from "zod";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const ChannelEdit = () => {
     const {id} = useParams()
 
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     const {data, isLoading} = useSWR(
         [`/api/channels/${id}`, {id: id}],
@@ -120,7 +121,7 @@ const ChannelEdit = () => {
                                     icon={<TbArrowNarrowLeft/>}
                                     onClick={handleBack}
                                 >
-                                    Back
+                                    {t('Back')}
                                 </Button>
                                 <div className="flex items-center">
                                     <Button
@@ -132,14 +133,14 @@ const ChannelEdit = () => {
                                         icon={<TbTrash/>}
                                         onClick={handleDelete}
                                     >
-                                        Delete
+                                        {t('Delete')}
                                     </Button>
                                     <Button
                                         variant="solid"
                                         type="submit"
                                         loading={isSubmitting}
                                     >
-                                        Save
+                                        {t('Save')}
                                     </Button>
                                 </div>
                             </div>
@@ -148,15 +149,16 @@ const ChannelEdit = () => {
                     <ConfirmDialog
                         isOpen={deleteConfirmationOpen}
                         type="danger"
-                        title="Delete channel"
+                        title={t('Delete Channel')}
+                        cancelText={t('Cancel')}
+                        confirmText={t('Confirm')}
                         onClose={handleCancel}
                         onRequestClose={handleCancel}
                         onCancel={handleCancel}
                         onConfirm={handleConfirmDelete}
                     >
                         <p>
-                            Are you sure you want to remove this channel? This
-                            action can&apos;t be undo.{' '}
+                            {t('Are you sure you want to remove this channel? This action can not be undone.')}
                         </p>
                     </ConfirmDialog>
                 </>

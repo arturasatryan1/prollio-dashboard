@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router'
 import cloneDeep from 'lodash/cloneDeep'
 import { TbPencil, TbEye } from 'react-icons/tb'
 import dayjs from "dayjs";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const statusColor = {
     pending: 'bg-amber-200 dark:bg-amber-300 text-gray-900 dark:text-gray-900',
@@ -17,6 +18,7 @@ const statusColor = {
 
 const PayoutListTable = () => {
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     const {
         itemList,
@@ -33,11 +35,11 @@ const PayoutListTable = () => {
     const columns = useMemo(
         () => [
             {
-                header: 'ID',
+                header: t('ID'),
                 accessorKey: 'uuid',
             },
             {
-                header: 'Amount',
+                header: t('Amount'),
                 accessorKey: 'amount',
                 cell: (props) => {
                     const row = props.row.original
@@ -49,7 +51,7 @@ const PayoutListTable = () => {
                 },
             },
             {
-                header: 'Status',
+                header: t('Status'),
                 accessorKey: 'status',
                 cell: (props) => {
                     const row = props.row.original
@@ -63,7 +65,7 @@ const PayoutListTable = () => {
                 },
             },
             {
-                header: 'Processed At',
+                header: t('Processed At'),
                 accessorKey: 'created_at',
                 cell: (props) => {
                     const row = props.row.original
@@ -77,7 +79,7 @@ const PayoutListTable = () => {
                 },
             },
             {
-                header: 'Completed At',
+                header: t('Completed At'),
                 accessorKey: 'completed_at',
                 cell: (props) => {
                     const row = props.row.original

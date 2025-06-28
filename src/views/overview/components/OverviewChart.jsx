@@ -39,21 +39,21 @@ const OverviewChart = ({data}) => {
                             className="h-3.5 w-3.5 rounded-sm"
                             style={{backgroundColor: COLORS[0]}}
                         />
-                        <div>Total Earnings</div>
+                        <div>{t('Total Earnings')}</div>
                     </div>
                     <div className="flex items-center gap-1.5">
                         <div
                             className="h-3.5 w-3.5 rounded-sm"
                             style={{backgroundColor: COLORS[7]}}
                         />
-                        <div>Net Earnings</div>
+                        <div>{t('Net Earnings')}</div>
                     </div>
                     <div className="flex items-center gap-1.5">
                         <div
                             className="h-3.5 w-3.5 rounded-sm"
                             style={{backgroundColor: COLORS[8]}}
                         />
-                        <div>Fees</div>
+                        <div>{t('Fees')}</div>
                     </div>
                 </div>
             </div>

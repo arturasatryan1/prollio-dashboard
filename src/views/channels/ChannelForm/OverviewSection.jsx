@@ -7,6 +7,7 @@ import { FormItem } from '@/components/ui/Form'
 import { countryList } from '@/constants/countries.constant'
 import { Controller } from 'react-hook-form'
 import { components } from 'react-select'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const { Control } = components
 
@@ -46,6 +47,9 @@ const CustomControl = ({ children, ...props }) => {
 }
 
 const OverviewSection = ({ control, errors }) => {
+
+    const {t} = useTranslation()
+
     const dialCodeList = useMemo(() => {
         const newCountryList = JSON.parse(JSON.stringify(countryList))
 
@@ -57,10 +61,10 @@ const OverviewSection = ({ control, errors }) => {
 
     return (
         <Card>
-            <h4 className="mb-6">Channel</h4>
+            <h4 className="mb-6">{t('Channel')}</h4>
             <div className="grid md:grid-cols-1 gap-4">
                 <FormItem
-                    label="Name"
+                    label={t('Name')}
                     invalid={Boolean(errors.name)}
                     errorMessage={errors.name?.message}
                 >
@@ -71,14 +75,14 @@ const OverviewSection = ({ control, errors }) => {
                             <Input
                                 type="text"
                                 autoComplete="off"
-                                placeholder="Channel Name"
+                                placeholder={t('Channel Name')}
                                 {...field}
                             />
                         )}
                     />
                 </FormItem>
                 <FormItem
-                    label="Description"
+                    label={t('Description')}
                     invalid={Boolean(errors.description)}
                     errorMessage={errors.description?.message}
                 >
@@ -90,7 +94,7 @@ const OverviewSection = ({ control, errors }) => {
                                 textArea
                                 type="text"
                                 autoComplete="off"
-                                placeholder="Describe your channal"
+                                placeholder={t('Describe your channel')}
                                 {...field}
                             />
                         )}

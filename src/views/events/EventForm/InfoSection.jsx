@@ -5,17 +5,19 @@ import {Controller, useFieldArray} from 'react-hook-form'
 import Select from "@/components/ui/Select/index.jsx";
 import {Button} from "@/components/ui/index.js";
 import {TbPlus, TbTrash} from "react-icons/tb";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const InfoSection = ({register, control, errors, channels}) => {
     const {fields, append, remove} = useFieldArray({
         control, name: 'promoCodes',
     })
+    const {t} = useTranslation();
 
     return (<Card>
-        <h4 className="mb-6">Edit Event</h4>
+        <h4 className="mb-6">{t('Edit Event')}</h4>
         <div className="grid md:grid-cols-1 mt-4">
             <FormItem
-                label="Title"
+                label={t('Title')}
                 invalid={Boolean(errors.title)}
             >
                 <Controller
@@ -25,13 +27,13 @@ const InfoSection = ({register, control, errors, channels}) => {
                         <Input
                             type="text"
                             autoComplete="off"
-                            placeholder="Event title"
+                            placeholder={t('Event Title')}
                             {...field}
                         />)}
                 />
             </FormItem>
             <FormItem
-                label="Description"
+                label={t('Description')}
                 invalid={Boolean(errors.description)}
             >
                 <Controller
@@ -42,13 +44,13 @@ const InfoSection = ({register, control, errors, channels}) => {
                             textArea
                             type="text"
                             autoComplete="off"
-                            placeholder="Describe the event"
+                            placeholder={t('Description')}
                             {...field}
                         />)}
                 />
             </FormItem>
             <FormItem
-                label="Channel"
+                label={t('Channel')}
                 invalid={Boolean(errors.channel)}
             >
                 <Controller
@@ -56,7 +58,7 @@ const InfoSection = ({register, control, errors, channels}) => {
                     control={control}
                     render={({field}) => (
                         <Select
-                            placeholder="Select Channel"
+                            placeholder={t('Select Channel')}
                             options={channels}
                             value={channels?.filter((option) => option.value === field.value)}
                             onChange={(selected) => {
@@ -67,7 +69,7 @@ const InfoSection = ({register, control, errors, channels}) => {
             </FormItem>
         </div>
         <div className="flex justify-between">
-            <h6 className="mb-6">Promo Codes (optional)</h6>
+            <h6 className="mb-6">{t('Promo Codes')} ({t('optional')})</h6>
             <Button
                 variant="solid"
                 size="xs"
@@ -89,7 +91,7 @@ const InfoSection = ({register, control, errors, channels}) => {
                 <Card key={item.id} className={`relative`}>
                     <div className="grid grid-cols-4 gap-4 mt-4">
                         <FormItem
-                            label="Promo Code"
+                            label={t('Promo Code')}
                             invalid={Boolean(errors.promoCodes?.[index]?.code)}
                         >
                             <Input
@@ -99,27 +101,28 @@ const InfoSection = ({register, control, errors, channels}) => {
                             />
                         </FormItem>
                         <FormItem
-                            label="Discount Type"
+                            label={t('Discount Type')}
                             invalid={Boolean(errors.promoCodes?.[index]?.discountType)}
                         >
                             <Controller
                                 control={control}
                                 name={`promoCodes.${index}.discountType`}
                                 render={({field}) => (<Select
-                                    options={[{value: 'percent', label: 'Percent (%)'}, {
+                                    options={[{value: 'percent', label: `${t('Percent')} (%)`}, {
                                         value: 'fixed',
-                                        label: 'Fixed Amount (֏)'
+                                        label: `${t('Fixed Amount')} (֏)`
                                     },]}
                                     value={field.value === 'fixed' ? {
                                         value: 'fixed',
-                                        label: 'Fixed Amount (֏)'
-                                    } : {value: 'percent', label: 'Percent (%)'}}
+                                        label: `${t('Fixed Amount')} (֏)`
+                                    } : {value: 'percent', label: `${t('Percent')} (%)`}
+                                }
                                     onChange={(selected) => field.onChange(selected.value)}
                                 />)}
                             />
                         </FormItem>
                         <FormItem
-                            label="Discount Value"
+                            label={t('Discount Value')}
                             invalid={Boolean(errors.promoCodes?.[index]?.discountValue)}
                         >
                             <Input
@@ -128,11 +131,11 @@ const InfoSection = ({register, control, errors, channels}) => {
                                 placeholder="e.g., 10"
                             />
                         </FormItem>
-                        <FormItem label="Max Usage">
+                        <FormItem label={t('Max Usage')}>
                             <Input
                                 type="number"
                                 {...register(`promoCodes.${index}.maxUsage`)}
-                                placeholder="e.g., 100 (optional)"
+                                placeholder={`e.g., 100 (${t('optional')})`}
                             />
                         </FormItem>
                     </div>

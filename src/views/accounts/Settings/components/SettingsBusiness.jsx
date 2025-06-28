@@ -11,6 +11,7 @@ import {z} from "zod";
 import {Avatar} from "@/components/ui/index.js";
 
 import {components} from 'react-select'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const {Control} = components
 
@@ -45,6 +46,7 @@ const banks = [
 
 const SettingsBusiness = () => {
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     const [subject, setSubject] = useState('billing')
     const [message, setMessage] = useState('')
@@ -111,19 +113,19 @@ const SettingsBusiness = () => {
         );
     }
 
+
     return (
         <div className={'gap-4'}>
             <Card>
-                <h4 className="mb-4">Payout Setup</h4>
+                <h4 className="mb-4">{t('Payout Setup')}</h4>
                 <div className="grid grid-cols-10 gap-10">
                     <Form onSubmit={handleSubmit(onSubmit)} className="mt-8 col-span-5">
                         <p className="text-sm text-gray-500 mb-6">
-                            Enter your bank account information to receive payouts. Please make sure the information is
-                            accurate.
+                            {t('Enter your bank account information to receive payouts. Please make sure the information is accurate.')}
                         </p>
 
                         <FormItem
-                            label="Account Holder Name"
+                            label={t('Account Holder Name')}
                             invalid={Boolean(errors.holder)}
                         >
                             <Controller
@@ -136,7 +138,7 @@ const SettingsBusiness = () => {
                         </FormItem>
 
                         <FormItem
-                            label="Bank Name"
+                            label={t('Bank Name')}
                             invalid={Boolean(errors.bank)}
                         >
                             <Controller
@@ -150,14 +152,14 @@ const SettingsBusiness = () => {
                                             Option: CustomSelectOption,
                                             Control: CustomControl,
                                         }}
-                                        placeholder="Select Bank" {...field}
+                                        placeholder={t('Select Bank')}
                                     />
                                 )}
                             />
                         </FormItem>
 
                         <FormItem
-                            label="IBAN"
+                            label={t('IBAN')}
                             invalid={Boolean(errors.iban)}
                         >
                             <Controller
@@ -170,27 +172,27 @@ const SettingsBusiness = () => {
                         </FormItem>
 
                         <FormItem
-                            label="SWIFT / BIC Code"
+                            label={t('SWIFT / BIC Code')}
                             invalid={Boolean(errors.swift)}
                         >
                             <Controller
                                 name="swift"
                                 control={control}
                                 render={({field}) => (
-                                    <Input placeholder="e.g. HSBKAM22" {...field} />
+                                    <Input placeholder={`${t('e.g.')} HSBKAM22`} {...field} />
                                 )}
                             />
                         </FormItem>
 
                         <FormItem>
                             <Button block loading={isSubmitting} variant="solid" type="submit">
-                                {isSubmitting ? 'Saving...' : 'Save Bank Info'}
+                                {t(isSubmitting ? 'Saving...' : 'Save Bank Info')}
                             </Button>
                         </FormItem>
 
                         {submitted && (
                             <div className="mt-4 text-green-600 font-medium">
-                                ✅ Your bank information has been saved successfully!
+                                ✅ {t('Your bank information has been saved successfully!')}
                             </div>
                         )}
                     </Form>

@@ -9,6 +9,7 @@ import {z} from 'zod'
 import {apiUpdateSettingSecurityPassword} from "@/services/AccontsService.js";
 import toast from "@/components/ui/toast/index.js";
 import Notification from "@/components/ui/Notification/index.jsx";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const authenticatorList = [
     {
@@ -56,6 +57,7 @@ const SettingsSecurity = () => {
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const formRef = useRef(null)
+    const {t} = useTranslation()
 
     const {
         getValues,
@@ -101,19 +103,18 @@ const SettingsSecurity = () => {
     return (
         <div>
             <div className="mb-8">
-                <h4>Password</h4>
+                <h5>{t('Change Password')}</h5>
                 <p>
-                    Remember, your password is your digital key to your account.
-                    Keep it safe, keep it secure!
+                    {t('Remember, your password is your digital key to your account. Keep it safe, keep it secure!')}
                 </p>
             </div>
             <Form
                 ref={formRef}
                 className="mb-8"
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(handlePostSubmit)}
             >
                 <FormItem
-                    label="Current password"
+                    label={t('Current password')}
                     invalid={Boolean(errors.currentPassword)}
                     errorMessage={errors.currentPassword?.message}
                 >
@@ -131,7 +132,7 @@ const SettingsSecurity = () => {
                     />
                 </FormItem>
                 <FormItem
-                    label="New password"
+                    label={t('New password')}
                     invalid={Boolean(errors.newPassword)}
                     errorMessage={errors.newPassword?.message}
                 >
@@ -149,7 +150,7 @@ const SettingsSecurity = () => {
                     />
                 </FormItem>
                 <FormItem
-                    label="Confirm new password"
+                    label={t('Confirm new password')}
                     invalid={Boolean(errors.confirmNewPassword)}
                     errorMessage={errors.confirmNewPassword?.message}
                 >
@@ -168,7 +169,7 @@ const SettingsSecurity = () => {
                 </FormItem>
                 <div className="flex justify-end">
                     <Button variant="solid" type="submit">
-                        Update
+                        {t('Update')}
                     </Button>
                 </div>
             </Form>

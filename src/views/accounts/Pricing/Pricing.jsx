@@ -3,13 +3,16 @@ import Plans from './components/Plans'
 import PaymentCycleToggle from './components/PaymentCycleToggle'
 import Faq from './components/Faq'
 import PaymentDialog from './components/PaymentDialog'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const Pricing = () => {
+    const {t} = useTranslation();
+
     return (
         <>
             <Card className="mb-4">
                 <div className="flex items-center justify-between mb-8">
-                    <h3>Pricing</h3>
+                    <h3>{t('Pricing')}</h3>
                     {/*<PaymentCycleToggle />*/}
                 </div>
                 <Plans />

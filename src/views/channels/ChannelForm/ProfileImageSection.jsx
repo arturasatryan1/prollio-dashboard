@@ -5,8 +5,12 @@ import {Button} from '@/components/ui'
 import DoubleSidedImage from '@/components/shared/DoubleSidedImage'
 import {Controller} from 'react-hook-form'
 import {HiOutlineUser} from 'react-icons/hi'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const ProfileImage = ({control}) => {
+
+    const {t} = useTranslation()
+
     const beforeUpload = (files) => {
         let valid = true
 
@@ -24,7 +28,7 @@ const ProfileImage = ({control}) => {
 
     return (
         <Card>
-            <h4 className="mb-6">Image</h4>
+            <h4 className="mb-6">{t('Image')}</h4>
             <div className="bg-gray-100 dark:bg-gray-700 rounded-lg text-center p-4">
                 <div className="text-center">
                     <Controller
@@ -67,7 +71,7 @@ const ProfileImage = ({control}) => {
                                         className="mt-4"
                                         type="button"
                                     >
-                                        {field.value ? 'Change Image' : 'Upload Image'}
+                                        {t(field.value ? 'Change Image' : 'Upload Image')}
 
                                     </Button>
                                 </Upload>

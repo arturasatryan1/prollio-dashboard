@@ -4,15 +4,19 @@ import EventListTable from './components/EventListTable.jsx'
 import EventListActionTools from './components/EventListActionTools.jsx'
 import EventChannelListTableTools from './components/EventChannelListTableTools.jsx'
 import EventListSelected from './components/EventListSelected.jsx'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const EventList = () => {
+
+    const {t} = useTranslation()
+
     return (
         <>
             <Container>
                 <AdaptiveCard>
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                            <h3>Events</h3>
+                            <h3>{t('Events')}</h3>
                             <EventListActionTools />
                         </div>
                         <EventChannelListTableTools />

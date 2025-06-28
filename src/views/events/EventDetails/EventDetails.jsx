@@ -9,11 +9,13 @@ import useSWR from 'swr'
 import { useParams } from 'react-router'
 import isEmpty from 'lodash/isEmpty'
 import {apiGetEvent} from "@/services/EventService.js";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const { TabNav, TabList, TabContent } = Tabs
 
 const EventDetails = () => {
     const { id } = useParams()
+    const { t } = useTranslation()
 
     const { data, isLoading } = useSWR(
         ['/api/events', { id: id }],
@@ -36,7 +38,7 @@ const EventDetails = () => {
                     <Card className="w-full">
                         <Tabs defaultValue="promos">
                             <TabList>
-                                <TabNav value="promos">Promo Codes</TabNav>
+                                <TabNav value="promos">{t('Promo Codes')}</TabNav>
                             </TabList>
                             <div className="p-4">
                                 <TabContent value="promos">

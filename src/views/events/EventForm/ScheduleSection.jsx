@@ -3,14 +3,18 @@ import { FormItem } from '@/components/ui/Form'
 import { Controller } from 'react-hook-form'
 import DateTimepicker from "@/components/ui/DatePicker/DateTimepicker.jsx";
 import Input from "@/components/ui/Input/index.jsx";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const ScheduleSection = ({ control, errors }) => {
+
+    const {t} = useTranslation()
+
     return (
         <Card>
-            <h6 className="mb-6">Schedule & Pricing</h6>
+            <h6 className="mb-6">{t('Schedule & Pricing')}</h6>
             <div className="">
                 <FormItem
-                    label="Start date"
+                    label={t('Start Time')}
                     invalid={Boolean(errors.start)}
                 >
                     <Controller
@@ -26,7 +30,7 @@ const ScheduleSection = ({ control, errors }) => {
                     />
                 </FormItem>
                 <FormItem
-                    label="End date"
+                    label={t('End Time')}
                     invalid={Boolean(errors.end)}
                 >
                     <Controller
@@ -42,7 +46,7 @@ const ScheduleSection = ({ control, errors }) => {
                     />
                 </FormItem>
                 <FormItem
-                    label="Price"
+                    label={t('Price')}
                     invalid={Boolean(errors.price)}
                 >
                     <Controller
@@ -52,7 +56,7 @@ const ScheduleSection = ({ control, errors }) => {
                             <Input
                                 type="number"
                                 autoComplete="off"
-                                placeholder="Set price for event"
+                                placeholder={t('Set price for event')}
                                 {...field}
                             />
                         )}

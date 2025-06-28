@@ -19,6 +19,7 @@ import {TbPlus} from 'react-icons/tb'
 import {apiSignIn} from "@/services/AuthService.js";
 import toast from "@/components/ui/toast/index.js";
 import Notification from "@/components/ui/Notification/index.jsx";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const {Control} = components
 
@@ -85,6 +86,8 @@ const SettingsProfile = () => {
         },
     )
 
+    const {t} = useTranslation();
+
     const dialCodeList = useMemo(() => {
         const newCountryList = JSON.parse(JSON.stringify(countryList))
 
@@ -131,7 +134,7 @@ const SettingsProfile = () => {
             if (resp) {
                 mutate({...data, ...values}, false)
                 toast.push(
-                    <Notification type="success">Profile successfully updated</Notification>,
+                    <Notification type="success">{t('Profile successfully updated')}</Notification>,
                     { placement: 'top-center' },
                 )
             }
@@ -145,7 +148,7 @@ const SettingsProfile = () => {
 
     return (
         <>
-            <h4 className="mb-8">Personal information</h4>
+            <h5 className="mb-8">{t('Personal information')}</h5>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-8">
                     <Controller
@@ -182,7 +185,7 @@ const SettingsProfile = () => {
                                             type="button"
                                             icon={<TbPlus/>}
                                         >
-                                            Upload Image
+                                            {t('Upload Image')}
                                         </Button>
                                     </Upload>
                                     <Button
@@ -192,7 +195,7 @@ const SettingsProfile = () => {
                                             field.onChange('')
                                         }}
                                     >
-                                        Remove
+                                        {t('Remove')}
                                     </Button>
                                 </div>
                             </div>
@@ -201,7 +204,7 @@ const SettingsProfile = () => {
                 </div>
                 <div className="grid md:grid-cols-2 gap-4">
                     <FormItem
-                        label="First name"
+                        label={t('First name')}
                         invalid={Boolean(errors.first_name)}
                         errorMessage={errors.first_name?.message}
                     >
@@ -212,14 +215,14 @@ const SettingsProfile = () => {
                                 <Input
                                     type="text"
                                     autoComplete="off"
-                                    placeholder="First Name"
+                                    placeholder={t('First name')}
                                     {...field}
                                 />
                             )}
                         />
                     </FormItem>
                     <FormItem
-                        label="User name"
+                        label={t('Last name')}
                         invalid={Boolean(errors.last_name)}
                         errorMessage={errors.last_name?.message}
                     >
@@ -230,7 +233,7 @@ const SettingsProfile = () => {
                                 <Input
                                     type="text"
                                     autoComplete="off"
-                                    placeholder="Last Name"
+                                    placeholder={t('Last name')}
                                     {...field}
                                 />
                             )}
@@ -238,7 +241,7 @@ const SettingsProfile = () => {
                     </FormItem>
                 </div>
                 <FormItem
-                    label="Email"
+                    label={t('Email')}
                     invalid={Boolean(errors.email)}
                     errorMessage={errors.email?.message}
                 >
@@ -249,7 +252,7 @@ const SettingsProfile = () => {
                             <Input
                                 type="email"
                                 autoComplete="off"
-                                placeholder="Email"
+                                placeholder={t('Email')}
                                 {...field}
                             />
                         )}
@@ -293,6 +296,7 @@ const SettingsProfile = () => {
                     {/*    />*/}
                     {/*</FormItem>*/}
                     <FormItem
+                        label={t('Phone')}
                         className="w-full"
                         invalid={
                             Boolean(errors.phone) ||
@@ -300,15 +304,13 @@ const SettingsProfile = () => {
                         }
                         errorMessage={errors.phone?.message}
                     >
-                        <label className="form-label mb-2">Phone</label>
-
                         <Controller
                             name="phone"
                             control={control}
                             render={({field}) => (
                                 <NumericInput
                                     autoComplete="off"
-                                    placeholder="Phone Number"
+                                    placeholder={t('Phone Number')}
                                     value={field.value}
                                     onChange={field.onChange}
                                     onBlur={field.onBlur}
@@ -374,7 +376,7 @@ const SettingsProfile = () => {
                         type="submit"
                         loading={isSubmitting}
                     >
-                        Save
+                        {t('Save')}
                     </Button>
                 </div>
             </Form>

@@ -9,6 +9,7 @@ import { TbFilter } from 'react-icons/tb'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const channelList = [
     'Retail Stores',
@@ -23,10 +24,12 @@ const validationSchema = z.object({
     purchaseChannel: z.array(z.string()),
 })
 
-const RequestListTableFilter = () => {
+const PayoutListTableFilter = () => {
     const [dialogIsOpen, setIsOpen] = useState(false)
 
     const { filterData, setFilterData } = usePayoutList()
+
+    const {t} = useTranslation()
 
     const openDialog = () => {
         setIsOpen(true)
@@ -49,7 +52,7 @@ const RequestListTableFilter = () => {
     return (
         <>
             <Button icon={<TbFilter />} onClick={() => openDialog()}>
-                Filter
+                {t('Filter')}
             </Button>
             <Dialog
                 isOpen={dialogIsOpen}
@@ -110,4 +113,4 @@ const RequestListTableFilter = () => {
     )
 }
 
-export default RequestListTableFilter
+export default PayoutListTableFilter

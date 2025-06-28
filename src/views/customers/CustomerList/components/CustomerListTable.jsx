@@ -7,6 +7,7 @@ import {Link, useNavigate} from 'react-router'
 import cloneDeep from 'lodash/cloneDeep'
 import {TbEye} from 'react-icons/tb'
 import dayjs from "dayjs";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const statusColor = {
     active: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
@@ -45,6 +46,7 @@ const ActionColumn = ({onEdit, onViewDetail}) => {
 
 const CustomerListTable = () => {
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     const {
         customerList,
@@ -68,7 +70,7 @@ const CustomerListTable = () => {
     const columns = useMemo(
         () => [
             {
-                header: 'Name',
+                header: t('Name'),
                 accessorKey: 'name',
                 cell: (props) => {
                     const row = props.row.original
@@ -76,15 +78,15 @@ const CustomerListTable = () => {
                 },
             },
             {
-                header: 'Email',
+                header: t('Email'),
                 accessorKey: 'email',
             },
             {
-                header: 'username',
+                header: t('Username'),
                 accessorKey: 'username',
             },
             {
-                header: 'Status',
+                header: t('Status'),
                 accessorKey: 'status',
                 cell: (props) => {
                     const row = props.row.original
@@ -98,14 +100,14 @@ const CustomerListTable = () => {
                 },
             },
             {
-                header: 'Spent',
+                header: t('Spent'),
                 accessorKey: 'totalSpending',
                 cell: (props) => {
                     return <span>֏{props.row.original.spent.toFixed(2)}</span>
                 },
             },
             {
-                header: 'Joined At',
+                header: t('Joined At'),
                 accessorKey: 'created_at',
                 cell: (props) => {
                     const row = props.row.original

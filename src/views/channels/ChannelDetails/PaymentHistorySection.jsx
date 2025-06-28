@@ -11,6 +11,7 @@ import { NumericFormat } from 'react-number-format'
 import dayjs from 'dayjs'
 import Th from "@/components/ui/Table/Th.jsx";
 import THead from "@/components/ui/Table/THead.jsx";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const { Tr, Td, TBody } = Table
 
@@ -22,79 +23,72 @@ const statusColor = {
 
 const columnHelper = createColumnHelper()
 
-const columns = [
-    columnHelper.accessor('channel', {
-        header: 'Channel',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center gap-2">
-                    <span className="font-semibold">{row.channel.name}</span>
-                </div>
-            )
-        },
-    }),
-    columnHelper.accessor('event', {
-        header: 'Event',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center gap-2">
-                    <span className="font-semibold">{row.event.title}</span>
-                </div>
-            )
-        },
-    }),
-    columnHelper.accessor('status', {
-        header: 'Status',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center gap-2">
-                    <Badge className={statusColor[row.status]} />
-                    <span className="heading-text font-bold capitalize">
-                        {row.status}
-                    </span>
-                </div>
-            )
-        },
-    }),
-    columnHelper.accessor('date', {
-        header: 'Date',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center">
-                    {dayjs(row.created_at).format('DD/MM/YYYY HH:mm')}
-                </div>
-            )
-        },
-    }),
-    columnHelper.accessor('amount', {
-        header: 'Amount',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center">
-                    <NumericFormat
-                        displayType="text"
-                        value={(Math.round(row.amount * 100) / 100).toFixed(2)}
-                        prefix={'֏'}
-                        thousandSeparator={true}
-                    />
-                </div>
-            )
-        },
-    }),
-]
 
 const PaymentHistorySection = ({ data }) => {
+    const { t } = useTranslation()
+
+    const columns = [
+        columnHelper.accessor('event', {
+            header: t('Event'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <div className="flex items-center gap-2">
+                        <span className="font-semibold">{row.event.name}</span>
+                    </div>
+                )
+            },
+        }),
+        columnHelper.accessor('status', {
+            header: t('Status'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <div className="flex items-center gap-2">
+                        <Badge className={statusColor[row.status]} />
+                        <span className="heading-text font-bold capitalize">
+                        {row.status}
+                    </span>
+                    </div>
+                )
+            },
+        }),
+        columnHelper.accessor('date', {
+            header: t('Date'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <div className="flex items-center">
+                        {dayjs(row.created_at).format('DD/MM/YYYY HH:mm')}
+                    </div>
+                )
+            },
+        }),
+        columnHelper.accessor('amount', {
+            header: t('Amount'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <div className="flex items-center">
+                        <NumericFormat
+                            displayType="text"
+                            value={(Math.round(row.amount * 100) / 100).toFixed(2)}
+                            prefix={'֏'}
+                            thousandSeparator={true}
+                        />
+                    </div>
+                )
+            },
+        }),
+    ]
+
     const table = useReactTable({
         data: data.payments || [],
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
     })
+
 
     return (
         <>

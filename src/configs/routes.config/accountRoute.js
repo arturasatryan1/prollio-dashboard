@@ -9,9 +9,9 @@ const accountRoute = [
         component: lazy(() => import('@/views/accounts/Settings')),
         authority: [ADMIN, USER],
         meta: {
-            header: {
-                title: 'Settings',
-            },
+            // header: {
+            //     title: 'Settings',
+            // },
             pageContainerType: 'contained',
         },
     },

@@ -7,6 +7,7 @@ import {HiOutlineTrash} from "react-icons/hi";
 import Tag from '@/components/ui/Tag'
 import dayjs from "dayjs";
 import {MdClose} from "react-icons/md";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const statusColor = {
     upcoming: 'bg-blue-200 dark:bg-blue-300 text-gray-900 dark:text-gray-900',
@@ -34,6 +35,8 @@ const CustomerInfoField = ({title, value, decimal = false}) => {
 
 const InfoSection = ({data = {}}) => {
     const navigate = useNavigate()
+    const {t} = useTranslation()
+
     const [dialogOpen, setDialogOpen] = useState(false)
 
     const handleDialogClose = () => {
@@ -49,32 +52,32 @@ const InfoSection = ({data = {}}) => {
             <div className="flex flex-col xl:justify-between h-full mx-auto">
                 <span>
                     <Tag className={statusColor[data.status]}>
-                        {data.status}
+                        {t(data.status)}
                     </Tag>
                 </span>
                 <div className="flex xl:flex-col items-center gap-4 mt-6">
                     <h4 className="font-bold">{data.title}</h4>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-y-7 gap-x-4 mt-10">
-                    <CustomerInfoField title="Description" value={data.description}/>
+                    <CustomerInfoField title={t('Description')} value={data.description}/>
                     {/*<CustomerInfoField title="Subscribers" value={data.subscribers?.length}/>*/}
                     {/*<CustomerInfoField title="Promo Codes" value={data.promo_codes?.length}/>*/}
-                    <CustomerInfoField title="Created Date" value={dayjs(data.created_at).format('DD/MM/YYYY HH:mm')}/>
-                    <CustomerInfoField title="Start Time" value={dayjs(data.start_time).format('DD/MM/YYYY HH:mm')}/>
-                    <CustomerInfoField title="End Time" value={dayjs(data.end_time).format('DD/MM/YYYY HH:mm')}/>
+                    <CustomerInfoField title={t('Created Date')} value={dayjs(data.created_at).format('DD/MM/YYYY HH:mm')}/>
+                    <CustomerInfoField title={t('Start Time')} value={dayjs(data.start_time).format('DD/MM/YYYY HH:mm')}/>
+                    <CustomerInfoField title={t('End Time')} value={dayjs(data.end_time).format('DD/MM/YYYY HH:mm')}/>
                     {
                         data.canceled_at && (
-                            <CustomerInfoField title="Canceled At" value={dayjs(data.canceled_at).format('DD/MM/YYYY HH:mm')}/>
+                            <CustomerInfoField title={t('Canceled At')} value={dayjs(data.canceled_at).format('DD/MM/YYYY HH:mm')}/>
                         )
                     }
                     {
                         data.cancelled_reason && (
-                            <CustomerInfoField title="Canceled At" value={data.cancelled_reason}/>
+                            <CustomerInfoField title={t('Canceled Reason')} value={data.cancelled_reason}/>
                         )
                     }
                     {
                         data.status === 'upcoming' && (
-                            <CustomerInfoField title="Shere Link" value={data.link}/>
+                            <CustomerInfoField title={t('Share Link')} value={data.link}/>
 
                         )
                     }
@@ -89,7 +92,7 @@ const InfoSection = ({data = {}}) => {
                             icon={<MdClose/>}
                             // onClick={handleDialogOpen}
                         >
-                            Cancel
+                            {t('Cancel')}
                         </Button>
                     </div>
                 )}

@@ -141,7 +141,7 @@ const PaymentDialog = () => {
                                                             <NumericFormat
                                                                 displayType="text"
                                                                 value={value}
-                                                                prefix={'$'}
+                                                                prefix={'֏'}
                                                                 thousandSeparator={
                                                                     true
                                                                 }
@@ -217,7 +217,7 @@ const PaymentDialog = () => {
                                             selectedPlan.paymentCycle
                                         ]
                                     }
-                                    prefix={'$'}
+                                    prefix={'֏'}
                                     thousandSeparator={true}
                                 />
                             </span>

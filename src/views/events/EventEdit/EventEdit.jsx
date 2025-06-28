@@ -13,11 +13,13 @@ import {apiGetEvent, apiUpdateEvent} from "@/services/EventService.js";
 import dayjs from "dayjs";
 import {apiGetChannelListAll} from "@/services/ChannelService.js";
 import {MdClose} from "react-icons/md";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const EventEdit = () => {
     const {id} = useParams()
 
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     const {data, isLoading} = useSWR(
         [`/api/events/${id}`, {id: id}],
@@ -139,7 +141,7 @@ const EventEdit = () => {
                                     icon={<TbArrowNarrowLeft/>}
                                     onClick={() => history.back()}
                                 >
-                                    Back
+                                    {t('Back')}
                                 </Button>
                                 <div className="flex items-center">
                                     <Button
@@ -151,14 +153,14 @@ const EventEdit = () => {
                                         icon={<MdClose/>}
                                         onClick={handleDelete}
                                     >
-                                        Cancel
+                                        {t('Cancel')}
                                     </Button>
                                     <Button
                                         variant="solid"
                                         type="submit"
                                         loading={isSubmitting}
                                     >
-                                        Save
+                                        {t('Save')}
                                     </Button>
                                 </div>
                             </div>
@@ -167,15 +169,16 @@ const EventEdit = () => {
                     <ConfirmDialog
                         isOpen={deleteConfirmationOpen}
                         type="danger"
-                        title="Cancel event"
+                        cancelText={t('Cancel')}
+                        confirmText={t('Confirm')}
+                        title={t('Cancel Event')}
                         onClose={handleCancel}
                         onRequestClose={handleCancel}
                         onCancel={handleCancel}
                         onConfirm={handleConfirmDelete}
                     >
                         <p>
-                            Are you sure you want to cancel this event? This
-                            action can&apos;t be undo.{' '}
+                            {t('Are you sure you want to cancel this event? This action cannot be undone.')}
                         </p>
                     </ConfirmDialog>
                 </>

@@ -11,6 +11,7 @@ import {apiGetChannelListAll} from "@/services/ChannelService.js";
 import Select from "@/components/ui/Select/index.jsx";
 import useCustomerList from "@/views/customers/CustomerList/hooks/useCustomerList.js";
 import {apiGetEventListAll} from "@/services/EventService.js";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const statusList = [
     'active',
@@ -32,6 +33,8 @@ const PaymentListTableFilter = () => {
     const [selectedChannel, setSelectedChannel] = useState(null)
 
     const {filterData, setFilterData} = useCustomerList()
+
+    const {t} = useTranslation();
 
     const {
         handleSubmit,
@@ -102,14 +105,14 @@ const PaymentListTableFilter = () => {
     return (
         <>
             <Button icon={<TbFilter/>} onClick={() => openDialog()}>
-                Filter
+                {t('Filter')}
             </Button>
             <Dialog
                 isOpen={dialogIsOpen}
                 onClose={onDialogClose}
                 onRequestClose={onDialogClose}
             >
-                <h4 className="mb-4">Filter</h4>
+                <h4 className="mb-4">{t('Filter')}</h4>
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     {/*<FormItem label={'Channel'}>*/}
                     {/*    <Controller*/}
@@ -133,13 +136,13 @@ const PaymentListTableFilter = () => {
                     {/*        )}*/}
                     {/*    />*/}
                     {/*</FormItem>*/}
-                    <FormItem label={'Event'}>
+                    <FormItem label={t('Event')}>
                         <Controller
                             name="event"
                             control={control}
                             render={({field}) => (
                                 <Select
-                                    placeholder="Select Event"
+                                    placeholder={t('Select Event')}
                                     invalid={Boolean(errors.event)}
                                     value={events?.filter((option) => option.value === field.value)}
                                     options={events}
@@ -152,7 +155,7 @@ const PaymentListTableFilter = () => {
                             )}
                         />
                     </FormItem>
-                    <FormItem label="Status">
+                    <FormItem label={t('Status')}>
                         <Controller
                             name="status"
                             control={control}
@@ -169,7 +172,7 @@ const PaymentListTableFilter = () => {
                                             value={source}
                                             className="justify-between flex-row-reverse heading-text"
                                         >
-                                            {source}
+                                            {t(source)}
                                         </Checkbox>
                                     ))}
                                 </Checkbox.Group>
@@ -178,10 +181,10 @@ const PaymentListTableFilter = () => {
                     </FormItem>
                     <div className="flex justify-end items-center gap-2 mt-4">
                         <Button type="button" onClick={() => reset()}>
-                            Reset
+                            {t('Reset')}
                         </Button>
                         <Button type="submit" variant="solid">
-                            Apply
+                            {t('Apply')}
                         </Button>
                     </div>
                 </Form>

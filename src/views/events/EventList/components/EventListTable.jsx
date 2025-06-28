@@ -7,6 +7,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import {TbEye, TbPencil} from 'react-icons/tb'
 import dayjs from "dayjs";
 import useEventList from "@/views/events/EventList/hooks/useEventList.js";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const statusColor = {
     upcoming: 'bg-blue-200 dark:bg-blue-300 text-gray-900 dark:text-gray-900',
@@ -55,6 +56,7 @@ const ActionColumn = ({onEdit, onViewDetail}) => {
 
 const EventListTable = () => {
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     const {
         itemList,
@@ -78,7 +80,7 @@ const EventListTable = () => {
     const columns = useMemo(
         () => [
             {
-                header: 'Title',
+                header: t('Title'),
                 accessorKey: 'title',
                 cell: (props) => {
                     const row = props.row.original
@@ -86,16 +88,16 @@ const EventListTable = () => {
                 },
             },
             {
-                header: 'Description',
+                header: t('Description'),
                 accessorKey: 'description',
                 size: 300
             },
             {
-                header: 'Members',
+                header: t('Members'),
                 accessorKey: 'members_count',
             },
             {
-                header: 'Earnings',
+                header: t('Earnings'),
                 accessorKey: 'payments_sum_amount',
                 cell: (props) => {
                     const row = props.row.original
@@ -107,21 +109,21 @@ const EventListTable = () => {
                 },
             },
             {
-                header: 'Status',
+                header: t('Status'),
                 accessorKey: 'status',
                 cell: (props) => {
                     const row = props.row.original
                     return (
                         <div className="flex items-center">
                             <Tag className={statusColor[row.status]}>
-                                <span className="capitalize">{row.status}</span>
+                                <span className="capitalize">{t(row.status)}</span>
                             </Tag>
                         </div>
                     )
                 },
             },
             {
-                header: 'Date',
+                header: t('Date'),
                 accessorKey: 'created_at',
                 cell: (props) => {
                     const row = props.row.original

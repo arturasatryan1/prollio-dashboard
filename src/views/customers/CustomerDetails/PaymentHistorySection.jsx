@@ -49,7 +49,7 @@ const columns = [
         },
     }),
     columnHelper.accessor('date', {
-        header: 'Jined At',
+        header: 'Joned At',
         cell: (props) => {
             const row = props.row.original
             return (

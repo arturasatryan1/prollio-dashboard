@@ -8,6 +8,7 @@ import {TbEye, TbPencil} from 'react-icons/tb'
 import dayjs from "dayjs";
 import useChannelList from "@/views/channels/ChannelList/hooks/useChannelList.js";
 import Avatar from "../../../../components/ui/Avatar/index.jsx";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const statusColor = {
     pending: 'bg-amber-200 dark:bg-amber-300 text-gray-900 dark:text-gray-900',
@@ -56,6 +57,7 @@ const ActionColumn = ({onEdit, onViewDetail}) => {
 
 const ChannelListTable = () => {
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     const {
         itemList,
@@ -79,7 +81,7 @@ const ChannelListTable = () => {
     const columns = useMemo(
         () => [
             {
-                header: 'Name',
+                header: t('Name'),
                 accessorKey: 'name',
                 cell: (props) => {
                     const row = props.row.original
@@ -87,12 +89,12 @@ const ChannelListTable = () => {
                 },
             },
             {
-                header: 'Description',
+                header: t('Description'),
                 accessorKey: 'description',
                 size: 300
             },
             {
-                header: 'Status',
+                header: t('Status'),
                 accessorKey: 'status',
                 cell: (props) => {
                     const row = props.row.original
@@ -106,11 +108,11 @@ const ChannelListTable = () => {
                 },
             },
             {
-                header: 'members',
+                header: t('Members'),
                 accessorKey: 'members_count',
             },
             {
-                header: 'Created Date',
+                header: t('Created Date'),
                 accessorKey: 'created_at',
                 cell: (props) => {
                     const row = props.row.original

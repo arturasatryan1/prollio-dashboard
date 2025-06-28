@@ -1,34 +1,10 @@
 import Checkbox from '@/components/ui/Checkbox'
-import Radio from '@/components/ui/Radio'
 import Switcher from '@/components/ui/Switcher'
-import {apiGetSettingsNotification, apiUpdateSettingSecurityPassword} from '@/services/AccontsService'
+import {apiGetSettingsNotification, apiUpdateSettingNotifications} from '@/services/AccontsService'
 import useSWR from 'swr'
 import cloneDeep from 'lodash/cloneDeep'
-import { TbMessageCircleCheck } from 'react-icons/tb'
 import {useEffect} from "react";
-
-const emailNotificationOption = [
-    {
-        label: 'New member alert',
-        value: 'newSubscriber',
-        desc: 'Get notified when a new user subscribes to your event.',
-    },
-    {
-        label: 'Platform updates',
-        value: 'platformUpdates',
-        desc: 'Stay informed about new features, improvements, and important announcements.',
-    },
-    {
-        label: 'Tips & best practices',
-        value: 'tips',
-        desc: 'Occasional tips to help you grow your audience and improve your performance on the platform.',
-    },
-    {
-        label: 'Event reminders',
-        value: 'eventReminder',
-        desc: 'Receive reminders for upcoming events you’ve scheduled or are involved in.',
-    },
-]
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const notifyMeOption = [
     {
@@ -51,7 +27,7 @@ const notifyMeOption = [
 const SettingsNotification = () => {
     const {
         data = {
-            email: [],
+            notification: [],
             // desktop: false,
             // unreadMessageBadge: false,
             // notifymeAbout: '',
@@ -67,27 +43,53 @@ const SettingsNotification = () => {
         },
     )
 
+    const {t} = useTranslation()
+
+    const emailNotificationOption = [
+        {
+            label: t('New member alert'),
+            value: 'new_subscriber',
+            desc: t('Get notified when a new user subscribes to your event.'),
+        },
+        {
+            label: t('Platform updates'),
+            value: 'platform_pdates',
+            desc: t('Stay informed about new features, improvements, and important announcements.'),
+        },
+        {
+            label: t('Tips & best practices'),
+            value: 'tips',
+            desc: t('Occasional tips to help you grow your audience and improve your performance on the platform.'),
+        },
+        {
+            label: t('Event reminders'),
+            value: 'event_reminder',
+            desc: t('Receive reminders for upcoming events you’ve scheduled or are involved in.'),
+        },
+    ]
+
     useEffect(() => {
-        const resp = apiUpdateSettingSecurityPassword(data)
+        const resp = apiUpdateSettingNotifications(data)
     }, [data])
+
 
     const handleEmailNotificationOptionChange = (values) => {
         const newData = cloneDeep(data)
-        newData.email = values
+        newData.notification = values
         mutate(newData, false)
     }
 
     const handleEmailNotificationOptionCheckAll = (value) => {
         const newData = cloneDeep(data)
         if (value) {
-            newData.email = [
+            newData.notification = [
                 'newSubscriber',
                 'platformUpdates',
                 'tips',
                 'eventReminder',
             ]
         } else {
-            newData.email = []
+            newData.notification = []
         }
 
         mutate(newData, false)
@@ -113,7 +115,7 @@ const SettingsNotification = () => {
 
     return (
         <div>
-            <h4>Notification</h4>
+            <h4>{t('Notification')}</h4>
             <div className="mt-2">
                 {/*<div className="flex items-center justify-between py-6 border-b border-gray-200 dark:border-gray-600">*/}
                 {/*    <div>*/}
@@ -175,14 +177,14 @@ const SettingsNotification = () => {
                 {/*</div>*/}
                 <div className="flex items-center justify-between py-6">
                     <div>
-                        <h5>Email notification</h5>
+                        <h5>{t('Email notification')}</h5>
                         <p>
-                            Receive email alerts for important updates and activity on your account.
+                            {t('Receive email alerts for important updates and activity on your account.')}
                         </p>
                     </div>
                     <div>
                         <Switcher
-                            checked={data.email.length > 0}
+                            checked={data?.notification.length > 0}
                             onChange={handleEmailNotificationOptionCheckAll}
                         />
                     </div>
@@ -190,13 +192,13 @@ const SettingsNotification = () => {
                 <Checkbox.Group
                     vertical
                     className="flex flex-col gap-6"
-                    value={data.email}
+                    value={data?.notification}
                     onChange={handleEmailNotificationOptionChange}
                 >
                     {emailNotificationOption.map((option) => (
                         <div key={option.value} className="flex gap-4">
                             <div className="mt-1.5">
-                                <Checkbox value={option.value} />
+                                <Checkbox value={option.value}/>
                             </div>
                             <div>
                                 <h6>{option.label}</h6>

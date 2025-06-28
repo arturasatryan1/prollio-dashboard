@@ -8,7 +8,8 @@ import React from "react";
 import dayjs from "dayjs";
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import {FiClock} from "react-icons/fi";
-import hyAmLocale from '@fullcalendar/core/locales/hy-am'
+import useTranslation from "@/utils/hooks/useTranslation.js";
+import {useLocaleStore} from "@/store/localeStore.js";
 
 dayjs.extend(isSameOrAfter)
 
@@ -42,38 +43,24 @@ const defaultColorList = {
 const fullArmenianLocale = {
     code: 'hy-custom',
     week: {
-        dow: 1, // Monday is the first day of the week
-        doy: 4, // First week of the year must contain Jan 4th
+        dow: 1,
+        doy: 4
     },
     buttonText: {
         today: 'Այսօր',
         month: 'Ամիս',
         week: 'Շաբաթ',
         day: 'Օր',
-        list: 'Ցանկ',
+        list: 'Ցանկ'
     },
-    weekText: 'ՇԲ',
-    allDayText: 'Ամբողջ օրը',
-    moreLinkText: 'ավելին',
+    // titleFormat: {
+    //     year: 'numeric',
+    //     month: 'long',
+    //     day: 'numeric'
+    // },
+    allDayText: 'Օրը',
     noEventsText: 'Միջոցառումներ չկան',
-    dayNames: [
-        'Կիրակի',
-        'Երկուշաբթի',
-        'Երեքշաբթի',
-        'Չորեքշաբթի',
-        'Հինգշաբթի',
-        'Ուրբաթ',
-        'Շաբաթ',
-    ],
-    dayNamesShort: [
-        'Կիր',
-        'Երկ',
-        'Երք',
-        'Չրք',
-        'Հնգ',
-        'Ուր',
-        'Շբթ',
-    ],
+    firstDay: 1,
 }
 
 const statusColor = {
@@ -86,13 +73,12 @@ const statusColor = {
 };
 
 const WEEKDAYS_HY = ['Կիրակի', 'Երկուշաբթի', 'Երեքշաբթի', 'Չորեքշաբթի', 'Հինգշաբթի', 'Ուրբաթ', 'Շաբաթ'];
-const MONTHS_HY = [
-    'Հունվար', 'Փետրվար', 'Մարտ', 'Ապրիլ', 'Մայիս', 'Հունիս',
-    'Հուլիս', 'Օգոստոս', 'Սեպտեմբեր', 'Հոկտեմբեր', 'Նոյեմբեր', 'Դեկտեմբեր',
-]
 
 const CalendarView = (props) => {
 
+    const {t} = useTranslation()
+    const locale = useLocaleStore()
+    const currentLang = locale?.currentLang;
     const {
         wrapperClass,
         events,
@@ -101,27 +87,35 @@ const CalendarView = (props) => {
         ...rest
     } = props
 
+    console.log(dayjs().format('LLLL'));
+
+    const getWeekNumber = (date) => {
+        const firstDayOfYear = new Date(date.getFullYear(), 0, 1)
+        const pastDaysOfYear = (date - firstDayOfYear + 86400000) / 86400000
+        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7)
+    }
+
     return (
         <div className={classNames('calendar', wrapperClass)}>
             <div className="grid grid-cols-10">
                 <div className="col-span-2">
                     <div className="pr-5">
-                        <h6 className="my-4">Instructions</h6>
+                        <h6 className="my-4">{t('Instructions')}</h6>
                         <Timeline>
                             <Timeline.Item>
-                                Select dates, and you will be prompted to create a new event
+                                {t('Select dates, and you will be prompted to create a new event')}
                             </Timeline.Item>
                             <Timeline.Item>
-                                Click on any event to view details, make changes, or cancel it.
+                                {t('Click on any event to view details, make changes, or cancel it.')}
                             </Timeline.Item>
                             <Timeline.Item>
-                                Easily switch between Month, Week, and Day views using the top navigation bar
+                                {t('Easily switch between Month, Week, and Day views using the top navigation bar')}
                             </Timeline.Item>
                         </Timeline>
 
-                        <h6 className=" my-4">Upcoming Events</h6>
+                        <h6 className=" my-4">{t('Upcoming Events')}</h6>
                         {
-                            !events?.length && <p>No Upcoming Events</p>
+                            !events?.length && <p>{t('No Upcoming Events')}</p>
                         }
                         <div className="overflow-y-auto space-y-2" style={{maxHeight: 'calc(100vh - 470px)'}}>
                             {events?.map((event, idx) => (
@@ -144,7 +138,7 @@ const CalendarView = (props) => {
                                             {event.title}
                                         </p>
                                         <p className="text-sm text-gray-600 flex items-center gap-1">
-                                            Start Time:
+                                            {t('Start Time')}
                                             <FiClock className="text-gray-400" size={14}/>
                                             {dayjs(event.start).format('MMM DD, HH:mm')}
                                         </p>
@@ -157,14 +151,56 @@ const CalendarView = (props) => {
                 <div className="col-span-8">
                     <FullCalendar
                         initialView="dayGridMonth"
-                        // dayHeaderContent={(args) => WEEKDAYS_HY[args.date.getDay()]}
-                        // titleFormat={(date) => {
-                        //     const monthIndex = date.date.marker.getMonth()
-                        //     const year = date.date.marker.getFullYear()
-                        //     return `${MONTHS_HY[monthIndex]} ${year}`
+                        dayHeaderContent={
+                            currentLang === 'hy'
+                                ? (args) => {
+                                    const date = args.date;
+                                    const isTimeGridWeek = args.view.type === 'timeGridWeek';
+                                    const weekday = WEEKDAYS_HY[date.getDay()];
+                                    const isArmenian = currentLang === 'hy';
+
+                                    if (isArmenian && isTimeGridWeek) {
+                                        const date = args.date;
+                                        const weekNumber = getWeekNumber(date);
+
+                                        return {
+                                            html: `<div>${weekday}</div><div style="font-size: 0.75em; color: gray;">Շբթ ${weekNumber}</div>`
+                                        };
+                                    }
+
+                                    return {
+                                        html: `<div>${weekday}</div>`
+                                    };
+                                }
+                                : undefined
+                        }
+                        // datesSet={(info) => {
+                        //     const viewType = info.view.type
+                        //     const start = dayjs(info.start)
+                        //     const end = dayjs(info.end).subtract(1, 'day')
+                        //
+                        //     let title = ''
+                        //
+                        //     if (viewType === 'dayGridMonth' || viewType === 'timeGridWeek') {
+                        //         const startMonth = start.format('MMMM')
+                        //         const endMonth = end.format('MMMM')
+                        //         const year = end.format('YYYY')
+                        //
+                        //         if (startMonth === endMonth) {
+                        //             title = `${startMonth} ${start.format('D')} - ${end.format('D')}, ${year} թ․`
+                        //         } else {
+                        //             title = `${start.format('D MMMM')} - ${end.format('D MMMM')}, ${year} թ․`
+                        //         }
+                        //     } else if (viewType === 'timeGridDay') {
+                        //         title = `${start.format('D MMMM')}, ${start.format('YYYY')} թ․`
+                        //     }
+                        //
+                        //     setTimeout(() => {
+                        //         const el = document.querySelector('.fc-toolbar-title')
+                        //         if (el) el.textContent = title
+                        //     }, 0)
                         // }}
-                        // locale={fullArmenianLocale}
-                        // locale={hyAmLocale}
+                        locale={currentLang === 'hy' ? fullArmenianLocale : null}
                         height={700}
                         selectAllow={(selectInfo) => {
                             return dayjs(selectInfo.start).isSameOrAfter(dayjs(), 'day')
@@ -175,20 +211,13 @@ const CalendarView = (props) => {
                         slotLabelFormat={{
                             hour: '2-digit',
                             minute: '2-digit',
-                            hour12: false, // ⬅️ This is the key for 24-hour format
+                            hour12: false,
                         }}
                         headerToolbar={{
                             left: '',
                             center: 'title',
                             right: 'dayGridMonth,timeGridWeek,timeGridDay prev,next',
                         }}
-                        // dayCellClassNames={(arg) => {
-                        //     const classes = []
-                        //     if (dayjs(arg.date).isBefore(dayjs(), 'day')) {
-                        //         classes.push('fc-day-other')
-                        //     }
-                        //     return classes
-                        // }}
                         eventContent={(arg) => {
                             const {extendedProps} = arg.event
                             const {isEnd, isStart} = arg

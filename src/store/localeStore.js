@@ -1,8 +1,8 @@
 import appConfig from '@/configs/app.config'
-import { create } from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
+import {create} from 'zustand'
+import {devtools, persist} from 'zustand/middleware'
 import i18n from 'i18next'
-import { dateLocales } from '@/locales'
+import {dateLocales} from '@/locales'
 import dayjs from 'dayjs'
 
 export const useLocaleStore = create()(
@@ -10,7 +10,7 @@ export const useLocaleStore = create()(
         persist(
             (set) => ({
                 currentLang: appConfig.locale,
-                setLang: (lang) => {
+                setLang: async (lang) => {
                     const formattedLang = lang.replace(
                         /-([a-z])/g,
                         function (g) {
@@ -18,16 +18,23 @@ export const useLocaleStore = create()(
                         },
                     )
 
-                    i18n.changeLanguage(formattedLang)
-
-                    dateLocales[formattedLang]().then(() => {
-                        dayjs.locale(formattedLang)
+                    await i18n.changeLanguage(formattedLang)
+                    await dateLocales[formattedLang]().then(() => {
+                        dayjs.locale(formattedLang === 'hy' ? 'hy-am' : formattedLang)
                     })
 
-                    return set({ currentLang: lang })
+                    return set({currentLang: lang})
                 },
             }),
-            { name: 'locale' },
+            {
+                name: 'locale',
+                onRehydrateStorage: () => async (state) => {
+                    const lang = state?.currentLang
+                    if (lang) {
+                        await state.setLang(lang)
+                    }
+                }
+            },
         ),
     ),
 )

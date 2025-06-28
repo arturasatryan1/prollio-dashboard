@@ -11,16 +11,19 @@ import { HiOutlineSearch, HiChevronRight } from 'react-icons/hi'
 import { PiMagnifyingGlassDuotone } from 'react-icons/pi'
 import { Link } from 'react-router'
 import Highlighter from 'react-highlight-words'
-
-const recommendedSearch = [
-    {
-        title: 'Recommended',
-        data: [],
-    },
-]
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const ListItem = (props) => {
     const { icon, label, url = '', keyWord, onNavigate } = props
+
+    const {t} = useTranslation()
+
+    const recommendedSearch = [
+        {
+            title: t('Recommended'),
+            data: [],
+        },
+    ]
 
     return (
         <Link to={url} onClick={onNavigate}>

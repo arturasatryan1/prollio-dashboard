@@ -43,7 +43,7 @@ const UpcomingEvents = () => {
                     size="sm"
                     onClick={() => navigate('/events/create')}
                 >
-                    Create New
+                    {t('Create New')}
                 </Button>
             </div>
             <div className="mt-6">

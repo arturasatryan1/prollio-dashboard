@@ -2,8 +2,12 @@ import Card from '@/components/ui/Card'
 import Switcher from '@/components/ui/Switcher'
 import { FormItem } from '@/components/ui/Form'
 import { Controller } from 'react-hook-form'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const AccountSection = ({ control }) => {
+
+    const {t} = useTranslation()
+
     return (
         <Card>
             <div className="mt-6">
@@ -14,10 +18,8 @@ const AccountSection = ({ control }) => {
                         render={({ field }) => (
                             <div className="flex items-center justify-between gap-8">
                                 <div>
-                                    <h6>Allow Comments</h6>
-                                    <p>
-                                        Allow comments on the posts
-                                    </p>
+                                    <h6>{t('Allow Comments')}</h6>
+                                    <p>{t('Allow comments on the posts')}</p>
                                 </div>
                                 <Switcher
                                     checked={field.value}
@@ -36,10 +38,8 @@ const AccountSection = ({ control }) => {
                         render={({ field }) => (
                             <div className="flex items-center justify-between gap-8">
                                 <div>
-                                    <h6>Allow Reactions</h6>
-                                    <p>
-                                        Allow reactions on the posts
-                                    </p>
+                                    <h6>{t('Allow Reactions')}</h6>
+                                    <p>{t('Allow reactions on the posts')}</p>
                                 </div>
                                 <Switcher
                                     checked={field.value}

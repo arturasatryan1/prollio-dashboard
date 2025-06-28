@@ -12,6 +12,7 @@ import dayjs from 'dayjs'
 import Th from "@/components/ui/Table/Th.jsx";
 import THead from "@/components/ui/Table/THead.jsx";
 import React from "react";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const { Tr, Td, TBody } = Table
 
@@ -23,74 +24,75 @@ const statusColor = {
 
 const columnHelper = createColumnHelper()
 
-const columns = [
-    columnHelper.accessor('code', {
-        header: 'Code',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <span className="font-semibold">{row.code}</span>
-            )
-        },
-    }),
-    columnHelper.accessor('discount_type', {
-        header: 'Type',
-        cell: (props) => {
-            const row = props.row.original
-            const label = row.discount_type === 'percent' ? 'Percentage' : 'Fixed'
-            return (
-                <span className="capitalize">{label}</span>
-            )
-        },
-    }),
-    columnHelper.accessor('discount_value', {
-        header: 'Value',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <span>
-                    {row.discount_type === 'percent' ? `${row.discount_value}%` : `֏${row.discount_value}`}
-                </span>
-            )
-        },
-    }),
-    columnHelper.accessor('usage_limit', {
-        header: 'Max Usage',
-        cell: (props) => {
-            const row = props.row.original
-            return <span>{row.usage_limit ?? '∞'}</span>
-        },
-    }),
-    columnHelper.accessor('expires_at', {
-        header: 'Expires At',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <span>
-                    {row.expires_at ? dayjs(row.expires_at).format('DD/MM/YYYY') : '—'}
-                </span>
-            )
-        },
-    }),
-    columnHelper.accessor('active', {
-        header: 'Status',
-        cell: (props) => {
-            const row = props.row.original
-            const status = row.active ? 'Active' : 'Inactive'
-            const color = row.active ? 'bg-emerald-200' : 'bg-gray-300'
-            return (
-                <div className="flex items-center gap-2">
-                    <Badge className={color} />
-                    <span className="capitalize">{status}</span>
-                </div>
-            )
-        },
-    }),
-]
-
 const PromoCodesSection = ({ data }) => {
 
-    console.log(data);
+    const {t} = useTranslation()
+
+    const columns = [
+        columnHelper.accessor('code', {
+            header: t('Code'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <span className="font-semibold">{row.code}</span>
+                )
+            },
+        }),
+        columnHelper.accessor('discount_type', {
+            header: t('Type'),
+            cell: (props) => {
+                const row = props.row.original
+                const label = row.discount_type === 'percent' ? 'Percentage' : 'Fixed'
+                return (
+                    <span className="capitalize">{label}</span>
+                )
+            },
+        }),
+        columnHelper.accessor('discount_value', {
+            header: t('Value'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <span>
+                    {row.discount_type === 'percent' ? `${row.discount_value}%` : `֏${row.discount_value}`}
+                </span>
+                )
+            },
+        }),
+        columnHelper.accessor('usage_limit', {
+            header: t('Max Usage'),
+            cell: (props) => {
+                const row = props.row.original
+                return <span>{row.usage_limit ?? '∞'}</span>
+            },
+        }),
+        columnHelper.accessor('expires_at', {
+            header: t('Expires At'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <span>
+                    {row.expires_at ? dayjs(row.expires_at).format('DD/MM/YYYY') : '—'}
+                </span>
+                )
+            },
+        }),
+        columnHelper.accessor('active', {
+            header: t('Status'),
+            cell: (props) => {
+                const row = props.row.original
+                const status = row.active ? 'Active' : 'Inactive'
+                const color = row.active ? 'bg-emerald-200' : 'bg-gray-300'
+                return (
+                    <div className="flex items-center gap-2">
+                        <Badge className={color} />
+                        <span className="capitalize">{status}</span>
+                    </div>
+                )
+            },
+        }),
+    ]
+
     const table = useReactTable({
         data: data || [],
         columns,

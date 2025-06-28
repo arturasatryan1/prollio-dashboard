@@ -8,6 +8,7 @@ import {useNavigate} from 'react-router'
 import {NumericFormat} from "react-number-format";
 import {HiOutlineTrash} from "react-icons/hi";
 import Avatar from "@/components/ui/Avatar/Avatar.jsx";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const CustomerInfoField = ({title, value, decimal = false}) => {
     return (
@@ -29,6 +30,8 @@ const CustomerInfoField = ({title, value, decimal = false}) => {
 
 const ProfileSection = ({data = {}}) => {
     const navigate = useNavigate()
+    const {t} = useTranslation()
+
     const [dialogOpen, setDialogOpen] = useState(false)
 
     const handleDialogClose = () => {
@@ -47,11 +50,11 @@ const ProfileSection = ({data = {}}) => {
                     <h4 className="font-bold">{data.name}</h4>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-y-7 gap-x-4">
-                    <CustomerInfoField title="Name" value={`${data.name}`}/>
-                    <CustomerInfoField title="Description" value={data.description}/>
-                    <CustomerInfoField title="Subscribers Count" value={data.members_count}/>
-                    <CustomerInfoField title="Allow Comments" value={data.allow_comment ? 'YES': 'NO'}/>
-                    <CustomerInfoField title="Allow Reactions" value={data.allow_reaction ? 'YES': 'NO'}/>
+                    <CustomerInfoField title={t('Name')} value={`${data.name}`}/>
+                    <CustomerInfoField title={t('Description')} value={data.description}/>
+                    <CustomerInfoField title={t('Subscribers Count')} value={data.members_count}/>
+                    <CustomerInfoField title={t('Allow Comments')} value={t(data.allow_comment ? 'Yes': 'No')}/>
+                    <CustomerInfoField title={t('Allow Reactions')} value={t(data.allow_reaction ? 'Yes': 'No')}/>
                 </div>
                 <div className="flex flex-col gap-4 mt-10">
                     {/*<Button block variant="solid" onClick={handleSendMessage}>*/}
@@ -65,7 +68,7 @@ const ProfileSection = ({data = {}}) => {
                         icon={<HiOutlineTrash />}
                         // onClick={handleDialogOpen}
                     >
-                        Delete
+                        {t('Delete')}
                     </Button>
                 </div>
             </div>

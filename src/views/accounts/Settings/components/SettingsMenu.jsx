@@ -10,24 +10,26 @@ import {
     TbRefreshDot,
 } from 'react-icons/tb'
 import {AiOutlineDollar} from "react-icons/ai";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const { MenuItem } = Menu
 
-const menuList = [
-    { label: 'Profile', value: 'profile', icon: <TbUserSquare /> },
-    { label: 'Security', value: 'security', icon: <TbLock /> },
-    { label: 'Notification', value: 'notification', icon: <TbBell /> },
-    { label: 'Billing', value: 'billing', icon: <TbFileDollar /> },
-    { label: 'Payout Setup', value: 'business', icon: <AiOutlineDollar /> },
-    // { label: 'Integration', value: 'integration', icon: <TbRefreshDot /> },
-]
-
 export const SettingsMenu = ({ onChange }) => {
     const query = useQuery()
+    const {t} = useTranslation()
 
     const { currentView, setCurrentView } = useSettingsStore()
 
     const currentPath = query.get('category') || query.get('label') || 'inbox'
+
+    const menuList = [
+        { label: t('Profile'), value: 'profile', icon: <TbUserSquare /> },
+        { label: t('Security'), value: 'security', icon: <TbLock /> },
+        { label: t('Notification'), value: 'notification', icon: <TbBell /> },
+        { label: t('Billing'), value: 'billing', icon: <TbFileDollar /> },
+        { label: t('Payout Setup'), value: 'business', icon: <AiOutlineDollar /> },
+        // { label: 'Integration', value: 'integration', icon: <TbRefreshDot /> },
+    ]
 
     const handleSelect = (value) => {
         setCurrentView(value)

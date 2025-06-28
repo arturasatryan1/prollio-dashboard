@@ -9,6 +9,7 @@ import {
 import { NumericFormat } from 'react-number-format'
 import dayjs from 'dayjs'
 import Tag from "@/components/ui/Tag/index.jsx";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const { Tr, Th, Td, THead, TBody } = Table
 
@@ -34,87 +35,89 @@ const purposeColor = {
 
 const columnHelper = createColumnHelper()
 
-const columns = [
-    columnHelper.accessor('id', {
-        header: 'Reference',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <span className="heading-text font-bold cursor-pointer">
+const BillingHistory = ({ data = [], ...rest }) => {
+    const {t} = useTranslation();
+
+    const columns = [
+        columnHelper.accessor('id', {
+            header: t('Reference'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <span className="heading-text font-bold cursor-pointer">
                     #{row.id}
                 </span>
-            )
-        },
-    }),
-    columnHelper.accessor('type', {
-        header: 'Type',
-        cell: (props) => {
-            const row = props.row.original
-            return <span className="font-semibold">{row.type}</span>
-        },
-    }),
-    columnHelper.accessor('purpose', {
-        header: 'Purpose',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center gap-2">
-                    <div className="flex items-center">
-                        <Tag className={purposeColor[row.purpose]}>
-                            <span>{row.purpose}</span>
-                        </Tag>
+                )
+            },
+        }),
+        columnHelper.accessor('type', {
+            header: t('Type'),
+            cell: (props) => {
+                const row = props.row.original
+                return <span className="font-semibold">{t(row.type)}</span>
+            },
+        }),
+        columnHelper.accessor('purpose', {
+            header: t('Purpose'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <div className="flex items-center gap-2">
+                        <div className="flex items-center">
+                            <Tag className={purposeColor[row.purpose]}>
+                                <span>{t(row.purpose)}</span>
+                            </Tag>
+                        </div>
                     </div>
-                </div>
-            )
-        },
-    }),
-    columnHelper.accessor('status', {
-        header: 'Status',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center gap-2">
-                    <Badge className={statusColor[row.status]} />
-                    <span className="heading-text font-bold  capitalize">
-                        {row.status}
+                )
+            },
+        }),
+        columnHelper.accessor('status', {
+            header: t('Status'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <div className="flex items-center gap-2">
+                        <Badge className={statusColor[row.status]} />
+                        <span className="heading-text font-bold  capitalize">
+                        {t(row.status)}
                     </span>
-                </div>
-            )
-        },
-    }),
-    columnHelper.accessor('amount', {
-        header: 'Amount',
-        cell: (props) => {
-            const row = props.row.original;
-            const isWithdrawal = row.type === 'withdrawal';
-            const value = (Math.round(row.amount * 100) / 100).toFixed(2);
+                    </div>
+                )
+            },
+        }),
+        columnHelper.accessor('amount', {
+            header: t('Amount'),
+            cell: (props) => {
+                const row = props.row.original;
+                const isWithdrawal = row.type === 'withdrawal';
+                const value = (Math.round(row.amount * 100) / 100).toFixed(2);
 
-            return (
-                <div className="flex items-center">
-                    <NumericFormat
-                        displayType="text"
-                        value={value}
-                        prefix={isWithdrawal ? '-' : ''}
-                        thousandSeparator={true}
-                    />
-                </div>
-            );
-        },
-    }),
-    columnHelper.accessor('date', {
-        header: 'Date',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center">
-                    {dayjs(row.created_at).format('MM/DD/YYYY')}
-                </div>
-            )
-        },
-    }),
-]
+                return (
+                    <div className="flex items-center">
+                        <NumericFormat
+                            displayType="text"
+                            value={value}
+                            prefix={isWithdrawal ? '-' : ''}
+                            thousandSeparator={true}
+                        />
+                    </div>
+                );
+            },
+        }),
+        columnHelper.accessor('date', {
+            header: t('Date'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <div className="flex items-center">
+                        {dayjs(row.created_at).format('MM/DD/YYYY')}
+                    </div>
+                )
+            },
+        }),
+    ]
 
-const BillingHistory = ({ data = [], ...rest }) => {
     const table = useReactTable({
         data,
         columns,

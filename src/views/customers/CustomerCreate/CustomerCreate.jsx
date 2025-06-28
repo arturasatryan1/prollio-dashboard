@@ -31,7 +31,7 @@ const CustomerEdit = () => {
     const handleConfirmDiscard = () => {
         setDiscardConfirmationOpen(true)
         toast.push(
-            <Notification type="success">Customer discardd!</Notification>,
+            <Notification type="success">Customer discarded!</Notification>,
             { placement: 'top-center' },
         )
         navigate('/concepts/customers/customer-list')

@@ -5,8 +5,8 @@ import DataTable from '@/components/shared/DataTable'
 import usePaymentList from '../hooks/usePaymentList.js'
 import { Link, useNavigate } from 'react-router'
 import cloneDeep from 'lodash/cloneDeep'
-import { TbPencil, TbEye } from 'react-icons/tb'
 import dayjs from "dayjs";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const statusColor = {
     pending: 'bg-amber-200 dark:bg-amber-300 text-gray-900 dark:text-gray-900',
@@ -27,15 +27,16 @@ const PaymentListTable = () => {
         selectedItem,
     } = usePaymentList()
 
+    const {t} =  useTranslation()
 
     const columns = useMemo(
         () => [
             {
-                header: 'ID',
+                header: t('ID'),
                 accessorKey: 'uuid',
             },
             {
-                header: 'Member',
+                header: t('Member'),
                 accessorKey: 'member.first_name',
                 cell: (props) => {
                     const row = props.row.original
@@ -45,7 +46,7 @@ const PaymentListTable = () => {
                 },
             },
             {
-                header: 'Event',
+                header: t('Event'),
                 accessorKey: 'event.title',
                 cell: (props) => {
                     const row = props.row.original
@@ -55,7 +56,7 @@ const PaymentListTable = () => {
                 },
             },
             {
-                header: 'Amount',
+                header: t('Amount'),
                 accessorKey: 'amount',
                 cell: (props) => {
                     const row = props.row.original
@@ -67,7 +68,7 @@ const PaymentListTable = () => {
                 },
             },
             {
-                header: 'Status',
+                header: t('Status'),
                 accessorKey: 'status',
                 cell: (props) => {
                     const row = props.row.original
@@ -82,7 +83,7 @@ const PaymentListTable = () => {
             },
 
             {
-                header: 'Date',
+                header: t('Date'),
                 accessorKey: 'created_at',
                 cell: (props) => {
                     const row = props.row.original

@@ -10,6 +10,7 @@ import useSWR from 'swr'
 import { NumericFormat } from 'react-number-format'
 import { TbCheck } from 'react-icons/tb'
 import {useAuth} from "@/auth/index.js";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const FEATURE_LABELS = {
     channels: 'Ալիքների քանակը',
@@ -26,6 +27,7 @@ const Plans = () => {
         usePricingStore()
 
     const { user } = useAuth()
+    const { t } = useTranslation()
 
     const { data } = useSWR(['/api/setting/pricing'], () => apiGetPricingPlans(), {
         revalidateOnFocus: false,
@@ -50,25 +52,33 @@ const Plans = () => {
                             <span>{plan.title}</span>
                             {index === 1 && (
                                 <Tag className="rounded-full bg-green-200 font-bold">
-                                    Recommended
+                                    {t('Recommended')}
                                 </Tag>
                             )}
                         </h5>
                         <div className="">{plan.description}</div>
-                        <div className="mt-6">
-                            <NumericFormat
-                                className="h3"
-                                displayType="text"
-                                value={plan.price_monthly}
-                                prefix={'$'}
-                                thousandSeparator={true}
-                            />
-                            <span className="text-lg font-bold">
+                        {plan.name !== 'basic' ? (
+                            <div className="mt-6">
+
+                                <NumericFormat
+                                    className="h3"
+                                    displayType="text"
+                                    value={plan.price_monthly}
+                                    prefix={'֏'}
+                                    thousandSeparator={true}
+                                />
+                                <span className="text-lg font-bold">
                                 {' '}
-                                /{' '}
-                                {paymentCycle === 'monthly' ? 'month' : 'year'}
+                                    /{' '}
+                                    {t(paymentCycle === 'monthly' ? 'month' : 'year')}
                             </span>
-                        </div>
+                            </div>
+                        ) : (
+                            <div className="mt-6">
+                                <span className={'h3'}>Անվճար</span>
+                            </div>
+                        )}
+
                         <div className="flex flex-col gap-4 border-t border-gray-200 dark:border-gray-700 mt-6 pt-6">
                             {plan?.features?.map((feature) => (
                                 <div
@@ -104,9 +114,9 @@ const Plans = () => {
                                 setPaymentDialog(true)
                             }}
                         >
-                            {subscription?.plan_id === plan.id
-                                ? 'Current plan'
-                                : 'Select plan'}
+                            {t(subscription?.plan_id === plan.id
+                                ? 'Current Plan'
+                                : 'Select Plan')}
                         </Button>
                     </div>
                 </div>

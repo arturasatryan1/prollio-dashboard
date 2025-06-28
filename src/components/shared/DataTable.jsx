@@ -15,6 +15,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const {Tr, Th, Td, THead, TBody, Sorter} = Table
 
@@ -85,11 +86,14 @@ function DataTable(props) {
 
     const [sorting, setSorting] = useState(null)
 
+
+    const {t} = useTranslation()
+
     const pageSizeOption = useMemo(
         () =>
             pageSizes.map((number) => ({
                 value: number,
-                label: `${number} / page`,
+                label: `${number} / ${t('page')}`,
             })),
         [pageSizes],
     )
@@ -274,7 +278,7 @@ function DataTable(props) {
                                             <>
                                                 <FileNotFound/>
                                                 <span className="font-semibold">
-                                                    No data found!
+                                                    {t('No data found!')}
                                                 </span>
                                             </>
                                         )}

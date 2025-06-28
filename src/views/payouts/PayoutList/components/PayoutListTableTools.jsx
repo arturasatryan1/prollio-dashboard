@@ -1,9 +1,9 @@
 import usePayoutList from '../hooks/usePayoutList.js'
-import RequestListSearch from './RequestListSearch.jsx'
-import RequestListTableFilter from './RequestListTableFilter.jsx'
+import PayoutListSearch from './PayoutListSearch.jsx'
+import PayoutListTableFilter from './PayoutListTableFilter.jsx'
 import cloneDeep from 'lodash/cloneDeep'
 
-const RequestListTableTools = () => {
+const PayoutListTableTools = () => {
     const { tableData, setTableData } = usePayoutList()
 
     const handleInputChange = (val) => {
@@ -21,10 +21,10 @@ const RequestListTableTools = () => {
 
     return (
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-            <RequestListSearch onInputChange={handleInputChange} />
-            {/*<ExpertListTableFilter />*/}
+            <PayoutListSearch onInputChange={handleInputChange} />
+            {/*<PayoutListTableFilter />*/}
         </div>
     )
 }
 
-export default RequestListTableTools
+export default PayoutListTableTools

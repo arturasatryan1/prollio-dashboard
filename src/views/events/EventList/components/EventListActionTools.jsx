@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router'
 import useEventList from '../hooks/useEventList.js'
 import { CSVLink } from 'react-csv'
 import {FaPlus} from "react-icons/fa";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const EventListActionTools = () => {
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     const { customerList } = useEventList()
 
@@ -29,7 +31,7 @@ const EventListActionTools = () => {
                 icon={<FaPlus className="text-xs" />}
                 onClick={() => navigate('/events/create')}
             >
-                Create Event
+                {t('Create Event')}
             </Button>
         </div>
     )
