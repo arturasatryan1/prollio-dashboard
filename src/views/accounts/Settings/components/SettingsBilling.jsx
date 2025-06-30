@@ -6,7 +6,6 @@ import Notification from '@/components/ui/Notification'
 import toast from '@/components/ui/toast'
 import BillingHistory from './BillingHistory'
 import {apiGetSettingsBilling} from '@/services/AccontsService'
-import sleep from '@/utils/sleep'
 import useSWR from 'swr'
 import dayjs from 'dayjs'
 import {useNavigate} from 'react-router'
@@ -15,12 +14,12 @@ import {NumericFormat} from 'react-number-format'
 import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const statusColor = {
-    pending: 'bg-amber-400',
-    processing: 'bg-blue-200 dark:bg-blue-300 text-gray-900',
-    completed: 'bg-emerald-500',
-    failed: 'bg-red-200 dark:bg-red-300 text-gray-900',
-    cancelled: 'bg-gray-200 dark:bg-gray-300 text-gray-900',
-    refunded: 'bg-purple-200 dark:bg-purple-300 text-gray-900',
+    pending: 'bg-yellow-400 text-gray-900',
+    active: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
+    canceled: 'bg-gray-400 text-white',
+    expired: 'bg-red-300 text-gray-900',
+    paused: 'bg-blue-200 text-gray-900',
+    failed: 'bg-red-500 text-white',
 };
 
 const SettingsBilling = () => {
@@ -52,41 +51,6 @@ const SettingsBilling = () => {
         revalidateOnReconnect: false,
     })
 
-    const handleEditCreditCard = (card) => {
-        setSelectedCard({
-            type: 'EDIT',
-            dialogOpen: true,
-            cardInfo: card,
-        })
-    }
-
-    const handleCreditCardDialogClose = () => {
-        setSelectedCard({
-            type: '',
-            dialogOpen: false,
-            cardInfo: {},
-        })
-    }
-
-    const handleEditCreditCardSubmit = async () => {
-        await sleep(500)
-        handleCreditCardDialogClose()
-        toast.push(
-            <Notification type="success">Credit card updated!</Notification>,
-            {placement: 'top-center'},
-        )
-    }
-
-    const handleAddCreditCardSubmit = async (values) => {
-        console.log('Submitted values', values)
-        await sleep(500)
-        handleCreditCardDialogClose()
-        toast.push(
-            <Notification type="success">Credit card added!</Notification>,
-            {placement: 'top-center'},
-        )
-    }
-
     const handleChangePlan = () => {
         navigate('/settings/pricing')
     }
@@ -107,9 +71,9 @@ const SettingsBilling = () => {
                         <div>
                             <div className="flex items-center mb-2">
                                 <h6 className="font-bold">
-                                    {data.subscription?.plan?.title}
+                                    {t(data.subscription?.plan?.name)}
                                 </h6>
-                                <Tag className={`rounded-md border-0 ${statusColor[data.subscription?.status]}`}>
+                                <Tag className={`rounded-md border-0 ml-2 ${statusColor[data.subscription?.status]}`}>
                                     <span className={`capitalize`}>
                                         {t(data.subscription?.status)}
                                     </span>
@@ -121,7 +85,7 @@ const SettingsBilling = () => {
                                 </span>
                                 <span> | </span>
                                 <span>
-                                    {t('Next payment on')}
+                                    {t('Next payment on')} {' '}
                                     {dayjs(
                                         data.subscription?.ends_at ||
                                         0,

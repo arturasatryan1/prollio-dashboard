@@ -9,10 +9,16 @@ import { LAYOUT_COLLAPSIBLE_SIDE } from '@/constants/theme.constant'
 import LanguageSelector from "@/components/template/LanguageSelector.jsx";
 import Notification from '@/components/template/Notification'
 import SidePanel from "@/components/template/SidePanel/SidePanel.jsx";
+import {Alert} from "@/components/ui/index.js";
+import {Link} from "react-router";
+import useTranslation from "@/utils/hooks/useTranslation.js";
+import {useAuth} from "@/auth/index.js";
 
 
 const CollapsibleSide = ({ children }) => {
     const { larger, smaller } = useResponsive()
+    const {t} = useTranslation();
+    const {user} = useAuth();
 
     return (
         <LayoutBase
@@ -40,6 +46,22 @@ const CollapsibleSide = ({ children }) => {
                         }
                     />
                     <div className="h-full flex flex-auto flex-col">
+                            {user?.expert && !user?.expert?.active && (
+                                <Alert type="warning" className="rounded-none px-8">
+                                    <strong>{t('Account Not Activated')}</strong><br />
+                                    {t('To start using Prollio and access your dashboard features, please activate your expert account by completing the payment for the subscription plan you selected.')}
+                                    <br />
+                                    <Link to="/settings/pricing" className="text-blue-500 underline">
+                                        {t('Go to Pricing & Activate')}
+                                    </Link>
+                                </Alert>
+                            )}
+
+                            {/*{alerts?.payment_missing && (*/}
+                            {/*    <Alert type="danger" className="mb-4">*/}
+                            {/*        💳 No subscription detected. <Link to="/settings/pricing">Choose a plan</Link> to activate your account.*/}
+                            {/*    </Alert>*/}
+                            {/*)}*/}
                         {children}
                     </div>
                 </div>

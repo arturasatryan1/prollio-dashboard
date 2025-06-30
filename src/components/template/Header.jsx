@@ -1,7 +1,14 @@
 import classNames from '@/utils/classNames'
 import { HEADER_HEIGHT } from '@/constants/theme.constant'
+import {Alert} from "@/components/ui/index.js";
+
+import {Link} from "react-router";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const Header = (props) => {
+
+    const {t} = useTranslation();
+
     const {
         headerStart,
         headerEnd,

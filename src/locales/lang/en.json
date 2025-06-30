@@ -190,6 +190,7 @@
   "Click on any event to view details, make changes, or cancel it.": "Click on any event to view details, make changes, or cancel it.",
   "Select dates, and you will be prompted to create a new event": "Select dates, and you will be prompted to create a new event",
   "Remember, your password is your digital key to your account. Keep it safe, keep it secure!": "Remember, your password is your digital key to your account. Keep it safe, keep it secure!",
+  "checkout_agreement": "By clicking the 'Pay' button, you agree to be charged {{price}} AMD every month. You can cancel the subscription at any time.",
 
   "Before You Contact Us": "Before You Contact Us",
   "Bot not responding?": "Bot not responding?",
@@ -208,8 +209,9 @@
   "Forgot password": "Forgot password",
   "Please enter your credentials to sign in!": "Please enter your credentials to sign in.",
 
-  "Basic": "Basic",
-  "Pro": "Pro",
+  "basic": "Basic",
+  "pro": "Pro",
+  "business": "Business",
   "Event Title": "Event Title",
   "Duration": "Duration",
   "I agree to the": "I agree to the",

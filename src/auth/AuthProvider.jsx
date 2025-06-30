@@ -83,15 +83,15 @@ function AuthProvider({ children }) {
 
     const signUp = async (values) => {
         try {
-            const resp = await apiSignUp(values)
-            if (resp) {
-                handleSignIn({ accessToken: resp.token }, resp.user)
-                redirect()
-                return {
-                    status: 'success',
-                    message: '',
-                }
-            }
+            // const resp = await apiSignUp(values)
+            // if (resp) {
+            //     handleSignIn({ accessToken: resp.token }, resp.user)
+            //     redirect()
+            //     return {
+            //         status: 'success',
+            //         message: '',
+            //     }
+            // }
             return {
                 status: 'failed',
                 message: 'Unable to sign up',

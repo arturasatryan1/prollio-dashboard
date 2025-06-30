@@ -8,3 +8,11 @@ export async function submitCheckout(data) {
         data,
     })
 }
+
+export async function submitExpertCheckout(data) {
+    return ApiService.fetchDataWithAxios({
+        url: endpointConfig.expertCheckout,
+        method: 'post',
+        data,
+    })
+}

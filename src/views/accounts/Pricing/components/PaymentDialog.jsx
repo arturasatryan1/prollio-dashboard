@@ -1,53 +1,71 @@
-import { useState } from 'react'
+import React, {useState} from 'react'
 import Button from '@/components/ui/Button'
 import Dialog from '@/components/ui/Dialog'
 import Segment from '@/components/ui/Segment'
 import classNames from '@/utils/classNames'
 import sleep from '@/utils/sleep'
-import { usePricingStore } from '../store/pricingStore'
-import { TbCheck, TbCreditCard, TbMail } from 'react-icons/tb'
-import {
-    NumericFormat,
-    PatternFormat,
-    NumberFormatBase,
-} from 'react-number-format'
-import { useNavigate } from 'react-router'
+import {usePricingStore} from '../store/pricingStore'
+import {TbCheck} from 'react-icons/tb'
+import {NumericFormat,} from 'react-number-format'
+import {Link} from 'react-router'
+import useTranslation from "@/utils/hooks/useTranslation.js";
+import {FormItem} from "@/components/ui/Form/index.jsx";
+import {Controller, useForm} from "react-hook-form";
+import {Checkbox, Form} from "@/components/ui/index.js";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {z} from "zod";
+import {submitExpertCheckout} from "@/services/CheckoutService.js";
+import toast from "@/components/ui/toast/index.js";
+import Notification from "@/components/ui/Notification/index.jsx";
+import {useSessionUser} from "@/store/authStore.js";
+import {apiGetSettingsProfile} from "@/services/AccontsService.js";
 
-function limit(val, max) {
-    if (val.length === 1 && val[0] > max[0]) {
-        val = '0' + val
-    }
+const paymentMethods = [
+    {id: 'arca', label: 'Card', logo: 'arca-logo.jpg'},
+    {id: 'idram', label: 'IDram', logo: 'idram.webp'},
+    {id: 'telcell', label: 'TelCell', logo: 'telcell-logo.jpg'},
+]
 
-    if (val.length === 2) {
-        if (Number(val) === 0) {
-            val = '01'
-        } else if (val > max) {
-            val = max
-        }
-    }
-
-    return val
-}
-
-function cardExpiryFormat(val) {
-    const month = limit(val.substring(0, 2), '12')
-    const date = limit(val.substring(2, 4), '31')
-
-    return month + (date.length ? '/' + date : '')
-}
+const validationSchema = z
+    .object({
+        agree: z.literal(true, {
+            errorMap: () => ({
+                message: 'You must agree to the terms before continuing.',
+            }),
+        }),
+    })
 
 const PaymentDialog = () => {
     const [loading, setLoading] = useState(false)
     const [paymentSuccessful, setPaymentSuccessful] = useState(false)
 
-    const navigate = useNavigate()
+    const {t} = useTranslation(false)
 
-    const { paymentDialog, setPaymentDialog, selectedPlan, setSelectedPlan } =
-        usePricingStore()
+    const {
+        register,
+        reset,
+        handleSubmit,
+        formState: {errors},
+        control,
+    } = useForm({
+        defaultValues: {
+            paymentMethod: null,
+            agree: false,
+        },
+        resolver: zodResolver(validationSchema),
+    })
+
+
+    const {paymentDialog, setPaymentDialog, selectedPlan, setSelectedPlan} = usePricingStore()
+    const setUser = useSessionUser((state) => state.setUser)
+
+    const [selectedMethod, setSelectedMethod] = useState('arca')
 
     const handleDialogClose = async () => {
+        reset()
         setPaymentDialog(false)
         await sleep(200)
+        reset()
         setSelectedPlan({})
         setPaymentSuccessful(false)
     }
@@ -59,16 +77,32 @@ const PaymentDialog = () => {
         })
     }
 
-    const handlePay = async () => {
+    const handlePay = async (values) => {
         setLoading(true)
-        await sleep(500)
-        setLoading(false)
-        setPaymentSuccessful(true)
-    }
 
-    const handleManageSubscription = async () => {
-        navigate('/concepts/account/settings?view=billing')
-        await handleDialogClose()
+        try {
+            const result = await submitExpertCheckout({
+                payment_method: selectedMethod,
+                plan_id: selectedPlan.id,
+                ...values
+            })
+
+            if (result) {
+                const res = await apiGetSettingsProfile()
+                if (res) {
+                    setUser(res)
+                }
+            }
+
+            setPaymentSuccessful(true)
+        } catch (errors) {
+            toast.push(
+                <Notification type="danger">{errors?.response?.data?.message || errors.toString()}</Notification>,
+                {placement: 'top-center'},
+            )
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -82,65 +116,58 @@ const PaymentDialog = () => {
                 <>
                     <div className="text-center mt-6 mb-2">
                         <div className="inline-flex rounded-full p-5 bg-success">
-                            <TbCheck className="text-5xl text-white" />
+                            <TbCheck className="text-5xl text-white"/>
                         </div>
                         <div className="mt-6">
-                            <h4>Thank you for your purchase!</h4>
+                            <h4>{t('Payment Successful!')}</h4>
                             <p className="text-base max-w-[400px] mx-auto mt-4 leading-relaxed">
-                                We&apos;ve received your order and are
-                                processing it now. You&apos;ll get an email with
-                                your order details soon
+                                {t('Your subscription is now active. You Will receive a confirmation email shortly')}
                             </p>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 mt-8">
-                            <Button block onClick={handleManageSubscription}>
-                                Manage subscription
-                            </Button>
+                        <div className="grid grid-cols-1 gap-2 mt-8">
+                            {/*<Button block onClick={handleManageSubscription}>*/}
+                            {/*    {t('Manage subscription')}*/}
+                            {/*</Button>*/}
                             <Button
                                 block
                                 variant="solid"
                                 onClick={handleDialogClose}
                             >
-                                Close
+                                {t('Close')}
                             </Button>
                         </div>
                     </div>
                 </>
             ) : (
-                <>
-                    <h4>{selectedPlan.planName} plan</h4>
+                <Form onSubmit={handleSubmit(handlePay)}>
+                    <h4>{t('Plan')} {selectedPlan.planName}</h4>
                     <div className="mt-6">
                         <Segment
                             defaultValue={selectedPlan.paymentCycle}
                             className="gap-4 flex bg-transparent"
                             onChange={(value) => handlePaymentChange(value)}
                         >
-                            {Object.entries(selectedPlan.price || {}).map(
-                                ([key, value]) => (
-                                    <Segment.Item key={key} value={key}>
-                                        {({ active, onSegmentItemClick }) => {
-                                            return (
-                                                <div
-                                                    className={classNames(
-                                                        'flex justify-between border rounded-xl border-gray-300 dark:border-gray-600 py-5 px-4 select-none ring-1 w-1/2',
-                                                        active
-                                                            ? 'ring-primary border-primary'
-                                                            : 'ring-transparent bg-gray-100 dark:bg-gray-600',
-                                                    )}
-                                                    role="button"
-                                                    onClick={onSegmentItemClick}
-                                                >
-                                                    <div>
-                                                        <div className="heading-text mb-0.5">
-                                                            Pay{' '}
-                                                            {key === 'monthly'
-                                                                ? 'monthly'
-                                                                : 'anually'}
-                                                        </div>
-                                                        <span className="text-lg font-bold heading-text flex gap-0.5">
+                            <Segment.Item value={selectedPlan.price}>
+                                {({active, onSegmentItemClick}) => {
+                                    return (
+                                        <div
+                                            className={classNames(
+                                                'flex justify-between border rounded-xl border-gray-300 dark:border-gray-600 py-5 px-4 select-none ring-1',
+                                                active
+                                                    ? 'ring-primary border-primary'
+                                                    : 'ring-transparent bg-gray-100 dark:bg-gray-600',
+                                            )}
+                                            role="button"
+                                            onClick={onSegmentItemClick}
+                                        >
+                                            <div>
+                                                <div className="heading-text mb-0.5">
+                                                    {t('Pay Monthly')}
+                                                </div>
+                                                <span className="text-lg font-bold heading-text flex gap-0.5">
                                                             <NumericFormat
                                                                 displayType="text"
-                                                                value={value}
+                                                                value={selectedPlan.price}
                                                                 prefix={'֏'}
                                                                 thousandSeparator={
                                                                     true
@@ -148,99 +175,108 @@ const PaymentDialog = () => {
                                                             />
                                                             <span>{'/'}</span>
                                                             <span>
-                                                                {key ===
-                                                                'monthly'
-                                                                    ? 'month'
-                                                                    : 'year'}
+                                                                {t('month')}
                                                             </span>
                                                         </span>
-                                                    </div>
-                                                    {active && (
-                                                        <TbCheck className="text-primary text-xl" />
-                                                    )}
-                                                </div>
-                                            )
-                                        }}
-                                    </Segment.Item>
-                                ),
-                            )}
+                                            </div>
+                                            {(
+                                                <TbCheck className="text-primary text-xl"/>
+                                            )}
+                                        </div>
+                                    )
+                                }}
+                            </Segment.Item>
+
                         </Segment>
                     </div>
-                    <div className="mt-6 border border-gray-200 dark:border-gray-600 rounded-lg">
-                        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-600">
-                            <div className="w-full">
-                                <span>Billing email</span>
-                                <div className="flex items-center gap-2 mt-2">
-                                    <TbMail className="text-2xl" />
-                                    <input
-                                        className="focus:outline-hidden heading-text flex-1"
-                                        placeholder="Enter email"
-                                        type="email"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex items-center justify-between p-4">
-                            <div className="w-full">
-                                <span>Credit card</span>
-                                <div className="flex items-center gap-2 mt-2">
-                                    <div className="flex-1">
-                                        <TbCreditCard className="text-2xl" />
-                                    </div>
-                                    <PatternFormat
-                                        className="focus:outline-hidden heading-text w-full"
-                                        placeholder="Credit card number"
-                                        format="#### #### #### ####"
-                                    />
-                                    <NumberFormatBase
-                                        className="focus:outline-hidden heading-text max-w-12 sm:max-w-28"
-                                        placeholder="MM/YY"
-                                        format={cardExpiryFormat}
-                                    />
-                                    <PatternFormat
-                                        className="focus:outline-hidden heading-text max-w-12 sm:max-w-28"
-                                        placeholder="CVC"
-                                        format="###"
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                    <h4 className={`mt-5 mb-3`}>{t('Select Payment Method')}</h4>
+                    <div>
+                        <Segment
+                            defaultValue={selectedMethod}
+                            className="gap-4 flex bg-transparent"
+                            onChange={(value) => setSelectedMethod(value)}
+                        >
+                            {paymentMethods.map((method) => (
+                                <Segment.Item key={method.id} value={method.id}>
+                                    {({active, onSegmentItemClick}) => (
+                                        <div
+                                            className={classNames(
+                                                'flex items-center relative border rounded-xl border-gray-300 dark:border-gray-600 py-5 px-4 select-none cursor-pointer',
+                                                active
+                                                    ? 'ring-primary border-primary bg-white dark:bg-gray-700'
+                                                    : 'ring-transparent bg-gray-100 dark:bg-gray-600'
+                                            )}
+                                            onClick={onSegmentItemClick}
+                                        >
+                                            <img
+                                                className="h-[40px] w-[40px]"
+                                                src={`/img/others/${method.logo}`}
+                                                alt="Google sign in"
+                                            />
+                                            <span
+                                                className="text-base font-medium ml-2 hidden lg:block">{t(method.label)}</span>
+                                            {active &&
+                                                <TbCheck size={25} className="text-primary absolute right-1 top-0"/>}
+                                        </div>
+                                    )}
+                                </Segment.Item>
+                            ))}
+                        </Segment>
+
                     </div>
                     <div className="mt-6 flex flex-col items-end">
                         <h4>
-                            <span>Bill now: </span>
+                            <span>{t('Amount')}: </span>
                             <span>
                                 <NumericFormat
                                     displayType="text"
-                                    value={
-                                        selectedPlan.price?.[
-                                            selectedPlan.paymentCycle
-                                        ]
-                                    }
+                                    value={selectedPlan.price}
                                     prefix={'֏'}
                                     thousandSeparator={true}
                                 />
                             </span>
                         </h4>
-                        <div className="max-w-[350px] ltr:text-right rtl:text-left leading-none mt-2 opacity-80">
-                            <small>
-                                By clicking &quot;Pay&quot;, you agree to be
-                                charged $399 every month, you can cancel this
-                                subscription any time.
-                            </small>
-                        </div>
+                        {/*<div className="max-w-[350px] ltr:text-right rtl:text-left leading-none mt-2 opacity-80">*/}
+                        {/*    <small>*/}
+                        {/*        {t('checkout_agreement', {*/}
+                        {/*            price: selectedPlan.price*/}
+                        {/*        })}*/}
+                        {/*    </small>*/}
+                        {/*</div>*/}
+                    </div>
+                    <div className={'mt-5'}>
+                        <FormItem
+                            invalid={Boolean(errors.agree)}
+                            errorMessage={t(errors.agree?.message)}
+                        >
+                            <Controller
+                                name="agree"
+                                control={control}
+                                render={({field}) => {
+                                    return (
+                                        <Checkbox
+                                            {...field}
+                                        >
+                                            <span className={'text-xs'}>{t('I agree to the')} {''}</span>
+                                            <Link to={`/terms`} className={'underline'}>
+                                                <span className={'text-xs'}>{t('Terms of Use')}</span>
+                                            </Link>
+                                        </Checkbox>
+                                    )
+                                }}
+                            />
+                        </FormItem>
                     </div>
                     <div className="mt-6">
                         <Button
                             block
                             variant="solid"
                             loading={loading}
-                            onClick={handlePay}
                         >
-                            Pay
+                            {t('Pay')}
                         </Button>
                     </div>
-                </>
+                </Form>
             )}
         </Dialog>
     )

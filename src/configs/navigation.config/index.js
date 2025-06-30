@@ -106,7 +106,7 @@ const navigationConfig = [
         },
         subMenu: [
             {
-                key: 'finance.payments',
+                key: 'payment.list',
                 path: '/payments',
                 title: 'Payments',
                 translateKey: 'nav.payments',
@@ -116,7 +116,7 @@ const navigationConfig = [
                 subMenu: [],
             },
             {
-                key: 'finance.payouts',
+                key: 'payout.list',
                 path: '/payouts',
                 title: 'Payouts',
                 translateKey: 'nav.payouts',

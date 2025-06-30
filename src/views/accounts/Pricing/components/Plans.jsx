@@ -48,18 +48,22 @@ const Plans = () => {
                     )}
                 >
                     <div>
-                        <h5 className="mb-6 flex items-center gap-2">
-                            <span>{plan.title}</span>
-                            {index === 1 && (
+                        <h5 className="mb-2 flex items-center gap-2">
+                            <h3>{t(plan.name)}</h3>
+                            {index === 1 && !subscription && (
                                 <Tag className="rounded-full bg-green-200 font-bold">
                                     {t('Recommended')}
+                                </Tag>
+                            )}
+                            {!user?.expert?.active && subscription?.plan_id === plan.id && (
+                                <Tag className="rounded-full bg-green-200 font-bold">
+                                    {t('Selected Plan')}
                                 </Tag>
                             )}
                         </h5>
                         <div className="">{plan.description}</div>
                         {plan.name !== 'basic' ? (
                             <div className="mt-6">
-
                                 <NumericFormat
                                     className="h3"
                                     displayType="text"
@@ -75,7 +79,7 @@ const Plans = () => {
                             </div>
                         ) : (
                             <div className="mt-6">
-                                <span className={'h3'}>Անվճար</span>
+                                <span className={'h3'}>{t('Free')}</span>
                             </div>
                         )}
 
@@ -102,21 +106,27 @@ const Plans = () => {
                     <div className="mt-10">
                         <Button
                             block
+                            variant={subscription?.plan_id === plan.id && subscription?.status === 'pending' && 'solid'}
                             disabled={
-                                subscription?.plan_id === plan.id
+                                subscription?.status !== 'pending' && subscription?.plan_id === plan.id
                             }
                             onClick={() => {
                                 setSelectedPlan({
                                     paymentCycle,
-                                    planName: plan.name,
-                                    price: plan.price,
+                                    planName: plan.title,
+                                    price: plan.price_monthly,
+                                    id: plan.id,
                                 })
                                 setPaymentDialog(true)
                             }}
                         >
-                            {t(subscription?.plan_id === plan.id
-                                ? 'Current Plan'
-                                : 'Select Plan')}
+                            {t(
+                                subscription?.plan_id === plan.id
+                                    ? subscription?.status === 'pending'
+                                        ? 'Proceed to Payment'
+                                        : 'Current Plan'
+                                    : 'Select Plan'
+                            )}
                         </Button>
                     </div>
                 </div>
