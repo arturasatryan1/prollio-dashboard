@@ -109,7 +109,7 @@ const CalendarView = (props) => {
                                 {t('Click on any event to view details, make changes, or cancel it.')}
                             </Timeline.Item>
                             <Timeline.Item>
-                                {t('Easily switch between Month, Week, and Day views using the top navigation bar')}
+                                {t('Easily switch the calendar to see the month, week, or day')}
                             </Timeline.Item>
                         </Timeline>
 

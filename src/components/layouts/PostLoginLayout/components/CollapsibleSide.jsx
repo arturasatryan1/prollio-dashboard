@@ -51,9 +51,11 @@ const CollapsibleSide = ({ children }) => {
                                     <strong>{t('Account Not Activated')}</strong><br />
                                     {t('To start using Prollio and access your dashboard features, please activate your expert account by completing the payment for the subscription plan you selected.')}
                                     <br />
+                                    {t('Go to')}{' '}
                                     <Link to="/settings/pricing" className="text-blue-500 underline">
-                                        {t('Go to Pricing & Activate')}
+                                        {t('Pricing')}
                                     </Link>
+                                    {' '} {t('and activate')}
                                 </Alert>
                             )}
 

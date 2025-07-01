@@ -1,13 +1,15 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
-import { FormItem, Form } from '@/components/ui/Form'
-import { useForm, Controller } from 'react-hook-form'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { apiSetPassword } from '@/services/AuthService'
-import { useNavigate } from 'react-router'
-
+import {Form, FormItem} from '@/components/ui/Form'
+import {Controller, useForm} from 'react-hook-form'
+import {z} from 'zod'
+import {zodResolver} from '@hookform/resolvers/zod'
+import {apiSetPassword} from '@/services/AuthService'
+import {useNavigate} from 'react-router'
+import toast from "@/components/ui/toast/index.js";
+import Notification from "@/components/ui/Notification/index.jsx";
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 
 const validationSchema = z.object({
@@ -18,13 +20,14 @@ const validationSchema = z.object({
     path: ['confirmPassword'],
 })
 
-const SetPasswordForm = ({ token, setMessage }) => {
+const SetPasswordForm = ({token, setMessage}) => {
     const [isSubmitting, setSubmitting] = useState(false)
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     const {
         handleSubmit,
-        formState: { errors },
+        formState: {errors},
         control,
     } = useForm({
         resolver: zodResolver(validationSchema),
@@ -39,8 +42,15 @@ const SetPasswordForm = ({ token, setMessage }) => {
                 password_confirmation: values.confirmPassword,
             })
 
-            navigate('/overview')
+            toast.push(
+                <Notification title={t('Your password has been set successfully!')} type="success" duration={4000}
+                              width={500}>
+                    {t('You can now log in to your account using your new password.')}
+                </Notification>,
+                {placement: 'top-center'},
+            )
 
+            navigate('/overview')
         } catch (err) {
             setMessage?.(
                 err?.response?.data?.message || 'Սխալ տեղի ունեցավ։ Խնդրում ենք փորձել նորից։'
@@ -61,7 +71,7 @@ const SetPasswordForm = ({ token, setMessage }) => {
                     <Controller
                         name="password"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <Input
                                 type="password"
                                 placeholder="Նոր գաղտնաբառ"
@@ -79,7 +89,7 @@ const SetPasswordForm = ({ token, setMessage }) => {
                     <Controller
                         name="confirmPassword"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <Input
                                 type="password"
                                 placeholder="Կրկնեք գաղտնաբառը"

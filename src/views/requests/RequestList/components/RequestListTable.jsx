@@ -111,8 +111,8 @@ const RequestListTable = () => {
                 accessorKey: 'plan.name',
                 cell: (props) => {
                     const row = props.row.original
-                    const plan = row.plan.name
-                    return (
+                    const plan = row.plan?.name
+                    return plan && (
                         <div>
                             {plan.toUpperCase()}
                         </div>
