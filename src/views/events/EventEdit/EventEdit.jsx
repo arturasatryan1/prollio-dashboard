@@ -128,6 +128,7 @@ const EventEdit = () => {
             {!isLoading && data && (
                 <>
                     <EventForm
+                        pageTitle={'Edit Event'}
                         defaultValues={getDefaultValues()}
                         onFormSubmit={handleFormSubmit}
                         channels={channels}

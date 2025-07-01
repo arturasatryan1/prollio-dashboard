@@ -119,7 +119,7 @@ const PaymentDialog = () => {
                             <TbCheck className="text-5xl text-white"/>
                         </div>
                         <div className="mt-6">
-                            <h4>{t('Payment Successful!')}</h4>
+                            <h4>{t("You're all set!")}</h4>
                             <p className="text-base max-w-[400px] mx-auto mt-4 leading-relaxed">
                                 {t('Your subscription is now active. You Will receive a confirmation email shortly')}
                             </p>
@@ -140,31 +140,38 @@ const PaymentDialog = () => {
                 </>
             ) : (
                 <Form onSubmit={handleSubmit(handlePay)}>
-                    <h4>{t('Plan')} {selectedPlan.planName}</h4>
-                    <div className="mt-6">
-                        <Segment
-                            defaultValue={selectedPlan.paymentCycle}
-                            className="gap-4 flex bg-transparent"
-                            onChange={(value) => handlePaymentChange(value)}
-                        >
-                            <Segment.Item value={selectedPlan.price}>
-                                {({active, onSegmentItemClick}) => {
-                                    return (
-                                        <div
-                                            className={classNames(
-                                                'flex justify-between border rounded-xl border-gray-300 dark:border-gray-600 py-5 px-4 select-none ring-1',
-                                                active
-                                                    ? 'ring-primary border-primary'
-                                                    : 'ring-transparent bg-gray-100 dark:bg-gray-600',
-                                            )}
-                                            role="button"
-                                            onClick={onSegmentItemClick}
-                                        >
-                                            <div>
-                                                <div className="heading-text mb-0.5">
-                                                    {t('Pay Monthly')}
-                                                </div>
-                                                <span className="text-lg font-bold heading-text flex gap-0.5">
+                    <h4>{t('Plan')} {' '} {t(selectedPlan.name)}</h4>
+                    {selectedPlan.name === 'basic' && (
+                        <div className={'mt-6'}>
+                            <p>{t("The Basic Plan is free and gives you the basics to explore the platform. When you're ready for more tools and flexibility, you can always upgrade.")}</p>
+                        </div>
+                    )}
+                    {selectedPlan.name !== 'basic' && (
+                        <div>
+                            <div className="mt-6">
+                                <Segment
+                                    defaultValue={selectedPlan.paymentCycle}
+                                    className="gap-4 flex bg-transparent"
+                                    onChange={(value) => handlePaymentChange(value)}
+                                >
+                                    <Segment.Item value={selectedPlan.price}>
+                                        {({active, onSegmentItemClick}) => {
+                                            return (
+                                                <div
+                                                    className={classNames(
+                                                        'flex justify-between border rounded-xl border-gray-300 dark:border-gray-600 py-5 px-4 select-none ring-1',
+                                                        active
+                                                            ? 'ring-primary border-primary'
+                                                            : 'ring-transparent bg-gray-100 dark:bg-gray-600',
+                                                    )}
+                                                    role="button"
+                                                    onClick={onSegmentItemClick}
+                                                >
+                                                    <div>
+                                                        <div className="heading-text mb-0.5">
+                                                            {t('Pay Monthly')}
+                                                        </div>
+                                                        <span className="text-lg font-bold heading-text flex gap-0.5">
                                                             <NumericFormat
                                                                 displayType="text"
                                                                 value={selectedPlan.price}
@@ -178,56 +185,57 @@ const PaymentDialog = () => {
                                                                 {t('month')}
                                                             </span>
                                                         </span>
-                                            </div>
-                                            {(
-                                                <TbCheck className="text-primary text-xl"/>
-                                            )}
-                                        </div>
-                                    )
-                                }}
-                            </Segment.Item>
+                                                    </div>
+                                                    {(
+                                                        <TbCheck className="text-primary text-xl"/>
+                                                    )}
+                                                </div>
+                                            )
+                                        }}
+                                    </Segment.Item>
 
-                        </Segment>
-                    </div>
-                    <h4 className={`mt-5 mb-3`}>{t('Select Payment Method')}</h4>
-                    <div>
-                        <Segment
-                            defaultValue={selectedMethod}
-                            className="gap-4 flex bg-transparent"
-                            onChange={(value) => setSelectedMethod(value)}
-                        >
-                            {paymentMethods.map((method) => (
-                                <Segment.Item key={method.id} value={method.id}>
-                                    {({active, onSegmentItemClick}) => (
-                                        <div
-                                            className={classNames(
-                                                'flex items-center relative border rounded-xl border-gray-300 dark:border-gray-600 py-5 px-4 select-none cursor-pointer',
-                                                active
-                                                    ? 'ring-primary border-primary bg-white dark:bg-gray-700'
-                                                    : 'ring-transparent bg-gray-100 dark:bg-gray-600'
+                                </Segment>
+                            </div>
+                            <h4 className={`mt-5 mb-3`}>{t('Select Payment Method')}</h4>
+                            <div>
+                                <Segment
+                                    defaultValue={selectedMethod}
+                                    className="gap-4 flex bg-transparent"
+                                    onChange={(value) => setSelectedMethod(value)}
+                                >
+                                    {paymentMethods.map((method) => (
+                                        <Segment.Item key={method.id} value={method.id}>
+                                            {({active, onSegmentItemClick}) => (
+                                                <div
+                                                    className={classNames(
+                                                        'flex items-center relative border rounded-xl border-gray-300 dark:border-gray-600 py-5 px-4 select-none cursor-pointer',
+                                                        active
+                                                            ? 'ring-primary border-primary bg-white dark:bg-gray-700'
+                                                            : 'ring-transparent bg-gray-100 dark:bg-gray-600'
+                                                    )}
+                                                    onClick={onSegmentItemClick}
+                                                >
+                                                    <img
+                                                        className="h-[40px] w-[40px]"
+                                                        src={`/img/others/${method.logo}`}
+                                                        alt="Google sign in"
+                                                    />
+                                                    <span
+                                                        className="text-base font-medium ml-2 hidden lg:block">{t(method.label)}</span>
+                                                    {active &&
+                                                        <TbCheck size={25}
+                                                                 className="text-primary absolute right-1 top-0"/>}
+                                                </div>
                                             )}
-                                            onClick={onSegmentItemClick}
-                                        >
-                                            <img
-                                                className="h-[40px] w-[40px]"
-                                                src={`/img/others/${method.logo}`}
-                                                alt="Google sign in"
-                                            />
-                                            <span
-                                                className="text-base font-medium ml-2 hidden lg:block">{t(method.label)}</span>
-                                            {active &&
-                                                <TbCheck size={25} className="text-primary absolute right-1 top-0"/>}
-                                        </div>
-                                    )}
-                                </Segment.Item>
-                            ))}
-                        </Segment>
+                                        </Segment.Item>
+                                    ))}
+                                </Segment>
 
-                    </div>
-                    <div className="mt-6 flex flex-col items-end">
-                        <h4>
-                            <span>{t('Amount')}: </span>
-                            <span>
+                            </div>
+                            <div className="mt-6 flex flex-col items-end">
+                                <h4>
+                                    <span>{t('Amount')}: </span>
+                                    <span>
                                 <NumericFormat
                                     displayType="text"
                                     value={selectedPlan.price}
@@ -235,15 +243,18 @@ const PaymentDialog = () => {
                                     thousandSeparator={true}
                                 />
                             </span>
-                        </h4>
-                        {/*<div className="max-w-[350px] ltr:text-right rtl:text-left leading-none mt-2 opacity-80">*/}
-                        {/*    <small>*/}
-                        {/*        {t('checkout_agreement', {*/}
-                        {/*            price: selectedPlan.price*/}
-                        {/*        })}*/}
-                        {/*    </small>*/}
-                        {/*</div>*/}
-                    </div>
+                                </h4>
+                                {/*<div className="max-w-[350px] ltr:text-right rtl:text-left leading-none mt-2 opacity-80">*/}
+                                {/*    <small>*/}
+                                {/*        {t('checkout_agreement', {*/}
+                                {/*            price: selectedPlan.price*/}
+                                {/*        })}*/}
+                                {/*    </small>*/}
+                                {/*</div>*/}
+                            </div>
+                        </div>
+                    )}
+
                     <div className={'mt-5'}>
                         <FormItem
                             invalid={Boolean(errors.agree)}
@@ -257,7 +268,7 @@ const PaymentDialog = () => {
                                         <Checkbox
                                             {...field}
                                         >
-                                            <span className={'text-xs'}>{t('I agree to the')} {''}</span>
+                                            <span className={'text-xs'}>{t('I agree with')} {''}</span>
                                             <Link to={`/terms`} className={'underline'}>
                                                 <span className={'text-xs'}>{t('Terms of Use')}</span>
                                             </Link>
@@ -273,7 +284,7 @@ const PaymentDialog = () => {
                             variant="solid"
                             loading={loading}
                         >
-                            {t('Pay')}
+                            {t(selectedPlan.name === 'basic' ? 'Activate' : 'Pay')}
                         </Button>
                     </div>
                 </Form>

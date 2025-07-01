@@ -57,42 +57,43 @@ const SettingsBilling = () => {
 
     return (
         <div>
-            <h4 className="mb-4">{t('Billing')}</h4>
+            <h4 className="mb-4">{t('Plan')}</h4>
             <div className="bg-gray-100 dark:bg-gray-700 rounded-xl p-6">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                         <div>
                             <Avatar
-                                className="bg-emerald-500"
+                                className={data?.subscription ? "bg-emerald-500" : ""}
                                 shape="circle"
                                 icon={<PiLightningFill/>}
                             />
                         </div>
-                        <div>
-                            <div className="flex items-center mb-2">
-                                <h6 className="font-bold">
-                                    {t(data.subscription?.plan?.name)}
-                                </h6>
-                                <Tag className={`rounded-md border-0 ml-2 ${statusColor[data.subscription?.status]}`}>
+                        {data?.subscription && (
+                            <div>
+                                <div className="flex items-center mb-2">
+                                    <h6 className="font-bold">
+                                        {t(data.subscription?.plan?.name)}
+                                    </h6>
+                                    <Tag className={`rounded-md border-0 ${statusColor[data.subscription?.status]}`}>
                                     <span className={`capitalize`}>
                                         {t(data.subscription?.status)}
                                     </span>
-                                </Tag>
-                            </div>
-                            <div className="font-semibold">
+                                    </Tag>
+                                </div>
+                                <div className="font-semibold">
                                     <span>
                                     {t('Billing')} {t(data.subscription?.type)}
                                 </span>
-                                <span> | </span>
-                                <span>
+                                    <span> | </span>
+                                    <span>
                                     {t('Next payment on')} {' '}
-                                    {dayjs(
-                                        data.subscription?.ends_at ||
-                                        0,
-                                    )
-                                        .format('MM/DD/YYYY')}
+                                        {dayjs(
+                                            data.subscription?.ends_at ||
+                                            0,
+                                        )
+                                            .format('MM/DD/YYYY')}
                                 </span>
-                                <span>
+                                    <span>
                                     <span className="mx-1">
                                             {t('for')}
                                     </span>
@@ -110,8 +111,20 @@ const SettingsBilling = () => {
                                     />
                                 </span>
 
+                                </div>
                             </div>
-                        </div>
+                        )}
+
+                        {!data?.subscription && (
+                            <div>
+                                <div className="flex items-center">
+                                    <h6 className="font-bold">
+                                        {t("You don’t have an active plan at the moment")}
+                                    </h6>
+                                </div>
+                            </div>
+                        )}
+
                     </div>
                     <div className="flex">
                         <Button
@@ -119,7 +132,7 @@ const SettingsBilling = () => {
                             variant="solid"
                             onClick={handleChangePlan}
                         >
-                            {t('Change Plan')}
+                            {t(data?.subscription ? 'Change Plan' : 'Buy Plan')}
                         </Button>
                     </div>
                 </div>

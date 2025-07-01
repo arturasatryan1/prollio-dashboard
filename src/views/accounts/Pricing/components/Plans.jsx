@@ -113,7 +113,7 @@ const Plans = () => {
                             onClick={() => {
                                 setSelectedPlan({
                                     paymentCycle,
-                                    planName: plan.title,
+                                    name: plan.name,
                                     price: plan.price_monthly,
                                     id: plan.id,
                                 })

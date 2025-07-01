@@ -51,6 +51,7 @@ const EventForm = (props) => {
         channels,
         defaultValues = {},
         children,
+        pageTitle = 'Create Event',
     } = props
 
     const {
@@ -86,7 +87,7 @@ const EventForm = (props) => {
             <Container>
                 <div className="flex flex-col md:flex-row gap-4">
                     <div className="gap-4 flex flex-col flex-auto">
-                        <InfoSection register={register} control={control} errors={errors} channels={channels}/>
+                        <InfoSection register={register} control={control} errors={errors} channels={channels} pageTitle={pageTitle}/>
                     </div>
                     <div className="md:w-[370px] gap-4 flex flex-col">
                         <ScheduleSection control={control} errors={errors}/>

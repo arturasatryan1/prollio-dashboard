@@ -184,7 +184,7 @@ const SettingsNotification = () => {
                     </div>
                     <div>
                         <Switcher
-                            checked={data?.notification.length > 0}
+                            checked={data?.notification?.length > 0}
                             onChange={handleEmailNotificationOptionCheckAll}
                         />
                     </div>

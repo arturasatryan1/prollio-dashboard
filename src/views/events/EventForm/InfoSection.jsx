@@ -7,14 +7,14 @@ import {Button} from "@/components/ui/index.js";
 import {TbPlus, TbTrash} from "react-icons/tb";
 import useTranslation from "@/utils/hooks/useTranslation.js";
 
-const InfoSection = ({register, control, errors, channels}) => {
+const InfoSection = ({register, control, errors, channels, pageTitle}) => {
     const {fields, append, remove} = useFieldArray({
         control, name: 'promoCodes',
     })
     const {t} = useTranslation();
 
     return (<Card>
-        <h4 className="mb-6">{t('Edit Event')}</h4>
+        <h4 className="mb-6">{t(pageTitle)}</h4>
         <div className="grid md:grid-cols-1 mt-4">
             <FormItem
                 label={t('Title')}

@@ -182,7 +182,7 @@ const CustomerListTableFilter = () => {
                             {t('Reset')}
                         </Button>
                         <Button type="submit" variant="solid">
-                            {t('Save')}
+                            {t('Apply')}
                         </Button>
                     </div>
                 </Form>
