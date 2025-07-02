@@ -6,6 +6,8 @@ import { apiResetPassword } from '@/services/AuthService'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import useTranslation from "@/utils/hooks/useTranslation.js";
+import {useLocation} from "react-router";
 
 const validationSchema = z
     .object({
@@ -25,6 +27,9 @@ const ResetPasswordForm = (props) => {
     const { className, setMessage, setResetComplete, resetComplete, children } =
         props
 
+    const location = useLocation()
+    const {t} = useTranslation();
+
     const {
         handleSubmit,
         formState: { errors },
@@ -34,12 +39,21 @@ const ResetPasswordForm = (props) => {
     })
 
     const onResetPassword = async (values) => {
-        const { newPassword } = values
+        const { newPassword, confirmPassword } = values
+
+        const params = new URLSearchParams(location.search)
+
+        const token = params.get('token')
+        const email = params.get('email')
 
         try {
             const resp = await apiResetPassword({
                 password: newPassword,
+                password_confirmation: confirmPassword,
+                token,
+                email
             })
+
             if (resp) {
                 setSubmitting(false)
                 setResetComplete?.(true)
@@ -48,7 +62,7 @@ const ResetPasswordForm = (props) => {
             setMessage?.(
                 typeof errors === 'string'
                     ? errors
-                    : 'Failed to reset password',
+                    : t('Failed to reset password'),
             )
             setSubmitting(false)
         }
@@ -61,9 +75,9 @@ const ResetPasswordForm = (props) => {
             {!resetComplete ? (
                 <Form onSubmit={handleSubmit(onResetPassword)}>
                     <FormItem
-                        label="Password"
+                        label={t('Password')}
                         invalid={Boolean(errors.newPassword)}
-                        errorMessage={errors.newPassword?.message}
+                        errorMessage={t(errors.newPassword?.message)}
                     >
                         <Controller
                             name="newPassword"
@@ -78,9 +92,9 @@ const ResetPasswordForm = (props) => {
                         />
                     </FormItem>
                     <FormItem
-                        label="Confirm Password"
+                        label={t('Confirm Password')}
                         invalid={Boolean(errors.confirmPassword)}
-                        errorMessage={errors.confirmPassword?.message}
+                        errorMessage={t(errors.confirmPassword?.message)}
                     >
                         <Controller
                             name="confirmPassword"
@@ -88,7 +102,7 @@ const ResetPasswordForm = (props) => {
                             render={({ field }) => (
                                 <PasswordInput
                                     autoComplete="off"
-                                    placeholder="Confirm Password"
+                                    placeholder="••••••••••••"
                                     {...field}
                                 />
                             )}
@@ -100,7 +114,7 @@ const ResetPasswordForm = (props) => {
                         variant="solid"
                         type="submit"
                     >
-                        {isSubmitting ? 'Submiting...' : 'Submit'}
+                        {t(isSubmitting ? 'Submitting...' : 'Submit')}
                     </Button>
                 </Form>
             ) : (

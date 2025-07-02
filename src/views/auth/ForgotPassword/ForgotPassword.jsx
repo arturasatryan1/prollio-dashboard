@@ -5,12 +5,14 @@ import ActionLink from '@/components/shared/ActionLink'
 import ForgotPasswordForm from './components/ForgotPasswordForm'
 import useTimeOutMessage from '@/utils/hooks/useTimeOutMessage'
 import { useNavigate } from 'react-router'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 export const ForgotPasswordBase = ({ signInUrl = '/sign-in' }) => {
     const [emailSent, setEmailSent] = useState(false)
     const [message, setMessage] = useTimeOutMessage()
 
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     const handleContinue = () => {
         navigate(signInUrl)
@@ -21,17 +23,16 @@ export const ForgotPasswordBase = ({ signInUrl = '/sign-in' }) => {
             <div className="mb-6">
                 {emailSent ? (
                     <>
-                        <h3 className="mb-2">Check your email</h3>
+                        <h3 className="mb-2">{t('Check your email')}</h3>
                         <p className="font-semibold heading-text">
-                            We have sent a password recovery to your email
+                            {t('We have sent a password recovery to your email')}
                         </p>
                     </>
                 ) : (
                     <>
-                        <h3 className="mb-2">Forgot Password</h3>
+                        <h3 className="mb-2">{t('Forgot password')}</h3>
                         <p className="font-semibold heading-text">
-                            Please enter your email to receive a verification
-                            code
+                            {t('Please enter your email to receive a verification code')}
                         </p>
                     </>
                 )}
@@ -52,17 +53,17 @@ export const ForgotPasswordBase = ({ signInUrl = '/sign-in' }) => {
                     type="button"
                     onClick={handleContinue}
                 >
-                    Continue
+                    {t('Continue')}
                 </Button>
             </ForgotPasswordForm>
             <div className="mt-4 text-center">
-                <span>Back to </span>
+                <span>{t('Back to')} </span>
                 <ActionLink
                     to={signInUrl}
                     className="heading-text font-bold"
                     themeColor={false}
                 >
-                    Sign in
+                    {t('Sign In')}
                 </ActionLink>
             </div>
         </div>

@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
-import { FormItem, Form } from '@/components/ui/Form'
-import { apiForgotPassword } from '@/services/AuthService'
-import { useForm, Controller } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import {Form, FormItem} from '@/components/ui/Form'
+import {apiForgotPassword} from '@/services/AuthService'
+import {Controller, useForm} from 'react-hook-form'
+import {zodResolver} from '@hookform/resolvers/zod'
+import {z} from 'zod'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const validationSchema = z.object({
     email: z.string().email().min(5),
@@ -13,34 +14,33 @@ const validationSchema = z.object({
 
 const ForgotPasswordForm = (props) => {
     const [isSubmitting, setSubmitting] = useState(false)
-
-    const { className, setMessage, setEmailSent, emailSent, children } = props
+    const {className, setMessage, setEmailSent, emailSent, children} = props
+    const {t} = useTranslation()
 
     const {
         handleSubmit,
-        formState: { errors },
+        formState: {errors},
         control,
     } = useForm({
         resolver: zodResolver(validationSchema),
     })
 
     const onForgotPassword = async (values) => {
-        const { email } = values
+        const {email} = values
+        setSubmitting(true)
 
         try {
-            const resp = await apiForgotPassword({ email })
+            const resp = await apiForgotPassword({email})
             if (resp) {
-                setSubmitting(false)
                 setEmailSent?.(true)
             }
         } catch (errors) {
             setMessage?.(
-                typeof errors === 'string' ? errors : 'Some error occured!',
+                typeof errors === 'string' ? errors : 'Some error occurred!',
             )
+        } finally {
             setSubmitting(false)
         }
-
-        setSubmitting(false)
     }
 
     return (
@@ -48,17 +48,16 @@ const ForgotPasswordForm = (props) => {
             {!emailSent ? (
                 <Form onSubmit={handleSubmit(onForgotPassword)}>
                     <FormItem
-                        label="Email"
+                        label={t('Email')}
                         invalid={Boolean(errors.email)}
-                        errorMessage={errors.email?.message}
                     >
                         <Controller
                             name="email"
                             control={control}
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <Input
                                     type="email"
-                                    placeholder="Email"
+                                    placeholder={t('name@example.com')}
                                     autoComplete="off"
                                     {...field}
                                 />
@@ -71,7 +70,7 @@ const ForgotPasswordForm = (props) => {
                         variant="solid"
                         type="submit"
                     >
-                        {isSubmitting ? 'Submiting...' : 'Submit'}
+                        {t(isSubmitting ? 'Submitting...' : 'Submit')}
                     </Button>
                 </Form>
             ) : (

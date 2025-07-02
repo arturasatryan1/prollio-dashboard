@@ -8,12 +8,11 @@ import useResponsive from '@/utils/hooks/useResponsive'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/constants/theme.constant'
 import LanguageSelector from "@/components/template/LanguageSelector.jsx";
 import Notification from '@/components/template/Notification'
-import SidePanel from "@/components/template/SidePanel/SidePanel.jsx";
 import {Alert} from "@/components/ui/index.js";
 import {Link} from "react-router";
 import useTranslation from "@/utils/hooks/useTranslation.js";
 import {useAuth} from "@/auth/index.js";
-
+import TourButton from "@/components/template/TourButton.jsx";
 
 const CollapsibleSide = ({ children }) => {
     const { larger, smaller } = useResponsive()
@@ -39,6 +38,7 @@ const CollapsibleSide = ({ children }) => {
                         headerEnd={
                             <>
                                 <LanguageSelector />
+                                <TourButton />
                                 <Notification />
                                 {/*<SidePanel />*/}
                                 <UserProfileDropdown hoverable={false} />

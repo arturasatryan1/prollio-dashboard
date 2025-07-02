@@ -8,6 +8,7 @@ const ChannelListSearch = (props) => {
 
     return (
         <DebouceInput
+            className={`channel-search-input`}
             ref={ref}
             placeholder={t('Quick search...')}
             suffix={<TbSearch className="text-lg" />}

@@ -19,7 +19,7 @@ const OverviewHeader = ({ selectedPeriod, handlePeriodChange }) => {
                 <h4 className="mb-1">{t('Overview')}</h4>
                 <p>{t('Track your revenue, events, and subscribers')}</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 overview-period-selector">
                 <span>{t('Show by:')}</span>
                 <Select
                     className="w-[150px]"

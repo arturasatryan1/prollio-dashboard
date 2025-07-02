@@ -115,10 +115,10 @@ const ExpertListTable = () => {
                 accessorKey: 'plan.name',
                 cell: (props) => {
                     const row = props.row.original
-                    const plan = row.plan.name
+                    const plan = row.plan?.name
                     return (
                         <div>
-                            {plan.toUpperCase()}
+                            {plan?.toUpperCase()}
                         </div>
                     )
                 },

@@ -138,7 +138,6 @@ const CalendarView = (props) => {
                                             {event.title}
                                         </p>
                                         <p className="text-sm text-gray-600 flex items-center gap-1">
-                                            {t('Start Time')}
                                             <FiClock className="text-gray-400" size={14}/>
                                             {dayjs(event.start).format('MMM DD, HH:mm')}
                                         </p>

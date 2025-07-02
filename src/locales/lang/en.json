@@ -230,5 +230,17 @@
   "Channel or Bot Issues": "Channel or Bot Issues",
   "Technical Problem": "Technical Problem",
   "Feature Request": "Feature Request",
-  "Other / General Question": "Other / General Question"
+  "Other / General Question": "Other / General Question",
+  "Basic package for beginners": "Basic package for beginners",
+  "Advanced package": "Advanced package",
+  "Complete solution for business": "Complete solution for business",
+  "features": {
+    "channels": "Number of channels",
+    "dashboard_access": "Dashboard access",
+    "payment_system": "Payment system",
+    "support": "24/7 technical support",
+    "analytics": "Data analytics",
+    "engagement_bot": "Follower engagement bot",
+    "event_limit_per_channel": "Number of events per channel"
+  }
 }

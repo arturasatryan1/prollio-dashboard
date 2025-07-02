@@ -9,6 +9,11 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from 'zod'
 import {Link} from "react-router";
 import useTranslation from "@/utils/hooks/useTranslation.js";
+import toast from "@/components/ui/toast/index.js";
+import Notification from "@/components/ui/Notification/index.jsx";
+import {
+    apiExpertContact,
+} from '@/services/ContactService.js'
 
 
 const validationSchema = z.object({
@@ -21,9 +26,6 @@ const validationSchema = z.object({
 })
 
 const ContactUs = () => {
-    const [subject, setSubject] = useState('billing')
-    const [message, setMessage] = useState('')
-    const [submitted, setSubmitted] = useState(false)
     const [isSubmitting, setSubmitting] = useState(false)
 
     const {t} = useTranslation()
@@ -40,6 +42,7 @@ const ContactUs = () => {
     ]
 
     const {
+        reset,
         handleSubmit,
         formState: {errors},
         control,
@@ -54,16 +57,40 @@ const ContactUs = () => {
     const onSubmit = async (values) => {
         if (isSubmitting) return
 
-
-        console.log(values);
         setSubmitting(true)
 
-        console.log('Contact message sent:', values)
+        try {
+            const res = await apiExpertContact(values)
+            if (res) {
+                toast.push(
+                    <Notification
+                        title={t('Thank you for reaching out!')}
+                        type="success"
+                        duration={6000}
+                        width={500}>
+                        {t('We’ve received your message and will get back to you as soon as possible.')}
+                    </Notification>,
+                    {placement: 'top-center'},
+                )
 
-        setTimeout(() => {
-            setSubmitted(true)
+                reset()
+            }
+
+        } catch (err) {
+            toast.push(
+                <Notification
+                    title={t('Something went wrong')}
+                    type="danger"
+                    duration={4000}
+                    width={500}
+                >
+                    {err?.response?.data?.message}
+                </Notification>,
+                {placement: 'top-center'},
+            )
+        } finally {
             setSubmitting(false)
-        }, 1000)
+        }
     }
 
     return (
@@ -119,12 +146,6 @@ const ContactUs = () => {
                     <Button block loading={isSubmitting} variant="solid" type="submit">
                         {t(isSubmitting ? 'Sending...' : 'Send Message')}
                     </Button>
-
-                    {submitted && (
-                        <div className="mt-4 text-green-600 font-medium">
-                            ✅ {t('Your message has been sent successfully!')}
-                        </div>
-                    )}
                 </Form>
                 <div className="col-span-5">
                     <div className="p-4">
@@ -134,14 +155,16 @@ const ContactUs = () => {
                                 <p className={'my-1'}><strong>{t('Missing payout?')}</strong></p>
                                 <p>
                                     {t('Please make sure your bank details are up-to-date in')}{' '}
-                                    <Link to="/settings/payout" className="text-blue-700 underline">{t('Payout Settings')}</Link>
+                                    <Link to="/settings/payout"
+                                          className="text-blue-700 underline">{t('Payout Settings')}</Link>
                                 </p>
                             </li>
                             <li>
                                 <p className={'my-1'}><strong>{t('Want to change plan?')}</strong></p>
                                 <p>
                                     {t('Visit')}{' '}
-                                    <Link to="/settings/pricing" className="text-blue-700 underline">{t('Pricing')}</Link> {' '}
+                                    <Link to="/settings/pricing"
+                                          className="text-blue-700 underline">{t('Pricing')}</Link> {' '}
                                     {t('to update your subscription.')}
                                 </p>
                             </li>

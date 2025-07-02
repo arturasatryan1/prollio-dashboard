@@ -27,6 +27,7 @@ const ChannelListActionTools = () => {
             {/*    </Button>*/}
             {/*</CSVLink>*/}
             <Button
+                className={`create-channel-btn`}
                 variant="solid"
                 icon={<FaPlus className="text-xs" />}
                 onClick={() => navigate('/channels/create')}
