@@ -73,6 +73,7 @@ const statusColor = {
 };
 
 const WEEKDAYS_HY = ['Կիրակի', 'Երկուշաբթի', 'Երեքշաբթի', 'Չորեքշաբթի', 'Հինգշաբթի', 'Ուրբաթ', 'Շաբաթ'];
+const WEEKDAYS_HY_SHORT = ['Կիր', 'Երկ', 'Երք', 'Չրք', 'Հնգ', 'Ուրբ', 'Շբթ'];
 
 const CalendarView = (props) => {
 
@@ -87,7 +88,11 @@ const CalendarView = (props) => {
         ...rest
     } = props
 
-    console.log(dayjs().format('LLLL'));
+    const now = dayjs();
+
+    const upcomingEvents = (events || []).filter(event =>
+        dayjs(event.start).isAfter(now)
+    );
 
     const getWeekNumber = (date) => {
         const firstDayOfYear = new Date(date.getFullYear(), 0, 1)
@@ -98,7 +103,7 @@ const CalendarView = (props) => {
     return (
         <div className={classNames('calendar', wrapperClass)}>
             <div className="grid grid-cols-10">
-                <div className="col-span-2">
+                <div className="col-span-2 hidden md:block">
                     <div className="pr-5">
                         <h6 className="my-4">{t('Instructions')}</h6>
                         <Timeline>
@@ -106,7 +111,7 @@ const CalendarView = (props) => {
                                 {t('Select dates, and you will be prompted to create a new event')}
                             </Timeline.Item>
                             <Timeline.Item>
-                                {t('Click on any event to view details, make changes, or cancel it.')}
+                                {t('Click on any event to view details, or cancel it.')}
                             </Timeline.Item>
                             <Timeline.Item>
                                 {t('Easily switch the calendar to see the month, week, or day')}
@@ -115,10 +120,10 @@ const CalendarView = (props) => {
 
                         <h6 className=" my-4">{t('Upcoming Events')}</h6>
                         {
-                            !events?.length && <p>{t('No Upcoming Events')}</p>
+                            !upcomingEvents?.length && <p>{t('No Upcoming Events')}</p>
                         }
                         <div className="overflow-y-auto space-y-2" style={{maxHeight: 'calc(100vh - 470px)'}}>
-                            {events?.map((event, idx) => (
+                            {upcomingEvents?.map((event, idx) => (
                                 <Card
                                     onClick={() => eventClick(event)}
                                     key={idx}
@@ -147,25 +152,29 @@ const CalendarView = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="col-span-8">
+                <div className="col-span-10 md:col-span-8">
                     <FullCalendar
                         initialView="dayGridMonth"
                         dayHeaderContent={
                             currentLang === 'hy'
                                 ? (args) => {
                                     const date = args.date;
-                                    const isTimeGridWeek = args.view.type === 'timeGridWeek';
-                                    const weekday = WEEKDAYS_HY[date.getDay()];
                                     const isArmenian = currentLang === 'hy';
+                                    let weekday = WEEKDAYS_HY_SHORT[date.getDay()];
 
-                                    if (isArmenian && isTimeGridWeek) {
+                                    if (isArmenian && args.view.type === 'timeGridWeek') {
                                         const date = args.date;
                                         const weekNumber = getWeekNumber(date);
 
                                         return {
                                             html: `<div>${weekday}</div><div style="font-size: 0.75em; color: gray;">Շբթ ${weekNumber}</div>`
                                         };
+                                    } else if (isArmenian && args.view.type === 'timeGridDay') {
+                                        return {
+                                            html: `<div>${WEEKDAYS_HY[date.getDay()]}</div>`
+                                        };
                                     }
+
 
                                     return {
                                         html: `<div>${weekday}</div>`

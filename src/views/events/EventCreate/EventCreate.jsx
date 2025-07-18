@@ -16,6 +16,7 @@ import StatusIcon from "@/components/ui/StatusIcon/StatusIcon.jsx";
 import {FiCheck, FiCopy} from "react-icons/fi";
 import {Input} from "@/components/ui/index.js";
 import useTranslation from "@/utils/hooks/useTranslation.js";
+import EventPreview from "@/views/events/EventForm/EventPreview.jsx";
 
 const EventCreate = () => {
     const navigate = useNavigate()
@@ -38,10 +39,12 @@ const EventCreate = () => {
     )
 
     const [discardConfirmationOpen, setDiscardConfirmationOpen] = useState(false)
+    const [previewConfirmationOpen, setPreviewConfirmationOpen] = useState(false)
     const [eventInfoDialogOpen, setEventInfoDialogOpen] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [event, setEvent] = useState(false)
     const [copied, setCopied] = useState(false)
+    const [submitValues, setSubmitValues] = useState({})
 
     const handleCopy = () => {
         navigator.clipboard.writeText(event.link)
@@ -49,7 +52,11 @@ const EventCreate = () => {
         setTimeout(() => setCopied(false), 2000)
     }
 
-    const handleFormSubmit = async (values) => {
+    const handleFormSubmit = async () => {
+        setPreviewConfirmationOpen(false)
+
+        const values = submitValues;
+
         setIsSubmitting(true)
 
         values.start = dayjs(values.start).format()
@@ -58,24 +65,23 @@ const EventCreate = () => {
         try {
             const res = await apiCreateEvent(values);
 
-            setEvent(res)
-            setEventInfoDialogOpen(true)
+            if (res) {
+                setEvent(res)
+                setEventInfoDialogOpen(true)
+            }
+
         } catch (errors) {
             toast.push(
-                <Notification type="danger">{errors.message}</Notification>,
+                <Notification type="danger" width={400}>{t(errors?.response?.data?.message)}</Notification>,
                 {placement: 'top-center'},
             )
+        } finally {
+            setIsSubmitting(false)
         }
-
-        setIsSubmitting(false)
     }
 
     const handleConfirmDiscard = () => {
         setDiscardConfirmationOpen(true)
-        toast.push(
-            <Notification type="success">Event discarded!</Notification>,
-            {placement: 'top-center'},
-        )
         navigate('/events')
     }
 
@@ -83,8 +89,14 @@ const EventCreate = () => {
         setDiscardConfirmationOpen(true)
     }
 
+    const handlePreview = (values) => {
+        setPreviewConfirmationOpen(true)
+        setSubmitValues(values)
+    }
+
     const handleCancel = () => {
         setDiscardConfirmationOpen(false)
+        setSubmitValues({})
     }
 
     const handleCloseEventInfoDialog = () => {
@@ -100,7 +112,7 @@ const EventCreate = () => {
                     end: end ? dayjs(end).toDate() : dayjs().add(1, 'hour').toDate(),
                 }}
                 channels={channels}
-                onFormSubmit={handleFormSubmit}
+                onFormSubmit={handlePreview}
             >
                 <Container>
                     <div className="flex items-center justify-between px-8">
@@ -139,16 +151,33 @@ const EventCreate = () => {
             <ConfirmDialog
                 isOpen={discardConfirmationOpen}
                 type="danger"
-                title={t('Discard changes')}
+                title={t('Cancel')}
                 onClose={handleCancel}
                 onRequestClose={handleCancel}
                 onCancel={handleCancel}
                 onConfirm={handleConfirmDiscard}
+                cancelText={t('Close')}
+                confirmText={t('Cancel')}
             >
                 <p>
-                    Are you sure you want discard this? This action can&apos;t
-                    be undo.{' '}
+                    {t('Are you sure you want to cancel?')}
                 </p>
+            </ConfirmDialog>
+
+            <ConfirmDialog
+                isOpen={previewConfirmationOpen}
+                type="info"
+                statusIcon={false}
+                title={t('Event Preview')}
+                onClose={() => setPreviewConfirmationOpen(false)}
+                onRequestClose={() => setPreviewConfirmationOpen(false)}
+                onCancel={() => setPreviewConfirmationOpen(false)}
+                onConfirm={handleFormSubmit}
+            >
+                <EventPreview
+                    event={submitValues}
+                    channels={channels}
+                />
             </ConfirmDialog>
 
             <Dialog
@@ -164,13 +193,13 @@ const EventCreate = () => {
                         <StatusIcon type={'success'}/>
                     </div>
                     <div className="ml-4 rtl:mr-4">
-                        <h5 className="mb-2">Event Created Successful</h5>
-                        Share this link with your members so they can join the event.
+                        <h5 className="mb-2">{t('Created Successful')}</h5>
+                        {t('Share this link with your members so they can join the event.')}
                     </div>
                 </div>
                 <div className="px-6 pb-6 pt-2 space-y-3 text-sm">
                     <div>
-                        <strong>Share Link:</strong>
+                        <strong>{t('Share Link')}</strong>
                         <div className="mt-1 flex items-center gap-2">
                             <Input
                                 readOnly
@@ -183,8 +212,8 @@ const EventCreate = () => {
                         </div>
                         {copied && (
                             <span className="text-green-600 text-xs mt-1 inline-block">
-                            ✅ Copied to clipboard
-                        </span>
+                              {t('Copied to clipboard')}
+                            </span>
                         )}
                     </div>
                 </div>
@@ -196,7 +225,7 @@ const EventCreate = () => {
                             variant="solid"
                             onClick={handleCloseEventInfoDialog}
                         >
-                            Done
+                            {t('Close')}
                         </Button>
                     </div>
                 </div>

@@ -1,8 +1,8 @@
 import ApiService from './ApiService'
 
-export async function apiGetPayoutList(params) {
+export async function apiGetTransactions(params) {
     return ApiService.fetchDataWithAxios({
-        url: '/dashboard/payouts',
+        url: '/dashboard/transactions',
         method: 'get',
         params,
     })

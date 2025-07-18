@@ -16,7 +16,7 @@ const CustomerList = () => {
                 <AdaptiveCard>
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                            <h3>{t('Members')}</h3>
+                            <h3>{t('Subscribers')}</h3>
                             <CustomerListActionTools />
                         </div>
                         <CustomersListTableTools />
@@ -24,7 +24,7 @@ const CustomerList = () => {
                     </div>
                 </AdaptiveCard>
             </Container>
-            <CustomerListSelected />
+            {/*<CustomerListSelected />*/}
         </>
     )
 }

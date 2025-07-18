@@ -38,32 +38,32 @@ const PromoCodesSection = ({ data }) => {
                 )
             },
         }),
-        columnHelper.accessor('discount_type', {
+        columnHelper.accessor('type', {
             header: t('Type'),
             cell: (props) => {
                 const row = props.row.original
-                const label = row.discount_type === 'percent' ? 'Percentage' : 'Fixed'
+                const label = row.type === 'percent' ? 'Percentage' : 'Fixed Amount'
                 return (
-                    <span className="capitalize">{label}</span>
+                    <span className="capitalize">{t(label)}</span>
                 )
             },
         }),
-        columnHelper.accessor('discount_value', {
+        columnHelper.accessor('value', {
             header: t('Value'),
             cell: (props) => {
                 const row = props.row.original
                 return (
                     <span>
-                    {row.discount_type === 'percent' ? `${row.discount_value}%` : `֏${row.discount_value}`}
+                    {row.type === 'percent' ? `${row.value}%` : `֏${row.value}`}
                 </span>
                 )
             },
         }),
-        columnHelper.accessor('usage_limit', {
+        columnHelper.accessor('limit', {
             header: t('Max Usage'),
             cell: (props) => {
                 const row = props.row.original
-                return <span>{row.usage_limit ?? '∞'}</span>
+                return <span>{row.limit ?? '∞'}</span>
             },
         }),
         columnHelper.accessor('expires_at', {
@@ -86,7 +86,7 @@ const PromoCodesSection = ({ data }) => {
                 return (
                     <div className="flex items-center gap-2">
                         <Badge className={color} />
-                        <span className="capitalize">{status}</span>
+                        <span className="capitalize">{t(status)}</span>
                     </div>
                 )
             },

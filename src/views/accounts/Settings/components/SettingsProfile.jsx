@@ -9,7 +9,6 @@ import NumericInput from '@/components/shared/NumericInput'
 import {countryList} from '@/constants/countries.constant'
 import {components} from 'react-select'
 import {apiGetSettingsProfile, apiUpdateSettingProfile} from '@/services/AccontsService'
-import sleep from '@/utils/sleep'
 import useSWR from 'swr'
 import {zodResolver} from '@hookform/resolvers/zod'
 import {Controller, useForm} from 'react-hook-form'
@@ -133,7 +132,7 @@ const SettingsProfile = () => {
             if (resp) {
                 mutate({...data, ...values}, false)
                 toast.push(
-                    <Notification type="success">{t('Profile successfully updated')}</Notification>,
+                    <Notification type="success">{t('Successfully updated')}</Notification>,
                     { placement: 'top-center' },
                 )
             }

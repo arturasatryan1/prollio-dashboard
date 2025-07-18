@@ -25,7 +25,7 @@ import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const validationSchema = z
     .object({
-        email: z.string().optional(),
+        email: z.string(),
         promo: z.string().optional(),
         member_id: z.string().optional(),
         event_id: z.string().optional(),
@@ -63,7 +63,6 @@ const Checkout = (props) => {
         },
     )
 
-
     const {
         register,
         handleSubmit,
@@ -89,12 +88,13 @@ const Checkout = (props) => {
             }
         } catch (errors) {
             toast.push(
-                <Notification type="danger">{errors?.response?.data?.message || errors.toString()}</Notification>,
+                <Notification type="danger">
+                    {t(errors?.response?.data?.message) || errors.toString()}
+                </Notification>,
                 {placement: 'top-center'},
             )
         } finally {
             setSubmitting(false)
-
         }
     }
 
@@ -159,6 +159,8 @@ const Checkout = (props) => {
                                     <FormItem
                                         label={t('Email')}
                                         size={100}
+                                        invalid={Boolean(errors.email)}
+                                        // errorMessage={t(errors.email?.message)}
                                     >
                                         <Controller
                                             name="email"
@@ -166,7 +168,7 @@ const Checkout = (props) => {
                                             render={({field}) => (
                                                 <Input
                                                     type="email"
-                                                    placeholder={`${t('Email')}  (${t('optional')})`}
+                                                    placeholder={`${t('Email')}`}
                                                     autoComplete="off"
                                                     {...field}
                                                 />

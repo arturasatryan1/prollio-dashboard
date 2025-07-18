@@ -8,3 +8,20 @@
     opacity: 0.6;
     /*pointer-events: none; !* optional: disable interaction *!*/
 }
+
+.w-md-editor-toolbar {
+    padding: 10px !important;
+}
+.w-md-editor {
+    color: inherit !important;
+    border-radius: 0;
+}
+
+.w-md-editor-toolbar li > button {
+    height: 32px !important;
+}
+.w-md-editor-toolbar  svg {
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+}

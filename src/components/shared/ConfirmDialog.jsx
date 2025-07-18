@@ -7,6 +7,7 @@ import {
 import Avatar from '@/components/ui/Avatar'
 import Button from '@/components/ui/Button'
 import Dialog from '@/components/ui/Dialog'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const StatusIcon = ({ status }) => {
     switch (status) {
@@ -69,10 +70,13 @@ const ConfirmDialog = (props) => {
         onConfirm,
         cancelText = 'Cancel',
         confirmText = 'Confirm',
+        statusIcon = true,
         confirmButtonProps,
         cancelButtonProps,
         ...rest
     } = props
+
+    const {t} = useTranslation()
 
     const handleCancel = () => {
         onCancel?.()
@@ -85,10 +89,13 @@ const ConfirmDialog = (props) => {
     return (
         <Dialog contentClassName="pb-0 px-0" {...rest}>
             <div className="px-6 pb-6 pt-2 flex">
-                <div>
-                    <StatusIcon status={type} />
-                </div>
-                <div className="ml-4 rtl:mr-4">
+                {statusIcon && (
+                    <div>
+                        <StatusIcon status={type} />
+                    </div>
+                )}
+
+                <div className="ml-4 rtl:mr-4 mr-4 rtl:ml-4 flex-1">
                     <h5 className="mb-2">{title}</h5>
                     {children}
                 </div>
@@ -100,7 +107,7 @@ const ConfirmDialog = (props) => {
                         onClick={handleCancel}
                         {...cancelButtonProps}
                     >
-                        {cancelText}
+                        {t(cancelText)}
                     </Button>
                     <Button
                         size="sm"
@@ -108,7 +115,7 @@ const ConfirmDialog = (props) => {
                         onClick={handleConfirm}
                         {...confirmButtonProps}
                     >
-                        {confirmText}
+                        {t(confirmText)}
                     </Button>
                 </div>
             </div>

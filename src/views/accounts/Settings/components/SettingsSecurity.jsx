@@ -10,6 +10,7 @@ import {apiUpdateSettingSecurityPassword} from "@/services/AccontsService.js";
 import toast from "@/components/ui/toast/index.js";
 import Notification from "@/components/ui/Notification/index.jsx";
 import useTranslation from "@/utils/hooks/useTranslation.js";
+import {PasswordInput} from "@/components/shared/index.jsx";
 
 const authenticatorList = [
     {
@@ -63,6 +64,7 @@ const SettingsSecurity = () => {
         getValues,
         handleSubmit,
         formState: {errors},
+        reset,
         control,
     } = useForm({
         resolver: zodResolver(validationSchema),
@@ -74,16 +76,19 @@ const SettingsSecurity = () => {
         try {
             const values = getValues();
 
-            const resp = await apiUpdateSettingSecurityPassword({
+            const res = await apiUpdateSettingSecurityPassword({
                 current_password: values.currentPassword,
                 password: values.newPassword,
                 password_confirmation: values.confirmNewPassword,
             })
+            if (res) {
+                reset()
+                toast.push(
+                    <Notification type="success">{t('Successfully updated')}</Notification>,
+                    {placement: 'top-center'},
+                )
 
-            toast.push(
-                <Notification type="success">Password successfully updated</Notification>,
-                {placement: 'top-center'},
-            )
+            }
 
         } catch (errors) {
             toast.push(
@@ -116,14 +121,14 @@ const SettingsSecurity = () => {
                 <FormItem
                     label={t('Current password')}
                     invalid={Boolean(errors.currentPassword)}
-                    errorMessage={errors.currentPassword?.message}
+                    errorMessage={t(errors.currentPassword?.message)}
                 >
                     <Controller
                         name="currentPassword"
                         control={control}
                         render={({field}) => (
-                            <Input
-                                type="password"
+                            <PasswordInput
+                                type="text"
                                 autoComplete="off"
                                 placeholder="•••••••••"
                                 {...field}
@@ -134,14 +139,14 @@ const SettingsSecurity = () => {
                 <FormItem
                     label={t('New password')}
                     invalid={Boolean(errors.newPassword)}
-                    errorMessage={errors.newPassword?.message}
+                    errorMessage={t(errors.newPassword?.message)}
                 >
                     <Controller
                         name="newPassword"
                         control={control}
                         render={({field}) => (
-                            <Input
-                                type="password"
+                            <PasswordInput
+                                type="text"
                                 autoComplete="off"
                                 placeholder="•••••••••"
                                 {...field}
@@ -152,14 +157,14 @@ const SettingsSecurity = () => {
                 <FormItem
                     label={t('Confirm new password')}
                     invalid={Boolean(errors.confirmNewPassword)}
-                    errorMessage={errors.confirmNewPassword?.message}
+                    errorMessage={t(errors.confirmNewPassword?.message)}
                 >
                     <Controller
                         name="confirmNewPassword"
                         control={control}
                         render={({field}) => (
-                            <Input
-                                type="password"
+                            <PasswordInput
+                                type="text"
                                 autoComplete="off"
                                 placeholder="•••••••••"
                                 {...field}
@@ -185,67 +190,8 @@ const SettingsSecurity = () => {
                 onRequestClose={() => setConfirmationOpen(false)}
                 onCancel={() => setConfirmationOpen(false)}
             >
-                <p>Are you sure you want to change your password?</p>
+                <p>{t('Are you sure you want to change your password?')}</p>
             </ConfirmDialog>
-            {/*  <div className="mb-8">
-                <h4>2-Step verification</h4>
-                <p>
-                    Your account holds great value to hackers. Enable two-step
-                    verification to safeguard your account!
-                </p>
-                <div className="mt-8">
-                    {authenticatorList.map((authOption, index) => (
-                        <div
-                            key={authOption.value}
-                            className={classNames(
-                                'py-6 border-gray-200 dark:border-gray-600',
-                                !isLastChild(authenticatorList, index) &&
-                                    'border-b',
-                            )}
-                        >
-                            <div className="flex items-center justify-between gap-4">
-                                <div className="flex items-center gap-4">
-                                    <Avatar
-                                        size={35}
-                                        className="bg-transparent"
-                                        src={authOption.img}
-                                    />
-                                    <div>
-                                        <h6>{authOption.label}</h6>
-                                        <span>{authOption.desc}</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    {selected2FaType === authOption.value ? (
-                                        <Button
-                                            size="sm"
-                                            customColorClass={() =>
-                                                'border-success ring-1 ring-success text-success hover:border-success hover:ring-success hover:text-success bg-transparent'
-                                            }
-                                            onClick={() =>
-                                                setSelected2FaType('')
-                                            }
-                                        >
-                                            Activated
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            size="sm"
-                                            onClick={() =>
-                                                setSelected2FaType(
-                                                    authOption.value,
-                                                )
-                                            }
-                                        >
-                                            Enable
-                                        </Button>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>*/}
         </div>
     )
 }

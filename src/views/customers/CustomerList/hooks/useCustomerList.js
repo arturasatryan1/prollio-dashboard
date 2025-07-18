@@ -9,6 +9,7 @@ export default function useCustomerList() {
         setTableData,
         selectedCustomer,
         setSelectedCustomer,
+        selectedAllCustomers,
         setSelectAllCustomer,
         setFilterData,
     } = useCustomerListStore((state) => state)
@@ -36,6 +37,7 @@ export default function useCustomerList() {
         setTableData,
         selectedCustomer,
         setSelectedCustomer,
+        selectedAllCustomers,
         setSelectAllCustomer,
         setFilterData,
     }

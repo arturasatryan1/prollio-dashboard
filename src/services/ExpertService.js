@@ -23,3 +23,18 @@ export async function apiGetExpertLog({ ...params }) {
         params,
     })
 }
+
+export async function apiExpertBankAccountSetup(data) {
+    return await ApiService.fetchDataWithAxios({
+        url: '/dashboard/experts/bank-account/setup',
+        method: 'post',
+        data
+    })
+}
+
+export async function apiGetExpertBankAccount() {
+    return await ApiService.fetchDataWithAxios({
+        url: '/dashboard/experts/bank-account/get',
+        method: 'get'
+    })
+}

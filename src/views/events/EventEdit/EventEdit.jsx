@@ -1,12 +1,11 @@
-import {useState} from 'react'
+import React, {useState} from 'react'
 import Container from '@/components/shared/Container'
 import Button from '@/components/ui/Button'
 import Notification from '@/components/ui/Notification'
 import toast from '@/components/ui/toast'
-import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import EventForm from '../EventForm'
 import NoUserFound from '@/assets/svg/NoUserFound'
-import {TbArrowNarrowLeft, TbTrash} from 'react-icons/tb'
+import {TbArrowNarrowLeft, TbCheck, TbTrash} from 'react-icons/tb'
 import {useNavigate, useParams} from 'react-router'
 import useSWR from 'swr'
 import {apiGetEvent, apiUpdateEvent} from "@/services/EventService.js";
@@ -40,7 +39,6 @@ const EventEdit = () => {
         }
     )
 
-    const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const handleFormSubmit = async (values) => {
@@ -54,7 +52,7 @@ const EventEdit = () => {
             await apiUpdateEvent(id, values);
 
             toast.push(
-                <Notification type="success">Event saved!</Notification>,
+                <Notification type="success">{t('Event updated successfully.')}</Notification>,
                 {placement: 'top-center'},
             )
 
@@ -90,8 +88,8 @@ const EventEdit = () => {
                 end: end_time ? dayjs(end_time).toDate() : null,
                 promoCodes: promo_codes.map((code) => ({
                     code: code.code,
-                    discountType: code.discount_type,
-                    discountValue: code.discount_value.toString(),
+                    discountType: code.type,
+                    discountValue: code.value.toString(),
                     maxUsage: code.usage_limit?.toString() || '',
                 })),
             }
@@ -100,32 +98,15 @@ const EventEdit = () => {
         return {}
     }
 
-    const handleConfirmDelete = () => {
-        setDeleteConfirmationOpen(true)
-        toast.push(
-            <Notification type="success">Event canceled!</Notification>,
-            {placement: 'top-center'},
-        )
-        navigate('/events')
-    }
-
-    const handleDelete = () => {
-        setDeleteConfirmationOpen(true)
-    }
-
-    const handleCancel = () => {
-        setDeleteConfirmationOpen(false)
-    }
-
     return (
         <>
-            {!isLoading && !data && (
+            {(!isLoading && !data) || data?.status !== 'upcoming' && (
                 <div className="h-full flex flex-col items-center justify-center">
                     <NoUserFound height={280} width={280}/>
-                    <h3 className="mt-8">No event found!</h3>
+                    <h3 className="mt-8">{t('No event found!')}</h3>
                 </div>
             )}
-            {!isLoading && data && (
+            {!isLoading && data && data?.status === 'upcoming' && (
                 <>
                     <EventForm
                         pageTitle={'Edit Event'}
@@ -146,17 +127,6 @@ const EventEdit = () => {
                                 </Button>
                                 <div className="flex items-center">
                                     <Button
-                                        className="ltr:mr-3 rtl:ml-3"
-                                        type="button"
-                                        customColorClass={() =>
-                                            'border-error ring-1 ring-error text-error hover:border-error hover:ring-error hover:text-error bg-transparent'
-                                        }
-                                        icon={<MdClose/>}
-                                        onClick={handleDelete}
-                                    >
-                                        {t('Cancel')}
-                                    </Button>
-                                    <Button
                                         variant="solid"
                                         type="submit"
                                         loading={isSubmitting}
@@ -167,21 +137,6 @@ const EventEdit = () => {
                             </div>
                         </Container>
                     </EventForm>
-                    <ConfirmDialog
-                        isOpen={deleteConfirmationOpen}
-                        type="danger"
-                        cancelText={t('Cancel')}
-                        confirmText={t('Confirm')}
-                        title={t('Cancel Event')}
-                        onClose={handleCancel}
-                        onRequestClose={handleCancel}
-                        onCancel={handleCancel}
-                        onConfirm={handleConfirmDelete}
-                    >
-                        <p>
-                            {t('Are you sure you want to cancel this event? This action cannot be undone.')}
-                        </p>
-                    </ConfirmDialog>
                 </>
             )}
         </>

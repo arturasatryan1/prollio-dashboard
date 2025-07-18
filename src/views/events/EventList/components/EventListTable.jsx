@@ -4,7 +4,7 @@ import Tooltip from '@/components/ui/Tooltip'
 import DataTable from '@/components/shared/DataTable'
 import {Link, useNavigate} from 'react-router'
 import cloneDeep from 'lodash/cloneDeep'
-import {TbEye, TbPencil} from 'react-icons/tb'
+import {TbCancel, TbEye, TbPencil} from 'react-icons/tb'
 import dayjs from "dayjs";
 import useEventList from "@/views/events/EventList/hooks/useEventList.js";
 import useTranslation from "@/utils/hooks/useTranslation.js";
@@ -29,18 +29,21 @@ const NameColumn = ({row}) => {
     )
 }
 
-const ActionColumn = ({onEdit, onViewDetail}) => {
+const ActionColumn = ({onEdit, onViewDetail, row}) => {
     return (
         <div className="flex items-center gap-3 justify-end">
-            <Tooltip title="Edit">
-                <div
-                    className={`text-xl cursor-pointer select-none font-semibold`}
-                    role="button"
-                    onClick={onEdit}
-                >
-                    <TbPencil size={25}/>
-                </div>
-            </Tooltip>
+            {row.status === 'upcoming' && (
+                <Tooltip title="Edit">
+                    <div
+                        className={`text-xl cursor-pointer select-none font-semibold`}
+                        role="button"
+                        onClick={onEdit}
+                    >
+                        <TbPencil size={25}/>
+                    </div>
+                </Tooltip>
+            )}
+
             <Tooltip title="View">
                 <div
                     className={`text-xl cursor-pointer select-none font-semibold`}
@@ -97,16 +100,8 @@ const EventListTable = () => {
                 accessorKey: 'members_count',
             },
             {
-                header: t('Earnings'),
-                accessorKey: 'payments_sum_amount',
-                cell: (props) => {
-                    const row = props.row.original
-                    return (
-                        <span>
-                            {row.payments_sum_amount || 0}
-                        </span>
-                    )
-                },
+                header: t('Price'),
+                accessorKey: 'price'
             },
             {
                 header: t('Status'),
@@ -123,7 +118,7 @@ const EventListTable = () => {
                 },
             },
             {
-                header: t('Date'),
+                header: t('Created Date'),
                 accessorKey: 'created_at',
                 cell: (props) => {
                     const row = props.row.original
@@ -139,6 +134,7 @@ const EventListTable = () => {
                 id: 'action',
                 cell: (props) => (
                     <ActionColumn
+                        row={props.row.original}
                         onEdit={() => handleEdit(props.row.original)}
                         onViewDetail={() =>
                             handleViewDetails(props.row.original)

@@ -8,6 +8,14 @@ export async function apiGetCustomersList(params) {
     })
 }
 
+export async function apiGetLeadMembersList(params) {
+    return ApiService.fetchDataWithAxios({
+        url: '/dashboard/lead-members',
+        method: 'get',
+        params,
+    })
+}
+
 export async function apiGetCustomer({ id, ...params }) {
     return ApiService.fetchDataWithAxios({
         url: `/dashboard/members/${id}`,

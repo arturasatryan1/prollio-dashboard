@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import Button from '@/components/ui/Button'
 import {useNavigate} from 'react-router'
 import Card from "@/components/ui/Card/index.jsx";
@@ -12,15 +12,21 @@ import {Avatar} from "@/components/ui/index.js";
 
 import {components} from 'react-select'
 import useTranslation from "@/utils/hooks/useTranslation.js";
+import {apiExpertBankAccountSetup, apiGetExpertBankAccount} from "@/services/ExpertService.js";
+import toast from "@/components/ui/toast/index.js";
+import Notification from "@/components/ui/Notification/index.jsx";
+import useSWR from "swr";
+import {useSessionUser} from "@/store/authStore.js";
+import {apiGetSettingsProfile} from "@/services/AccontsService.js";
 
 const {Control} = components
 
 const validationSchema = z.object({
-    holder: z.string().min(1, ''),
-    bank: z.string().min(1, ''),
-    iban: z.string().min(1, ''),
-    swift: z.string().min(1, ''),
+    holderName: z.string().min(1, ''),
+    bankName: z.string().min(1, ''),
+    accountNumber: z.string().min(1, ''),
 })
+
 const banks = [
     {
         label: "ACBA-Credit Agricole Bank",
@@ -45,39 +51,77 @@ const banks = [
 ];
 
 const SettingsBusiness = () => {
-    const navigate = useNavigate()
+    const [isSubmitting, setSubmitting] = useState(false)
+    const setUser = useSessionUser((state) => state.setUser)
+
     const {t} = useTranslation()
 
-    const [subject, setSubject] = useState('billing')
-    const [message, setMessage] = useState('')
-    const [submitted, setSubmitted] = useState(false)
-    const [isSubmitting, setSubmitting] = useState(false)
+    const {
+        data = null,
+    } = useSWR('/api/dashboard/experts/bank-account/get', () => apiGetExpertBankAccount(), {
+        revalidateOnFocus: false,
+        revalidateIfStale: false,
+        revalidateOnReconnect: false,
+    })
 
     const {
         handleSubmit,
         formState: {errors},
         control,
+        reset,
     } = useForm({
         defaultValues: {
-            subject: '',
-            message: '',
+            holderName: '',
+            bankName: '',
+            accountNumber: '',
         },
         resolver: zodResolver(validationSchema),
     })
 
+    useEffect(() => {
+        if (data) {
+            reset({
+                holderName: data.holder_name || '',
+                bankName: data.bank_name || '',
+                accountNumber: data.account_number || '',
+            });
+        }
+    }, [data, reset]);
+
     const onSubmit = async (values) => {
         if (isSubmitting) return
 
-
-        console.log(values);
         setSubmitting(true)
 
-        console.log('Contact message sent:', values)
+        try {
+            const res = await apiExpertBankAccountSetup({
+                bank_name: values.bankName,
+                holder_name: values.holderName,
+                account_number: values.accountNumber,
+            })
 
-        setTimeout(() => {
-            setSubmitted(true)
+            if (res) {
+                toast.push(
+                    <Notification type="success">{t('Your bank account information has been saved successfully')}</Notification>,
+                    { placement: 'top-center' },
+                )
+
+                const userRes = await apiGetSettingsProfile()
+
+                if (userRes) {
+                    setUser(userRes)
+                }
+            }
+
+        } catch (errors) {
+            toast.push(
+                <Notification type="danger">{t(errors?.response?.data?.message)}</Notification>,
+                {placement: 'top-center'},
+            )
+        } finally {
             setSubmitting(false)
-        }, 1000)
+        }
+
     }
 
     const CustomControl = ({
@@ -105,10 +149,7 @@ const SettingsBusiness = () => {
             <DefaultOption
                 {...props}
                 customLabel={(data, label) => (
-                    <span className="flex items-center gap-2">
-                    <Avatar shape="circle" size={20} src={data.logoUrl || ''}/>
                     <span className="ml-2 rtl:mr-2">{label}</span>
-                </span>
                 )}/>
         );
     }
@@ -117,84 +158,85 @@ const SettingsBusiness = () => {
     return (
         <div className={'gap-4'}>
             <Card>
-                <h4 className="mb-4">{t('Payout Setup')}</h4>
+                <h4 className="mb-4">{t('Bank Account Setup')}</h4>
                 <div className="grid grid-cols-10 gap-10">
                     <Form onSubmit={handleSubmit(onSubmit)} className="mt-8 col-span-5">
                         <p className="text-sm text-gray-500 mb-6">
-                            {t('Enter your bank account information to receive payouts. Please make sure the information is accurate.')}
+                            {t('Enter your bank account information to receive earnings. Please make sure the information is accurate.')}
                         </p>
 
                         <FormItem
                             label={t('Account Holder Name')}
-                            invalid={Boolean(errors.holder)}
+                            invalid={Boolean(errors.holderName)}
                         >
                             <Controller
-                                name="holder"
+                                name="holderName"
                                 control={control}
                                 render={({field}) => (
-                                    <Input placeholder="e.g. Artur Asatryan" {...field} />
-                                )}
-                            />
-                        </FormItem>
-
-                        <FormItem
-                            label={t('Bank Name')}
-                            invalid={Boolean(errors.bank)}
-                        >
-                            <Controller
-                                name="bank"
-                                control={control}
-                                render={({field}) => (
-                                    <Select
-                                        instanceId="custom"
-                                        options={banks}
-                                        components={{
-                                            Option: CustomSelectOption,
-                                            Control: CustomControl,
-                                        }}
-                                        placeholder={t('Select Bank')}
+                                    <Input
+                                        placeholder="e.g. Artur Asatryan"
+                                        {...field}
                                     />
                                 )}
                             />
                         </FormItem>
 
                         <FormItem
-                            label={t('IBAN')}
-                            invalid={Boolean(errors.iban)}
+                            label={t('Bank Name')}
+                            invalid={Boolean(errors.bankName)}
                         >
                             <Controller
-                                name="iban"
+                                name="bankName"
                                 control={control}
                                 render={({field}) => (
-                                    <Input placeholder="e.g. AM123456789012345678" {...field} />
+                                    <Select
+                                        searchable
+                                        options={banks}
+                                        // components={{
+                                        //     Option: CustomSelectOption,
+                                        //     Control: CustomControl,
+                                        // }}
+                                        value={banks?.filter((option) => option.value === field.value)}
+                                        placeholder={t('Select Bank')}
+                                        onChange={(selected) => {
+                                            field.onChange(selected?.value)
+                                        }}
+                                    />
                                 )}
                             />
                         </FormItem>
 
                         <FormItem
-                            label={t('SWIFT / BIC Code')}
-                            invalid={Boolean(errors.swift)}
+                            label={t('Bank Account Number')}
+                            invalid={Boolean(errors.accountNumber)}
                         >
                             <Controller
-                                name="swift"
+                                name="accountNumber"
                                 control={control}
                                 render={({field}) => (
-                                    <Input placeholder={`${t('e.g.')} HSBKAM22`} {...field} />
+                                    <Input placeholder="e.g. 123456789012345678" {...field} />
                                 )}
                             />
                         </FormItem>
 
+                        {/*<FormItem*/}
+                        {/*    label={t('SWIFT / BIC Code')}*/}
+                        {/*    invalid={Boolean(errors.swift)}*/}
+                        {/*>*/}
+                        {/*    <Controller*/}
+                        {/*        name="swift"*/}
+                        {/*        control={control}*/}
+                        {/*        render={({field}) => (*/}
+                        {/*            <Input placeholder={`${t('e.g.')} HSBKAM22`} {...field} />*/}
+                        {/*        )}*/}
+                        {/*    />*/}
+                        {/*</FormItem>*/}
+
                         <FormItem>
                             <Button block loading={isSubmitting} variant="solid" type="submit">
-                                {t(isSubmitting ? 'Saving...' : 'Save Bank Info')}
+                                {t('Save')}
                             </Button>
                         </FormItem>
-
-                        {submitted && (
-                            <div className="mt-4 text-green-600 font-medium">
-                                ✅ {t('Your bank information has been saved successfully!')}
-                            </div>
-                        )}
                     </Form>
                 </div>
             </Card>

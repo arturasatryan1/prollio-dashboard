@@ -24,13 +24,14 @@ export async function apiGetEventUpcoming(params) {
     })
 }
 
-export async function apiGetEvent({ id, ...params }) {
+export async function apiGetEvent({id, ...params}) {
     return ApiService.fetchDataWithAxios({
         url: `/dashboard/events/${id}`,
         method: 'get',
         params,
     })
 }
+
 export async function apiCreateEvent(data) {
     return ApiService.fetchDataWithAxios({
         url: `/dashboard/events`,
@@ -39,7 +40,7 @@ export async function apiCreateEvent(data) {
     })
 }
 
-export async function apiUpdateEvent(id, {...data }) {
+export async function apiUpdateEvent(id, {...data}) {
     return ApiService.fetchDataWithAxios({
         url: `/dashboard/events/${id}`,
         method: 'put',
@@ -47,14 +48,15 @@ export async function apiUpdateEvent(id, {...data }) {
     })
 }
 
-export async function apiDeleteEvent(id) {
+export async function apiCancelEvent(id, {...data}) {
     return ApiService.fetchDataWithAxios({
-        url: `/dashboard/events/${id}`,
-        method: 'delete'
+        url: `/dashboard/events/${id}/cancel`,
+        method: 'post',
+        data
     })
 }
 
-export async function apiGetEventSubscribers({id, ...params }) {
+export async function apiGetEventSubscribers({id, ...params}) {
     return ApiService.fetchDataWithAxios({
         url: `/dashboard/events/${id}/members`,
         method: 'get',

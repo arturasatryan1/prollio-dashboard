@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import React, {useState} from 'react'
 import StickyFooter from '@/components/shared/StickyFooter'
 import Button from '@/components/ui/Button'
 import Dialog from '@/components/ui/Dialog'
@@ -7,7 +7,14 @@ import toast from '@/components/ui/toast'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
 import useCustomerList from '../hooks/useCustomerList'
 import {TbChecks} from 'react-icons/tb'
+import useTranslation from "@/utils/hooks/useTranslation.js";
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+// import MDEditor from '@uiw/react-md-editor';
 import {Input} from "@/components/ui/index.js";
+import {apiDraftMessage} from "@/services/MessageService.js";
+import {useNavigate} from "react-router";
+
 
 const CustomerListSelected = () => {
     const {
@@ -15,12 +22,18 @@ const CustomerListSelected = () => {
         customerList,
         mutate,
         customerListTotal,
+        selectedAllCustomers,
         setSelectAllCustomer,
     } = useCustomerList()
 
     const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false)
     const [sendMessageDialogOpen, setSendMessageDialogOpen] = useState(false)
     const [sendMessageLoading, setSendMessageLoading] = useState(false)
+    const [content, setContent] = useState('')
+    // const [showPicker, setShowPicker] = useState(false);
+
+    const navigate = useNavigate()
+    const {t} = useTranslation()
 
     const handleDelete = () => {
         setDeleteConfirmationOpen(true)
@@ -47,18 +60,66 @@ const CustomerListSelected = () => {
         setDeleteConfirmationOpen(false)
     }
 
-    const handleSend = () => {
+    const handleSend = async () => {
         setSendMessageLoading(true)
-        setTimeout(() => {
+
+        try {
+            const res = await apiDraftMessage({
+                message: content,
+                selectedAllCustomers: selectedAllCustomers,
+            });
+
+            if (res) {
+                toast.push(
+                    <Notification type="success">{t('Message sent')}</Notification>,
+                    {placement: 'top-center'},
+                )
+
+                setSendMessageLoading(false)
+                setSendMessageDialogOpen(false)
+                setSelectAllCustomer([])
+            }
+
+        } catch (errors) {
             toast.push(
-                <Notification type="success">Message sent!</Notification>,
+                <Notification type="danger">{errors?.response?.data?.message || errors.toString()}</Notification>,
                 {placement: 'top-center'},
             )
+        } finally {
             setSendMessageLoading(false)
-            setSendMessageDialogOpen(false)
-            setSelectAllCustomer([])
-        }, 500)
+        }
     }
+
+    const handelSendMessage = async () => {
+        try {
+
+            const memberIds = [...new Set(selectedCustomer.map(item => item.member_id))];
+
+            const res = apiDraftMessage({
+                memberIds: memberIds,
+                allMembers: selectedAllCustomers
+            })
+
+            if (res) {
+                setSendMessageLoading(false)
+                setSelectAllCustomer([])
+                navigate('/messages')
+            }
+        } catch (errors) {
+            toast.push(
+                <Notification type="danger">{errors?.response?.data?.message || errors.toString()}</Notification>,
+                {placement: 'top-center'},
+            )
+        } finally {
+            setSendMessageLoading(false)
+        }
+    }
+
+    // const handleEmojiClick = (emojiData) => {
+    //     const emoji = emojiData.emoji;
+    //     setContent((prev) => prev + emoji);
+    //     setShowPicker(false)
+    // };
 
     return (
         <>
@@ -102,9 +163,7 @@ const CustomerListSelected = () => {
                                 <Button
                                     size="sm"
                                     variant="solid"
-                                    onClick={() =>
-                                        setSendMessageDialogOpen(true)
-                                    }
+                                    onClick={handelSendMessage}
                                 >
                                     Message
                                 </Button>
@@ -132,15 +191,42 @@ const CustomerListSelected = () => {
                 isOpen={sendMessageDialogOpen}
                 onRequestClose={() => setSendMessageDialogOpen(false)}
                 onClose={() => setSendMessageDialogOpen(false)}
+                // width={800}
             >
-                <h5 className="mb-2">Send Message</h5>
-                <p>Send message to the selected members</p>
-                <div className="my-4">
+                <h5>{t('Send message to the selected members')}</h5>
+                {/*<Avatar.Group*/}
+                {/*    chained*/}
+                {/*    omittedAvatarTooltip*/}
+                {/*    className="mt-4"*/}
+                {/*    maxCount={4}*/}
+                {/*    omittedAvatarProps={{ size: 30 }}*/}
+                {/*>*/}
+                {/*    {selectedCustomer.map((customer) => (*/}
+                {/*        <Tooltip key={customer.id} title={`${customer.first_name} ${customer.last_name}`}>*/}
+                {/*            <Avatar size={30} icon={<FaUser/>} alt="" />*/}
+                {/*        </Tooltip>*/}
+                {/*    ))}*/}
+                {/*</Avatar.Group>*/}
+                <div className="my-4 relative">
                     <Input
                         textArea
                         className={'border-gray-200 dark:border-gray-700'}
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
                     />
-                    {/*<RichTextEditor content={''}  />*/}
+                    {/*<button*/}
+                    {/*    type="button"*/}
+                    {/*    onClick={() => setShowPicker(!showPicker)}*/}
+                    {/*    className="text-xl"*/}
+                    {/*>*/}
+                    {/*    😊*/}
+                    {/*</button>*/}
+
+                    {/*{showPicker && (*/}
+                    {/*    <div className="absolute z-10 top-0">*/}
+                    {/*        <EmojiPicker onEmojiClick={handleEmojiClick} />*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
                 </div>
                 <div className="ltr:justify-end flex items-center gap-2">
                     <Button

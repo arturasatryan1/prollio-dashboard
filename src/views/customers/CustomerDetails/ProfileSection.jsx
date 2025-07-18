@@ -45,25 +45,14 @@ const ProfileSection = ({data = {}}) => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-y-7 gap-x-4">
                     <CustomerInfoField title="Full Name" value={`${data.first_name} ${data.last_name}`}/>
-                    <CustomerInfoField title="Email" value={data.email}/>
                     <CustomerInfoField title="Username" value={data.username}/>
                     <CustomerInfoField title="Total Spent" value={data.spent} decimal={true}/>
                 </div>
-                <div className="flex flex-col gap-4 mt-10">
-                    {/*<Button block variant="solid" onClick={handleSendMessage}>*/}
-                    {/*    Send Message*/}
-                    {/*</Button>*/}
-                    {/*<Button*/}
-                    {/*    block*/}
-                    {/*    customColorClass={() =>*/}
-                    {/*        'text-error hover:border-error hover:ring-1 ring-error hover:text-error'*/}
-                    {/*    }*/}
-                    {/*    icon={<HiOutlineTrash />}*/}
-                    {/*    onClick={handleDialogOpen}*/}
-                    {/*>*/}
-                    {/*    Delete*/}
-                    {/*</Button>*/}
-                </div>
+                {/*<div className="flex flex-col gap-4 mt-10">*/}
+                {/*    <Button block variant="solid" onClick={handleSendMessage}>*/}
+                {/*        Send Message*/}
+                {/*    </Button>*/}
+                {/*</div>*/}
             </div>
         </Card>
     )

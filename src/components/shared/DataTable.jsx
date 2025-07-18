@@ -67,8 +67,9 @@ function DataTable(props) {
         onSelectChange,
         onSort,
         paginate = true,
-        pageSizes = [10, 25, 50, 100],
+        pageSizes = [10, 25, 50],
         selectable = false,
+        enableRowSelection = () => true,
         skeletonAvatarProps,
         pagingData = {
             total: 0,
@@ -180,6 +181,7 @@ function DataTable(props) {
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        enableRowSelection: enableRowSelection,
         manualPagination: true,
         manualSorting: true,
         onSortingChange: (sorter) => {

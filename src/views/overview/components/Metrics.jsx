@@ -50,7 +50,7 @@ const Metrics = ({data, selectedPeriod}) => {
     return (
         <div className="flex flex-col 2xl:flex-col xl:flex-row gap-4">
             <Widget
-                title={t('Active Members')}
+                title={t('Active subscribers')}
                 value={
                     <NumericFormat
                         displayType="text"

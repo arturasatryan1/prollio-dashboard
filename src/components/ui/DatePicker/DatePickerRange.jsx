@@ -61,6 +61,7 @@ const DatePickerRange = (props) => {
         ...rest
     } = props
 
+
     const { locale: themeLocale } = useConfig()
 
     const finalLocale = locale || themeLocale
@@ -98,7 +99,7 @@ const DatePickerRange = (props) => {
         : ''
 
     const handleClear = () => {
-        setValue([null, null])
+        setValue(null)
         setDropdownOpened(true)
         openPickerOnClear && onDropdownOpen?.()
         inputRef.current?.focus()

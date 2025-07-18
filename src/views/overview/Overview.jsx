@@ -6,7 +6,6 @@ import OverviewChart from './components/OverviewChart.jsx'
 import UpcomingEvents from './components/UpcomingEvents'
 import {apiGetOverview} from '@/services/DashboardService'
 import useSWR from 'swr'
-
 const Overview = () => {
     const [selectedPeriod, setSelectedPeriod] = useState('monthly')
 
@@ -15,8 +14,8 @@ const Overview = () => {
         ([_, params]) => apiGetOverview(params),
         {
             revalidateOnFocus: false,
-            revalidateIfStale: false,
-            revalidateOnReconnect: false,
+            // revalidateIfStale: false,
+            // revalidateOnReconnect: false,
         },
     )
 

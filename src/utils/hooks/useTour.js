@@ -21,11 +21,19 @@ export const usePageTour = () => {
     useEffect(() => {
         setSteps(steps)
 
-        const seenKey = `tour_seen_${pageKey}`
-        if (!localStorage.getItem(seenKey)) {
-            setCurrentStep(0)
-            setIsOpen(true)
-            localStorage.setItem(seenKey, '1')
+        const seenKey = 'tour_seen'
+        const seenPages = JSON.parse(localStorage.getItem(seenKey) || '{}')
+
+        if (!seenPages[pageKey]) {
+            const timeout = setTimeout(() => {
+                setCurrentStep(0)
+                setIsOpen(true)
+
+                const updatedSeen = { ...seenPages, [pageKey]: true }
+                localStorage.setItem(seenKey, JSON.stringify(updatedSeen))
+            }, 500)
+
+            return () => clearTimeout(timeout)
         }
     }, [pathname])
 

@@ -106,7 +106,9 @@ const Tooltip = (props) => {
                             style={floatingStyles}
                             {...getFloatingProps()}
                         >
-                            <span>{title}</span>
+                            <span className={classNames(
+                                className
+                            )}>{title}</span>
                             <Arrow
                                 placement={context.placement}
                                 color={tooltipColor.arrow}

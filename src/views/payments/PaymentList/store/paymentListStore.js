@@ -11,7 +11,11 @@ export const initialTableData = {
 }
 
 export const initialFilterData = {
-
+    event: null,
+    status: null,
+    dateRange: null,
+    minAmount: null,
+    maxAmount: null
 }
 
 const initialState = {

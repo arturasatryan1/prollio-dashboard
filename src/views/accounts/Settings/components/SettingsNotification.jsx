@@ -3,34 +3,12 @@ import Switcher from '@/components/ui/Switcher'
 import {apiGetSettingsNotification, apiUpdateSettingNotifications} from '@/services/AccontsService'
 import useSWR from 'swr'
 import cloneDeep from 'lodash/cloneDeep'
-import {useEffect} from "react";
 import useTranslation from "@/utils/hooks/useTranslation.js";
-
-const notifyMeOption = [
-    {
-        label: 'All new messages',
-        value: 'allNewMessage',
-        desc: 'Broadcast notifications to the channel for each new message',
-    },
-    {
-        label: 'Mentions only',
-        value: 'mentionsOnly',
-        desc: 'Only alert me in the channel if someone mentions me in a message',
-    },
-    {
-        label: 'Nothing',
-        value: 'nothing',
-        desc: `Don't notify me anything`,
-    },
-]
 
 const SettingsNotification = () => {
     const {
         data = {
-            notification: [],
-            // desktop: false,
-            // unreadMessageBadge: false,
-            // notifymeAbout: '',
+            notification: []
         },
         mutate,
     } = useSWR(
@@ -53,7 +31,7 @@ const SettingsNotification = () => {
         },
         {
             label: t('Platform updates'),
-            value: 'platform_pdates',
+            value: 'platform_updates',
             desc: t('Stay informed about new features, improvements, and important announcements.'),
         },
         {
@@ -68,49 +46,30 @@ const SettingsNotification = () => {
         },
     ]
 
-    useEffect(() => {
-        const resp = apiUpdateSettingNotifications(data)
-    }, [data])
-
-
-    const handleEmailNotificationOptionChange = (values) => {
+    const handleEmailNotificationOptionChange = async (values) => {
         const newData = cloneDeep(data)
         newData.notification = values
         mutate(newData, false)
+
+        await apiUpdateSettingNotifications(newData)
     }
 
-    const handleEmailNotificationOptionCheckAll = (value) => {
+    const handleEmailNotificationOptionCheckAll = async (value) => {
         const newData = cloneDeep(data)
         if (value) {
             newData.notification = [
-                'newSubscriber',
-                'platformUpdates',
+                'new_subscriber',
+                'platform_updates',
                 'tips',
-                'eventReminder',
+                'event_reminder',
             ]
         } else {
             newData.notification = []
         }
 
         mutate(newData, false)
-    }
 
-    const handleDesktopNotificationCheck = (value) => {
-        const newData = cloneDeep(data)
-        newData.desktop = value
-        mutate(newData, false)
-    }
-
-    const handleUnreadMessagebadgeCheck = (value) => {
-        const newData = cloneDeep(data)
-        newData.unreadMessageBadge = value
-        mutate(newData, false)
-    }
-
-    const handleNotifyMeChange = (value) => {
-        const newData = cloneDeep(data)
-        newData.notifymeAbout = value
-        mutate(newData, false)
+        await apiUpdateSettingNotifications(newData)
     }
 
     return (
@@ -189,24 +148,28 @@ const SettingsNotification = () => {
                         />
                     </div>
                 </div>
-                <Checkbox.Group
-                    vertical
-                    className="flex flex-col gap-6"
-                    value={data?.notification}
-                    onChange={handleEmailNotificationOptionChange}
-                >
-                    {emailNotificationOption.map((option) => (
-                        <div key={option.value} className="flex gap-4">
-                            <div className="mt-1.5">
-                                <Checkbox value={option.value}/>
+
+                {data?.notification && (
+                    <Checkbox.Group
+                        vertical
+                        className="flex flex-col gap-6"
+                        value={data?.notification}
+                        onChange={handleEmailNotificationOptionChange}
+                    >
+                        {emailNotificationOption.map((option, idx) => (
+                            <div key={idx} className="flex gap-4">
+                                <div className="mt-1.5">
+                                    <Checkbox value={option.value}/>
+                                </div>
+                                <div>
+                                    <h6>{option.label}</h6>
+                                    <p>{option.desc}</p>
+                                </div>
                             </div>
-                            <div>
-                                <h6>{option.label}</h6>
-                                <p>{option.desc}</p>
-                            </div>
-                        </div>
-                    ))}
-                </Checkbox.Group>
+                        ))}
+                    </Checkbox.Group>
+                )}
+
             </div>
         </div>
     )

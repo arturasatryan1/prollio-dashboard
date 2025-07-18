@@ -16,3 +16,11 @@ export async function submitExpertCheckout(data) {
         data,
     })
 }
+
+export async function apiSubmitToolPayment(data) {
+    return ApiService.fetchDataWithAxios({
+        url: endpointConfig.toolCheckout,
+        method: 'post',
+        data,
+    })
+}

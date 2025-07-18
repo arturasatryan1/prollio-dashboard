@@ -10,6 +10,7 @@ const endpointConfig = {
     checkToken: '/check-request-token',
     checkout: '/checkout',
     expertCheckout: '/expert-checkout',
+    toolCheckout: '/tool-checkout',
 }
 
 export default endpointConfig

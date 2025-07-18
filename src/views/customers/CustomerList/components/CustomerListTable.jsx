@@ -10,8 +10,8 @@ import dayjs from "dayjs";
 import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const statusColor = {
-    active: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
-    blocked: 'bg-red-200 dark:bg-red-200 text-gray-900 dark:text-gray-900',
+    guest: 'bg-red-200 dark:bg-red-200 text-gray-900 dark:text-gray-900',
+    subscribed: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
 }
 
 const NameColumn = ({row}) => {
@@ -20,7 +20,7 @@ const NameColumn = ({row}) => {
             {/*<Avatar size={40} shape="circle" src={row.img} />*/}
             <Link
                 className={`hover:text-primary font-semibold text-gray-900 dark:text-gray-100`}
-                to={`/members/${row.id}`}
+                to={`/members/${row.member_id}`}
             >
                 {row.first_name} {row.last_name}
             </Link>
@@ -64,7 +64,7 @@ const CustomerListTable = () => {
     }
 
     const handleViewDetails = (customer) => {
-        navigate(`/members/${customer.id}`)
+        navigate(`/members/${customer.member_id}`)
     }
 
     const columns = useMemo(
@@ -78,12 +78,12 @@ const CustomerListTable = () => {
                 },
             },
             {
-                header: t('Email'),
-                accessorKey: 'email',
-            },
-            {
                 header: t('Username'),
                 accessorKey: 'username',
+            },
+            {
+                header: t('Event'),
+                accessorKey: 'title',
             },
             {
                 header: t('Status'),
@@ -93,17 +93,10 @@ const CustomerListTable = () => {
                     return (
                         <div className="flex items-center">
                             <Tag className={statusColor[row.status]}>
-                                <span className="capitalize">{row.status}</span>
+                                <span className="capitalize">{t(row.status)}</span>
                             </Tag>
                         </div>
                     )
-                },
-            },
-            {
-                header: t('Spent'),
-                accessorKey: 'totalSpending',
-                cell: (props) => {
-                    return <span>֏{props.row.original.spent.toFixed(2)}</span>
                 },
             },
             {
@@ -123,7 +116,6 @@ const CustomerListTable = () => {
                 id: 'action',
                 cell: (props) => (
                     <ActionColumn
-                        onEdit={() => handleEdit(props.row.original)}
                         onViewDetail={() =>
                             handleViewDetails(props.row.original)
                         }
@@ -175,14 +167,14 @@ const CustomerListTable = () => {
 
     return (
         <DataTable
-            selectable
+            // selectable
             columns={columns}
             data={customerList}
             noData={!isLoading && customerList.length === 0}
             skeletonAvatarColumns={[0]}
             skeletonAvatarProps={{width: 28, height: 28}}
             loading={isLoading}
-            paginate={customerListTotal > tableData.pageSize}
+            paginate={tableData.pageSize}
             pagingData={{
                 total: customerListTotal,
                 pageIndex: tableData.pageIndex,
@@ -191,6 +183,7 @@ const CustomerListTable = () => {
             checkboxChecked={(row) =>
                 selectedCustomer.some((selected) => selected.id === row.id)
             }
+            // enableRowSelection={(row) => row.original.source_bot === 'lead'}
             onPaginationChange={handlePaginationChange}
             onSelectChange={handleSelectChange}
             // onSort={handleSort}

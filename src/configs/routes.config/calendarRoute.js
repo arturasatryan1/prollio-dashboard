@@ -6,7 +6,7 @@ const calendarRoute = [
         key: 'calendar',
         path: `/calendar`,
         component: lazy(
-            () => import('@/views/calendar/Calendar/Faq.jsx'),
+            () => import('@/views/calendar/Calendar/Calendar.jsx'),
         ),
         authority: [ADMIN, USER],
     },

@@ -5,7 +5,7 @@ import {
     PiBookOpenUserDuotone, PiCalendarDuotone,
     PiChartBarDuotone, PiCreditCard, PiPackage, PiQuestionDuotone, PiRocketDuotone, PiUserCircleDuotone, PiUsersDuotone,
 } from 'react-icons/pi'
-import {FiSettings, FiUser} from 'react-icons/fi'
+import {FiSettings, FiTrendingUp, FiUser} from 'react-icons/fi'
 import {
     RiCustomerService2Line,
     RiQuestionLine
@@ -14,6 +14,7 @@ import {FaRegAddressCard, FaUsers} from 'react-icons/fa'
 import {MdOutlinePayments} from 'react-icons/md'
 import {AiOutlineClockCircle} from "react-icons/ai";
 import {TbRefreshAlert} from "react-icons/tb";
+import {BsSend} from "react-icons/bs";
 
 const navigationIcon = {
     overview: <PiChartBarDuotone/>,
@@ -34,7 +35,9 @@ const navigationIcon = {
     groupCollapseMenu: <PiBookBookmarkDuotone/>,
     groupMenu: <PiBagSimpleDuotone/>,
     requests: <FaRegAddressCard/>,
+    messages: <BsSend/>,
     event: <AiOutlineClockCircle/>,
+    tools: <FiTrendingUp/>,
 }
 
 export default navigationIcon

@@ -1,3 +1,3 @@
-import Faq from './Faq.jsx'
+import Calendar from './Calendar.jsx'
 
-export default Faq
+export default Calendar

@@ -8,8 +8,8 @@ import requestRoute from "@/configs/routes.config/requestRoute.js";
 import channelRoute from "@/configs/routes.config/channelRoute.js";
 import calendarRoute from "@/configs/routes.config/calendarRoute.js";
 import eventRoute from "@/configs/routes.config/eventRoute.js";
-import payoutRoute from "@/configs/routes.config/payoutRoute.js";
 import paymentRoute from "@/configs/routes.config/paymentRoute.js";
+import toolRoute from "@/configs/routes.config/toolRoute.js";
 
 export const publicRoutes = [
     {
@@ -44,6 +44,12 @@ export const protectedRoutes = [
         component: lazy(() => import('@/views/contactUs/ContactUs/ContactUs.jsx')),
         authority: [],
     },
+    {
+        key: 'messages',
+        path: '/messages',
+        component: lazy(() => import('@/views/chat/Chat/Chat.jsx')),
+        authority: [],
+    },
     ...channelRoute,
     ...eventRoute,
     ...accountRoute,
@@ -51,7 +57,7 @@ export const protectedRoutes = [
     ...customerRoute,
     ...requestRoute,
     ...calendarRoute,
-    ...payoutRoute,
     ...paymentRoute,
+    ...toolRoute,
     ...othersRoute,
 ]

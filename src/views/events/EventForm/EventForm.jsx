@@ -1,12 +1,10 @@
-import {useEffect} from 'react'
 import {Form} from '@/components/ui/Form'
 import Container from '@/components/shared/Container'
 import BottomStickyBar from '@/components/template/BottomStickyBar'
 import InfoSection from './InfoSection.jsx'
 import ScheduleSection from './ScheduleSection.jsx'
-import isEmpty from 'lodash/isEmpty'
 import {zodResolver} from '@hookform/resolvers/zod'
-import {useForm} from 'react-hook-form'
+import {useForm, useFormContext} from 'react-hook-form'
 import {z} from 'zod'
 
 const promoCodeSchema = z.object({
@@ -20,17 +18,12 @@ const promoCodeSchema = z.object({
 
 const validationSchema = z.object({
     title: z.string().min(1, { message: '' }),
-    start: z.date({
-        required_error: '',
-        invalid_type_error: "",
-    }),
-    end: z.date({
-        required_error: '',
-        invalid_type_error: "",
-    }),
+    start: z.date(),
+    end: z.date(),
     price: z.string().min(1, { message: '' }),
     channel: z.number().min(1, { message: '' }),
     description: z.string().min(1, { message: '' }),
+    publish: z.boolean().optional(),
     promoCodes: z
         .array(promoCodeSchema)
         .refine(
@@ -56,23 +49,17 @@ const EventForm = (props) => {
 
     const {
         handleSubmit,
-        reset,
+        watch,
         formState: {errors},
         control,
         register,
+        setValue,
     } = useForm({
         defaultValues: {
             ...defaultValues,
         },
         resolver: zodResolver(validationSchema),
     })
-
-    useEffect(() => {
-        if (!isEmpty(defaultValues)) {
-            reset(defaultValues)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(defaultValues)])
 
     const onSubmit = (values) => {
         onFormSubmit?.(values)
@@ -90,7 +77,7 @@ const EventForm = (props) => {
                         <InfoSection register={register} control={control} errors={errors} channels={channels} pageTitle={pageTitle}/>
                     </div>
                     <div className="md:w-[370px] gap-4 flex flex-col">
-                        <ScheduleSection control={control} errors={errors}/>
+                        <ScheduleSection control={control} errors={errors} watch={watch} setValue={setValue}/>
                     </div>
                 </div>
             </Container>

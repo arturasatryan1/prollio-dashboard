@@ -10,6 +10,7 @@ import { NumericFormat } from 'react-number-format'
 import dayjs from 'dayjs'
 import Tag from "@/components/ui/Tag/index.jsx";
 import useTranslation from "@/utils/hooks/useTranslation.js";
+import {CiBank} from "react-icons/ci";
 
 const { Tr, Th, Td, THead, TBody } = Table
 
@@ -33,6 +34,12 @@ const purposeColor = {
     bonus: 'bg-green-100 dark:bg-green-200 text-gray-900',
 };
 
+
+const paymentMethods = {
+    arca: 'ARCA',
+    bank_transfer: 'Bank Transfer'
+};
+
 const columnHelper = createColumnHelper()
 
 const BillingHistory = ({ data = [], ...rest }) => {
@@ -45,18 +52,18 @@ const BillingHistory = ({ data = [], ...rest }) => {
                 const row = props.row.original
                 return (
                     <span className="heading-text font-bold cursor-pointer">
-                    #{row.id}
+                    {row.uuid}
                 </span>
                 )
             },
         }),
-        columnHelper.accessor('type', {
-            header: t('Type'),
-            cell: (props) => {
-                const row = props.row.original
-                return <span className="font-semibold">{t(row.type)}</span>
-            },
-        }),
+        // columnHelper.accessor('type', {
+        //     header: t('Type'),
+        //     cell: (props) => {
+        //         const row = props.row.original
+        //         return <span className="font-semibold">{t(row.type)}</span>
+        //     },
+        // }),
         columnHelper.accessor('purpose', {
             header: t('Purpose'),
             cell: (props) => {
@@ -70,6 +77,13 @@ const BillingHistory = ({ data = [], ...rest }) => {
                         </div>
                     </div>
                 )
+            },
+        }),
+        columnHelper.accessor('payment_method', {
+            header: t('Payment Method'),
+            cell: (props) => {
+                const row = props.row.original
+                return <span className="font-semibold">{t(paymentMethods[row.payment_method])}</span>
             },
         }),
         columnHelper.accessor('status', {
@@ -90,15 +104,12 @@ const BillingHistory = ({ data = [], ...rest }) => {
             header: t('Amount'),
             cell: (props) => {
                 const row = props.row.original;
-                const isWithdrawal = row.type === 'withdrawal';
-                const value = (Math.round(row.amount * 100) / 100).toFixed(2);
 
                 return (
                     <div className="flex items-center">
                         <NumericFormat
                             displayType="text"
-                            value={value}
-                            prefix={isWithdrawal ? '-' : ''}
+                            value={row.amount}
                             thousandSeparator={true}
                         />
                     </div>

@@ -1,13 +1,13 @@
-import {useState} from 'react'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
-import {useNavigate} from 'react-router'
 import {NumericFormat} from "react-number-format";
-import {HiOutlineTrash} from "react-icons/hi";
 import Tag from '@/components/ui/Tag'
 import dayjs from "dayjs";
 import {MdClose} from "react-icons/md";
 import useTranslation from "@/utils/hooks/useTranslation.js";
+import {Input} from "@/components/ui/index.js";
+import {FiCheck, FiCopy} from "react-icons/fi";
+import {useState} from "react";
 
 const statusColor = {
     upcoming: 'bg-blue-200 dark:bg-blue-300 text-gray-900 dark:text-gray-900',
@@ -33,18 +33,17 @@ const CustomerInfoField = ({title, value, decimal = false}) => {
     )
 }
 
-const InfoSection = ({data = {}}) => {
-    const navigate = useNavigate()
+const InfoSection = ({data = {}, handleCancel}) => {
+    const [copied, setCopied] = useState(false)
+
+
     const {t} = useTranslation()
 
-    const [dialogOpen, setDialogOpen] = useState(false)
 
-    const handleDialogClose = () => {
-        setDialogOpen(false)
-    }
-
-    const handleSendMessage = () => {
-        navigate('/concepts/chat')
+    const handleCopy = () => {
+        navigator.clipboard.writeText(data.link)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
     }
 
     return (
@@ -62,12 +61,15 @@ const InfoSection = ({data = {}}) => {
                     <CustomerInfoField title={t('Description')} value={data.description}/>
                     {/*<CustomerInfoField title="Subscribers" value={data.subscribers?.length}/>*/}
                     {/*<CustomerInfoField title="Promo Codes" value={data.promo_codes?.length}/>*/}
-                    <CustomerInfoField title={t('Created Date')} value={dayjs(data.created_at).format('DD/MM/YYYY HH:mm')}/>
-                    <CustomerInfoField title={t('Start Time')} value={dayjs(data.start_time).format('DD/MM/YYYY HH:mm')}/>
+                    <CustomerInfoField title={t('Created Date')}
+                                       value={dayjs(data.created_at).format('DD/MM/YYYY HH:mm')}/>
+                    <CustomerInfoField title={t('Start Time')}
+                                       value={dayjs(data.start_time).format('DD/MM/YYYY HH:mm')}/>
                     <CustomerInfoField title={t('End Time')} value={dayjs(data.end_time).format('DD/MM/YYYY HH:mm')}/>
                     {
                         data.canceled_at && (
-                            <CustomerInfoField title={t('Canceled At')} value={dayjs(data.canceled_at).format('DD/MM/YYYY HH:mm')}/>
+                            <CustomerInfoField title={t('Canceled At')}
+                                               value={dayjs(data.canceled_at).format('DD/MM/YYYY HH:mm')}/>
                         )
                     }
                     {
@@ -77,8 +79,24 @@ const InfoSection = ({data = {}}) => {
                     }
                     {
                         data.status === 'upcoming' && (
-                            <CustomerInfoField title={t('Share Link')} value={data.link}/>
-
+                            <div>
+                                <strong>{t('Share Link')}</strong>
+                                <div className="mt-1 flex items-center gap-2">
+                                    <Input
+                                        readOnly
+                                        value={data.link}
+                                        className=""
+                                    />
+                                    <Button size="sm" onClick={handleCopy}>
+                                        {copied ? <FiCheck size={16}/> : <FiCopy size={16}/>}
+                                    </Button>
+                                </div>
+                                {copied && (
+                                    <span className="text-green-600 text-xs mt-1 inline-block">
+                                      {t('Copied to clipboard')}
+                                    </span>
+                                )}
+                            </div>
                         )
                     }
                 </div>
@@ -90,7 +108,7 @@ const InfoSection = ({data = {}}) => {
                                 'text-error hover:border-error hover:ring-1 ring-error hover:text-error'
                             }
                             icon={<MdClose/>}
-                            // onClick={handleDialogOpen}
+                            onClick={handleCancel}
                         >
                             {t('Cancel')}
                         </Button>

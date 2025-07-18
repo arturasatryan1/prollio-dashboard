@@ -1,4 +1,5 @@
 import {create} from 'zustand'
+import dayjs from "dayjs";
 
 export const initialTableData = {
     pageIndex: 1,
@@ -10,7 +11,11 @@ export const initialTableData = {
     },
 }
 
-export const initialFilterData = {}
+export const initialFilterData = {
+    channel: null,
+    dateRange: null,
+    status: null,
+}
 
 const initialState = {
     tableData: initialTableData,

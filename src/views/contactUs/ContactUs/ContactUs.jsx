@@ -152,11 +152,11 @@ const ContactUs = () => {
                         <h4 className="text-base font-semibold mb-3">{t('Before You Contact Us')}</h4>
                         <ul className="pl-5 text-md space-y-5 text-gray-700">
                             <li>
-                                <p className={'my-1'}><strong>{t('Missing payout?')}</strong></p>
+                                <p className={'my-1'}><strong>{t('No withdrawal was made?')}</strong></p>
                                 <p>
                                     {t('Please make sure your bank details are up-to-date in')}{' '}
                                     <Link to="/settings/payout"
-                                          className="text-blue-700 underline">{t('Payout Settings')}</Link>
+                                          className="text-blue-700 underline">{t('Bank Account Setup')}</Link>
                                 </p>
                             </li>
                             <li>

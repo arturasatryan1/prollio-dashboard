@@ -81,6 +81,16 @@ const navigationConfig = [
                 subMenu: [],
             },
             {
+                key: 'messages.list',
+                path: '/messages',
+                title: 'Message',
+                translateKey: 'nav.messages',
+                icon: 'messages',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [USER],
+                subMenu: [],
+            },
+            {
                 key: 'requests.list',
                 path: '/requests',
                 title: 'Requests',
@@ -114,17 +124,7 @@ const navigationConfig = [
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [ADMIN, USER],
                 subMenu: [],
-            },
-            {
-                key: 'payout.list',
-                path: '/payouts',
-                title: 'Payouts',
-                translateKey: 'nav.payouts',
-                icon: 'dollar',
-                type: NAV_ITEM_TYPE_ITEM,
-                authority: [ADMIN, USER],
-                subMenu: [],
-            },
+            }
         ]
     },
     {
@@ -145,7 +145,7 @@ const navigationConfig = [
                 key: 'account.settings',
                 path: `/settings/account`,
                 title: 'Account',
-                translateKey: 'nav.settings',
+                translateKey: 'nav.account',
                 icon: 'account',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [ADMIN, USER],
@@ -174,6 +174,26 @@ const navigationConfig = [
                 subMenu: [],
             }
         ]
+    },
+    {
+        key: 'additional',
+        path: '',
+        title: 'Additional Features',
+        translateKey: 'nav.additional',
+        type: NAV_ITEM_TYPE_TITLE,
+        authority: [ADMIN, USER],
+        subMenu: [
+            {
+                key: 'tools',
+                path: '/tools',
+                title: 'Growth Tools',
+                translateKey: 'nav.tools',
+                icon: 'tools',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [ADMIN, USER],
+                subMenu: [],
+            },
+        ],
     },
     {
         key: 'support',

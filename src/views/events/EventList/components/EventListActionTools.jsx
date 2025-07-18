@@ -31,7 +31,7 @@ const EventListActionTools = () => {
                 icon={<FaPlus className="text-xs" />}
                 onClick={() => navigate('/events/create')}
             >
-                {t('Create Event')}
+                {t('Create New')}
             </Button>
         </div>
     )

@@ -23,11 +23,11 @@ export const SettingsMenu = ({ onChange }) => {
     const currentPath = query.get('category') || query.get('label') || 'inbox'
 
     const menuList = [
-        { label: t('Profile'), value: 'profile', icon: <TbUserSquare /> },
+        { label: t('Personal'), value: 'profile', icon: <TbUserSquare /> },
         { label: t('Security'), value: 'security', icon: <TbLock /> },
         { label: t('Notification'), value: 'notification', icon: <TbBell /> },
         { label: t('Billing'), value: 'billing', icon: <TbFileDollar /> },
-        { label: t('Payout Setup'), value: 'business', icon: <AiOutlineDollar /> },
+        { label: t('Bank Account Setup'), value: 'business', icon: <AiOutlineDollar /> },
         // { label: 'Integration', value: 'integration', icon: <TbRefreshDot /> },
     ]
 
@@ -55,7 +55,7 @@ export const SettingsMenu = ({ onChange }) => {
                             <span className="text-2xl ltr:mr-2 rtl:ml-2">
                                 {menu.icon}
                             </span>
-                            <span>{menu.label}</span>
+                            <span className={'truncate'}>{menu.label}</span>
                         </MenuItem>
                     ))}
                 </Menu>

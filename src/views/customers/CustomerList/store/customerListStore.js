@@ -14,23 +14,27 @@ export const initialFilterData = {
     channel: null,
     event: null,
     status: [],
+    dateRange: null
 }
 
 const initialState = {
     tableData: initialTableData,
     filterData: initialFilterData,
     selectedCustomer: [],
+    selectedAllCustomers: false,
 }
 
 export const useCustomerListStore = create((set) => ({
     ...initialState,
     setFilterData: (payload) => set(() => ({ filterData: payload })),
     setTableData: (payload) => set(() => ({ tableData: payload })),
-    setSelectedCustomer: (checked, row) =>
-        set((state) => {
+    setSelectedCustomer: (checked, row) => set((state) => {
             const prevData = state.selectedCustomer
             if (checked) {
-                return { selectedCustomer: [...prevData, ...[row]] }
+                return {
+                    selectedCustomer: [...prevData, ...[row]],
+                    selectedAllCustomers: false,
+                }
             } else {
                 if (
                     prevData.some((prevCustomer) => row.id === prevCustomer.id)
@@ -41,8 +45,14 @@ export const useCustomerListStore = create((set) => ({
                         ),
                     }
                 }
-                return { selectedCustomer: prevData }
+                return {
+                    selectedCustomer: prevData,
+                    selectedAllCustomers: false,
+                }
             }
         }),
-    setSelectAllCustomer: (row) => set(() => ({ selectedCustomer: row })),
+    setSelectAllCustomer: (row) => set(() => ({
+        selectedCustomer: row,
+        selectedAllCustomers: true,
+    })),
 }))

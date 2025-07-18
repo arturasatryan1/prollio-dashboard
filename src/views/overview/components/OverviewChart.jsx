@@ -17,7 +17,6 @@ const OverviewChart = ({data}) => {
     )
     const {t} = useTranslation()
 
-
     useEffect(() => {
         if (!sideNavCollapse && isFirstRender.current) {
             isFirstRender.current = false
@@ -53,7 +52,7 @@ const OverviewChart = ({data}) => {
                             className="h-3.5 w-3.5 rounded-sm"
                             style={{backgroundColor: COLORS[8]}}
                         />
-                        <div>{t('Fees')}</div>
+                        <div>{t('Service Fee')}</div>
                     </div>
                 </div>
             </div>
@@ -84,12 +83,12 @@ const OverviewChart = ({data}) => {
                         </div>
                     </div>
                     <div>
-                        <div className="mb-2">{t('Pending Payout')}</div>
+                        <div className="mb-2">{t('Pending Withdrawal')}</div>
                         <div className="flex items-end gap-2">
                             <h3>
                                 <NumericFormat
                                     displayType="text"
-                                    value={data?.summary?.pending_payout}
+                                    value={data?.summary?.pending_withdrawal}
                                     prefix={'֏'}
                                     thousandSeparator={true}
                                 />

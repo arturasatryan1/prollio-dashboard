@@ -10,7 +10,6 @@ import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const statusColor = {
     pending: 'bg-amber-200 dark:bg-amber-300 text-gray-900 dark:text-gray-900',
-    processing: 'bg-blue-200 dark:bg-amber-300 text-gray-900 dark:text-gray-900',
     completed: 'bg-green-200 dark:bg-green-300 text-gray-900 dark:text-gray-900',
     failed: 'bg-red-200 dark:bg-red-300 text-gray-900 dark:text-gray-900',
 }
@@ -41,7 +40,7 @@ const PaymentListTable = () => {
                 cell: (props) => {
                     const row = props.row.original
                     return (
-                        <div>{row?.member?.first_name} {row?.member?.last_name}</div>
+                        <div>{row?.first_name} {row?.last_name}</div>
                     )
                 },
             },
@@ -51,7 +50,7 @@ const PaymentListTable = () => {
                 cell: (props) => {
                     const row = props.row.original
                     return (
-                        <div>{row?.event?.title}</div>
+                        <div>{row?.title}</div>
                     )
                 },
             },
@@ -62,7 +61,7 @@ const PaymentListTable = () => {
                     const row = props.row.original
                     return (
                         <div>
-                            ${Number(row.amount).toFixed(2)}
+                            {row.amount}
                         </div>
                     )
                 },
@@ -75,7 +74,7 @@ const PaymentListTable = () => {
                     return (
                         <div className="flex items-center">
                             <Tag className={statusColor[row.status]}>
-                                <span className="capitalize">{row.status}</span>
+                                <span className="capitalize">{t(row.status)}</span>
                             </Tag>
                         </div>
                     )
@@ -99,7 +98,6 @@ const PaymentListTable = () => {
         ],
         [], // eslint-disable-next-line react-hooks/exhaustive-deps
     )
-
 
     const handleSetTableData = (data) => {
         setTableData(data)

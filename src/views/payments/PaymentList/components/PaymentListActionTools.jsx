@@ -12,7 +12,7 @@ const PaymentListActionTools = () => {
         <div className="flex flex-col md:flex-row gap-3">
             <CSVLink
                 className="w-full"
-                filename="payouts.csv"
+                filename="payments.csv"
                 data={itemList}
             >
                 <Button

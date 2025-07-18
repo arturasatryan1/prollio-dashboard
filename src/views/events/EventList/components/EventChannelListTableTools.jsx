@@ -20,9 +20,9 @@ const EventChannelListTableTools = () => {
     }
 
     return (
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+        <div className="flex flex-row md:flex-row md:items-center md:justify-between gap-2">
             <EventListSearch onInputChange={handleInputChange} />
-            {/*<CustomerTableFilter />*/}
+            <CustomerTableFilter />
         </div>
     )
 }

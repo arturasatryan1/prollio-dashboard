@@ -26,7 +26,7 @@ const purposeColor = {
     balance_topup: 'bg-indigo-100 dark:bg-indigo-200 text-gray-900',
     subscription: 'bg-sky-100 dark:bg-sky-200 text-gray-900',
     system_charge: 'bg-orange-100 dark:bg-orange-200 text-gray-900',
-    payout: 'bg-rose-100 dark:bg-rose-200 text-gray-900',
+    withdrawal: 'bg-rose-100 dark:bg-rose-200 text-gray-900',
     refund: 'bg-purple-100 dark:bg-purple-200 text-gray-900',
     admin_adjustment: 'bg-gray-100 dark:bg-gray-200 text-gray-900',
     event_payment: 'bg-pink-100 dark:bg-pink-200 text-gray-900',
@@ -36,13 +36,13 @@ const purposeColor = {
 const columnHelper = createColumnHelper()
 
 const columns = [
-    columnHelper.accessor('id', {
+    columnHelper.accessor('uuid', {
         header: 'Reference',
         cell: (props) => {
             const row = props.row.original
             return (
                 <span className="heading-text font-bold cursor-pointer">
-                    #{row.id}
+                    #{row.uuid}
                 </span>
             )
         },
@@ -123,9 +123,6 @@ const initialSelectedCard = {
 }
 
 const BillingSection = ({data}) => {
-    const [selectedCard, setSelectedCard] = useState(initialSelectedCard)
-
-    const [dialogOpen, setDialogOpen] = useState(false)
 
     const table = useReactTable({
         data: data.transactions || [],
@@ -208,94 +205,6 @@ const BillingSection = ({data}) => {
                         })}
                 </TBody>
             </Table>
-            {/*<h6 className="mt-8">Addresses</h6>*/}
-            {/*<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">*/}
-            {/*    <Card>*/}
-            {/*        <div className="font-bold heading-text">*/}
-            {/*            Billing Address*/}
-            {/*        </div>*/}
-            {/*        <div className="mt-4 flex flex-col gap-1 font-semibold">*/}
-            {/*            <span>{data.personalInfo?.address}</span>*/}
-            {/*            <span>{data.personalInfo?.city}</span>*/}
-            {/*            <span>{data.personalInfo?.postcode}</span>*/}
-            {/*            <span>{countryName}</span>*/}
-            {/*        </div>*/}
-            {/*    </Card>*/}
-            {/*    <Card>*/}
-            {/*        <div className="font-bold heading-text">*/}
-            {/*            Delivery Address*/}
-            {/*        </div>*/}
-            {/*        <div className="mt-4 flex flex-col gap-1 font-semibold">*/}
-            {/*            <span>{data.personalInfo?.address}</span>*/}
-            {/*            <span>{data.personalInfo?.city}</span>*/}
-            {/*            <span>{data.personalInfo?.postcode}</span>*/}
-            {/*            <span>{countryName}</span>*/}
-            {/*        </div>*/}
-            {/*    </Card>*/}
-            {/*</div>*/}
-            {/*<h6 className="mt-8">Payment Methods</h6>*/}
-            {/*<Card className="mt-4" bodyClass="py-0">*/}
-            {/*    {data.paymentMethod?.map((card, index) => (*/}
-            {/*        <div*/}
-            {/*            key={card.last4Number}*/}
-            {/*            className={classNames(*/}
-            {/*                'flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-4',*/}
-            {/*                !isLastChild(data.paymentMethod || [], index) &&*/}
-            {/*                    'border-b border-gray-200 dark:border-gray-600',*/}
-            {/*            )}*/}
-            {/*        >*/}
-            {/*            <div className="flex items-center gap-3">*/}
-            {/*                {card.cardType === 'VISA' && (*/}
-            {/*                    <img src="/img/others/img-8.png" alt="visa" />*/}
-            {/*                )}*/}
-            {/*                {card.cardType === 'MASTER' && (*/}
-            {/*                    <img src="/img/others/img-9.png" alt="master" />*/}
-            {/*                )}*/}
-            {/*                <div>*/}
-            {/*                    <div className="flex items-center">*/}
-            {/*                        <div className="text-gray-900 dark:text-gray-100 font-semibold">*/}
-            {/*                            {card.cardHolderName} ••••{' '}*/}
-            {/*                            {card.last4Number}*/}
-            {/*                        </div>*/}
-            {/*                        {card.primary && (*/}
-            {/*                            <Tag className="bg-sky-100 text-primary dark:bg-primary/20 dark:text-primary rounded-md border-0 mx-2">*/}
-            {/*                                <span className="capitalize">*/}
-            {/*                                    {' '}*/}
-            {/*                                    Primary{' '}*/}
-            {/*                                </span>*/}
-            {/*                            </Tag>*/}
-            {/*                        )}*/}
-            {/*                    </div>*/}
-            {/*                    <span>*/}
-            {/*                        Expired{' '}*/}
-            {/*                        {months[parseInt(card.expMonth) - 1]} 20*/}
-            {/*                        {card.expYear}*/}
-            {/*                    </span>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*            <div className="flex justify-end">*/}
-            {/*                <Button*/}
-            {/*                    size="sm"*/}
-            {/*                    onClick={() =>*/}
-            {/*                        handleEdit(*/}
-            {/*                            card.cardHolderName,*/}
-            {/*                            `${card.expMonth}${card.expYear}`,*/}
-            {/*                        )*/}
-            {/*                    }*/}
-            {/*                >*/}
-            {/*                    Edit*/}
-            {/*                </Button>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    ))}*/}
-            {/*    <CreditCardDialog*/}
-            {/*        title="Edit credit card"*/}
-            {/*        defaultValues={selectedCard}*/}
-            {/*        dialogOpen={dialogOpen}*/}
-            {/*        onDialogClose={handleEditClose}*/}
-            {/*        onSubmit={handleSubmit}*/}
-            {/*    />*/}
-            {/*</Card>*/}
         </>
     )
 }

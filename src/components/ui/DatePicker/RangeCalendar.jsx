@@ -33,7 +33,7 @@ const RangeCalendar = (props) => {
             return null
         }
 
-        if (value[0] && isSameDate(date, value[0]) && !singleDate) {
+        if (value && value[0] && isSameDate(date, value[0]) && !singleDate) {
             setPickedDate(null)
             setHoveredDay(null)
             onChange([null, null])

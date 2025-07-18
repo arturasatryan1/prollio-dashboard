@@ -8,16 +8,21 @@ import useResponsive from '@/utils/hooks/useResponsive'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/constants/theme.constant'
 import LanguageSelector from "@/components/template/LanguageSelector.jsx";
 import Notification from '@/components/template/Notification'
-import {Alert} from "@/components/ui/index.js";
-import {Link} from "react-router";
+import {Alert, Button} from "@/components/ui/index.js";
+import {Link, useNavigate} from "react-router";
 import useTranslation from "@/utils/hooks/useTranslation.js";
 import {useAuth} from "@/auth/index.js";
 import TourButton from "@/components/template/TourButton.jsx";
+import {useSettingsStore} from "@/views/accounts/Settings/store/settingsStore.js";
 
 const CollapsibleSide = ({ children }) => {
     const { larger, smaller } = useResponsive()
+
+    const navigate = useNavigate()
     const {t} = useTranslation();
     const {user} = useAuth();
+
+    const { setCurrentView } = useSettingsStore()
 
     return (
         <LayoutBase
@@ -37,8 +42,8 @@ const CollapsibleSide = ({ children }) => {
                         }
                         headerEnd={
                             <>
-                                <LanguageSelector />
                                 <TourButton />
+                                <LanguageSelector />
                                 <Notification />
                                 {/*<SidePanel />*/}
                                 <UserProfileDropdown hoverable={false} />
@@ -47,15 +52,30 @@ const CollapsibleSide = ({ children }) => {
                     />
                     <div className="h-full flex flex-auto flex-col">
                             {user?.expert && !user?.expert?.active && (
-                                <Alert type="warning" className="rounded-none px-8">
-                                    <strong>{t('Account Not Activated')}</strong><br />
+                                <Alert type="warning" className="rounded-none px-8 py-2">
                                     {t('To start using Prollio and access your dashboard features, please activate your expert account by completing the payment for the subscription plan you selected.')}
-                                    <br />
+                                    {' '}
                                     {t('Go to')}{' '}
                                     <Link to="/settings/pricing" className="text-blue-500 underline">
                                         {t('Pricing')}
                                     </Link>
                                     {' '} {t('and activate')}
+                                </Alert>
+                            )}
+                        {user?.expert && !user?.expert?.bank_account && (
+                                <Alert type="warning" className="rounded-none px-8 py-2 mt-1">
+                                    {t('You haven’t added a bank account yet. To receive your earnings, set one up')}
+                                    {' '}
+                                    <span
+                                        className="text-blue-500 underline cursor-pointer"
+                                        onClick={() => {
+                                            setCurrentView('business')
+                                            navigate('/settings/account')
+                                        }}
+                                    >
+
+                                        {t('here')}
+                                    </span>
                                 </Alert>
                             )}
 
