@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/index";
+import {Button} from "@/components/ui/index";
 import classNames from '@/utils/classNames'
 import Segment from "../../../../components/ui/Segment/index.jsx";
 import {TbCheck, TbTrash} from "react-icons/tb";
