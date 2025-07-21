@@ -13,18 +13,9 @@ import Notification from "@/components/ui/Notification/index.jsx";
 import useTranslation from "@/utils/hooks/useTranslation.js";
 import {FormItem} from "@/components/ui/Form/index.jsx";
 import Select, {Option as DefaultOption} from "@/components/ui/Select/index.jsx";
-import DatePicker from "../../../../components/ui/DatePicker/index.jsx";
-import {z} from "zod";
 import dayjs from "dayjs";
 import {apiGetEventListAll} from "@/services/EventService.js";
 import {Badge, Tag} from "@/components/ui/index.js";
-
-const validationSchema = z.object({
-    status: z.array(z.string()).optional(),
-    channel: z.number().nullable().optional(),
-    event: z.number().nullable().optional(),
-    dateRange: z.tuple([z.date(), z.date()]).nullable().optional(),
-})
 
 const CustomSelectOption = (props) => {
     return (
@@ -39,6 +30,18 @@ const CustomSelectOption = (props) => {
         />
     )
 }
+
+const typeColors = {
+    guest: 'bg-red-200 dark:bg-red-200 text-gray-900 dark:text-gray-900',
+    subscriber: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
+}
+
+const statusColors = {
+    active: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
+    removed: 'bg-orange-200 dark:bg-orange-200 text-gray-900 dark:text-gray-900',
+    expired: 'bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-gray-300',
+    blocked: 'bg-red-200 dark:bg-red-200 text-gray-900 dark:text-gray-900',
+};
 
 const NewChat = ({onClose}) => {
     const [contactListDialog, setContactListDialog] = useState(false)
@@ -62,12 +65,7 @@ const NewChat = ({onClose}) => {
         setTableData,
     } = useLeadMemberList()
 
-    const statusColor = {
-        guest: 'bg-red-200 dark:bg-red-200 text-gray-900 dark:text-gray-900',
-        subscribed: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
-    }
-
-    const statusOption = [
+    const typeOptions = [
         {
             value: null,
             label: t('All'),
@@ -79,10 +77,18 @@ const NewChat = ({onClose}) => {
             className: 'bg-red-200 dark:bg-red-200 text-gray-900 dark:text-gray-900'
         },
         {
-            value: 'subscribed',
-            label: t('subscribed'),
+            value: 'subscriber',
+            label: t('subscriber'),
             className: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900'
         },
+    ];
+
+    const statusOptions = [
+        {value: '', label: t('All'), className: 'bg-gray-200'},
+        {value: 'active', label: t('Active'), className: 'bg-emerald-500'},
+        {value: 'expired', label: t('Expired'), className: 'bg-gray-500'},
+        {value: 'removed', label: t('Removed'), className: 'bg-orange-500'},
+        {value: 'blocked', label: t('Blocked'), className: 'bg-red-500'},
     ];
 
     useEffect(() => {
@@ -214,7 +220,7 @@ const NewChat = ({onClose}) => {
                 isOpen={contactListDialog}
                 onClose={handleDialogClose}
                 onRequestClose={handleDialogClose}
-                width={600}
+                width={800}
             >
                 {leadMemberList && (
                     <div>
@@ -236,10 +242,24 @@ const NewChat = ({onClose}) => {
                             <FormItem className="flex-1">
                                 <Select
                                     isDisabled={!filterData.event}
+                                    name={'type'}
+                                    placeholder={t('Select Type')}
+                                    options={typeOptions}
+                                    value={typeOptions.filter((option) => option.value === filterData.type)}
+                                    components={{
+                                        Option: CustomSelectOption,
+                                    }}
+                                    onChange={(item) => handleChange('type', item)}
+
+                                />
+                            </FormItem>
+                            <FormItem className="flex-1">
+                                <Select
+                                    isDisabled={!filterData.event}
                                     name={'status'}
                                     placeholder={t('Select Status')}
-                                    options={statusOption}
-                                    value={statusOption.filter((option) => option.value === filterData.status)}
+                                    options={statusOptions}
+                                    value={statusOptions.filter((option) => option.value === filterData.status)}
                                     components={{
                                         Option: CustomSelectOption,
                                     }}
@@ -295,9 +315,11 @@ const NewChat = ({onClose}) => {
                                                 <div className="flex items-center gap-2">
                                                     <TbUser size={24}></TbUser>
                                                     <div className="heading-text font-bold">
-                                                        <span
-                                                            className={'mr-2'}>{member.first_name} {member.last_name}</span>
-                                                        <Tag className={statusColor[member.status]}>
+                                                        <span className={'mr-2'}>{member.first_name} {member.last_name}</span>
+                                                        <Tag className={`${typeColors[member.type]} mr-2`}>
+                                                            <span className="capitalize">{t(member.type)}</span>
+                                                        </Tag>
+                                                        <Tag className={statusColors[member.status]}>
                                                             <span className="capitalize">{t(member.status)}</span>
                                                         </Tag>
                                                     </div>

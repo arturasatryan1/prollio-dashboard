@@ -222,6 +222,16 @@ const navigationConfig = [
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [ADMIN, USER],
                 subMenu: [],
+            },
+            {
+                key: 'guide',
+                path: '/support/guide',
+                title: 'Guide',
+                translateKey: 'nav.guide',
+                icon: 'guide',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [ADMIN, USER],
+                subMenu: [],
             }
         ],
     },

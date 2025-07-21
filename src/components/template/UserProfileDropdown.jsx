@@ -14,11 +14,11 @@ const dropdownItemList = [
         path: '/settings/account',
         icon: <PiUserDuotone />,
     },
-    {
-        label: 'Activity Log',
-        path: '/account/activity-log',
-        icon: <PiPulseDuotone />,
-    },
+    // {
+    //     label: 'Activity Log',
+    //     path: '/account/activity-log',
+    //     icon: <PiPulseDuotone />,
+    // },
 ]
 
 const _UserDropdown = () => {

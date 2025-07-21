@@ -28,10 +28,7 @@ const validationSchema = z.object({
 })
 
 const banks = [
-    {
-        label: "ACBA-Credit Agricole Bank",
-        value: "acba",
-    },
+    {label: "ACBA", value: "acba"},
     {label: "Ameriabank", value: "ameriabank"},
     {label: "Araratbank", value: "araratbank"},
     {label: "Ardshinbank", value: "ardshinbank"},
@@ -42,7 +39,7 @@ const banks = [
     {label: "Converse Bank", value: "converse"},
     {label: "Evocabank", value: "evocabank"},
     {label: "Fast Bank", value: "fastbank"},
-    {label: "Ardshininvest Bank", value: "ardshininvest"},
+    {label: "Ardshin Bank", value: "ardshinbank"},
     {label: "Inecobank", value: "inecobank"},
     {label: "Mellat Bank", value: "mellat"},
     {label: "Unibank", value: "unibank"},
@@ -60,8 +57,8 @@ const SettingsBusiness = () => {
         data = null,
     } = useSWR('/api/dashboard/experts/bank-account/get', () => apiGetExpertBankAccount(), {
         revalidateOnFocus: false,
-        revalidateIfStale: false,
-        revalidateOnReconnect: false,
+        // revalidateIfStale: false,
+        // revalidateOnReconnect: false,
     })
 
     const {

@@ -129,25 +129,25 @@ function DataTable(props) {
                 {
                     id: 'select',
                     maxSize: 50,
-                    header: ({table}) => (
-                        <IndeterminateCheckbox
-                            checked={
-                                indeterminateCheckboxChecked
-                                    ? indeterminateCheckboxChecked(
-                                        table.getRowModel().rows,
-                                    )
-                                    : table.getIsAllRowsSelected()
-                            }
-                            indeterminate={table.getIsSomeRowsSelected()}
-                            onChange={table.getToggleAllRowsSelectedHandler()}
-                            onIndeterminateCheckBoxChange={(e) => {
-                                handleIndeterminateCheckBoxChange(
-                                    e.target.checked,
-                                    table.getRowModel().rows,
-                                )
-                            }}
-                        />
-                    ),
+                    // header: ({table}) => (
+                    //     <IndeterminateCheckbox
+                    //         checked={
+                    //             indeterminateCheckboxChecked
+                    //                 ? indeterminateCheckboxChecked(
+                    //                     table.getRowModel().rows,
+                    //                 )
+                    //                 : table.getIsAllRowsSelected()
+                    //         }
+                    //         indeterminate={table.getIsSomeRowsSelected()}
+                    //         onChange={table.getToggleAllRowsSelectedHandler()}
+                    //         onIndeterminateCheckBoxChange={(e) => {
+                    //             handleIndeterminateCheckBoxChange(
+                    //                 e.target.checked,
+                    //                 table.getRowModel().rows,
+                    //             )
+                    //         }}
+                    //     />
+                    // ),
                     cell: ({row}) => (
                         <IndeterminateCheckbox
                             checked={

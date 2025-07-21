@@ -22,8 +22,8 @@ const ChannelDetails = () => {
         ([_, params]) => apiGetChannel(params),
         {
             revalidateOnFocus: false,
-            revalidateIfStale: false,
-            revalidateOnReconnect: false,
+            // revalidateIfStale: false,
+            // revalidateOnReconnect: false,
         },
     )
 

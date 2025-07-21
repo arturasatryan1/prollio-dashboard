@@ -93,7 +93,7 @@ const SettingsBilling = () => {
                                         className="font-bold heading-text"
                                         displayType="text"
                                         value={subscription?.plan?.price_monthly}
-                                        prefix={'֏'}
+                                        suffix={'֏'}
                                         thousandSeparator={true}
                                     />
                                 </span>

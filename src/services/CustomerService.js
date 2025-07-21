@@ -16,10 +16,18 @@ export async function apiGetLeadMembersList(params) {
     })
 }
 
-export async function apiGetCustomer({ id, ...params }) {
+export async function apiGetCustomer({id, ...params}) {
     return ApiService.fetchDataWithAxios({
         url: `/dashboard/members/${id}`,
         method: 'get',
         params,
+    })
+}
+
+export async function apiBulkRemoveCustomers(data) {
+    return ApiService.fetchDataWithAxios({
+        url: `/dashboard/members/bulk-delete`,
+        method: 'post',
+        data
     })
 }

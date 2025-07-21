@@ -9,10 +9,17 @@ import {TbEye} from 'react-icons/tb'
 import dayjs from "dayjs";
 import useTranslation from "@/utils/hooks/useTranslation.js";
 
-const statusColor = {
-    guest: 'bg-red-200 dark:bg-red-200 text-gray-900 dark:text-gray-900',
-    subscribed: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
+const roleColor = {
+    guest: 'bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-gray-300',
+    subscriber: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
 }
+
+const statusColor = {
+    active: 'bg-emerald-200 dark:bg-emerald-200 text-gray-900 dark:text-gray-900',
+    removed: 'bg-orange-200 dark:bg-orange-200 text-gray-900 dark:text-gray-900',
+    expired: 'bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-gray-300',
+    blocked: 'bg-red-200 dark:bg-red-200 text-gray-900 dark:text-gray-900',
+};
 
 const NameColumn = ({row}) => {
     return (
@@ -86,16 +93,32 @@ const CustomerListTable = () => {
                 accessorKey: 'title',
             },
             {
+                header: t('Type'),
+                accessorKey: 'type',
+                cell: (props) => {
+                    const row = props.row.original
+                    return (
+                        <div className="flex items-center">
+                            <Tag className={roleColor[row.type]}>
+                                <span className="capitalize">{t(row.type)}</span>
+                            </Tag>
+                        </div>
+                    )
+                },
+            },
+            {
                 header: t('Status'),
                 accessorKey: 'status',
                 cell: (props) => {
                     const row = props.row.original
                     return (
-                        <div className="flex items-center">
-                            <Tag className={statusColor[row.status]}>
-                                <span className="capitalize">{t(row.status)}</span>
-                            </Tag>
-                        </div>
+                        row.type === 'subscriber' ?
+                            <div className="flex items-center">
+                                <Tag className={statusColor[row.status]}>
+                                    <span className="capitalize">{row.status ? t(row.status) : "-"}</span>
+                                </Tag>
+                            </div> : "-"
+
                     )
                 },
             },
@@ -167,7 +190,7 @@ const CustomerListTable = () => {
 
     return (
         <DataTable
-            // selectable
+            selectable
             columns={columns}
             data={customerList}
             noData={!isLoading && customerList.length === 0}
@@ -183,7 +206,7 @@ const CustomerListTable = () => {
             checkboxChecked={(row) =>
                 selectedCustomer.some((selected) => selected.id === row.id)
             }
-            // enableRowSelection={(row) => row.original.source_bot === 'lead'}
+            enableRowSelection={(row) => !row.original.kicked_at && row.original.type === 'subscriber' && row.original.status === 'active'}
             onPaginationChange={handlePaginationChange}
             onSelectChange={handleSelectChange}
             // onSort={handleSort}

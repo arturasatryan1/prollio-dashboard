@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import StickyFooter from '@/components/shared/StickyFooter'
 import Button from '@/components/ui/Button'
-import Dialog from '@/components/ui/Dialog'
 import Notification from '@/components/ui/Notification'
 import toast from '@/components/ui/toast'
 import ConfirmDialog from '@/components/shared/ConfirmDialog'
@@ -10,29 +9,18 @@ import {TbChecks} from 'react-icons/tb'
 import useTranslation from "@/utils/hooks/useTranslation.js";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-// import MDEditor from '@uiw/react-md-editor';
-import {Input} from "@/components/ui/index.js";
-import {apiDraftMessage} from "@/services/MessageService.js";
-import {useNavigate} from "react-router";
+import {apiBulkRemoveCustomers} from "@/services/CustomerService.js";
 
 
 const CustomerListSelected = () => {
     const {
         selectedCustomer,
-        customerList,
+        setSelectedCustomer,
         mutate,
-        customerListTotal,
-        selectedAllCustomers,
-        setSelectAllCustomer,
     } = useCustomerList()
 
     const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false)
-    const [sendMessageDialogOpen, setSendMessageDialogOpen] = useState(false)
-    const [sendMessageLoading, setSendMessageLoading] = useState(false)
-    const [content, setContent] = useState('')
-    // const [showPicker, setShowPicker] = useState(false);
 
-    const navigate = useNavigate()
     const {t} = useTranslation()
 
     const handleDelete = () => {
@@ -43,83 +31,33 @@ const CustomerListSelected = () => {
         setDeleteConfirmationOpen(false)
     }
 
-    const handleConfirmDelete = () => {
-        const newCustomerList = customerList.filter((customer) => {
-            return !selectedCustomer.some(
-                (selected) => selected.id === customer.id,
-            )
-        })
-        setSelectAllCustomer([])
-        mutate(
-            {
-                list: newCustomerList,
-                total: customerListTotal - selectedCustomer.length,
-            },
-            false,
-        )
-        setDeleteConfirmationOpen(false)
-    }
-
-    const handleSend = async () => {
-        setSendMessageLoading(true)
+    const handleConfirmDelete = async () => {
+        const memberIds = [...new Set(selectedCustomer.map(item => item.id))];
 
         try {
-            const res = await apiDraftMessage({
-                message: content,
-                selectedAllCustomers: selectedAllCustomers,
-            });
+            const res = await apiBulkRemoveCustomers({memberIds});
+            mutate()
 
-            if (res) {
-                toast.push(
-                    <Notification type="success">{t('Message sent')}</Notification>,
-                    {placement: 'top-center'},
-                )
-
-                setSendMessageLoading(false)
-                setSendMessageDialogOpen(false)
-                setSelectAllCustomer([])
-            }
-
-        } catch (errors) {
-            toast.push(
-                <Notification type="danger">{errors?.response?.data?.message || errors.toString()}</Notification>,
-                {placement: 'top-center'},
-            )
-        } finally {
-            setSendMessageLoading(false)
-        }
-    }
-
-    const handelSendMessage = async () => {
-        try {
-
-            const memberIds = [...new Set(selectedCustomer.map(item => item.member_id))];
-
-            const res = apiDraftMessage({
-                memberIds: memberIds,
-                allMembers: selectedAllCustomers
+            selectedCustomer.map(row => {
+                setSelectedCustomer(false, row)
             })
 
             if (res) {
-                setSendMessageLoading(false)
-                setSelectAllCustomer([])
-                navigate('/messages')
+                toast.push(
+                    <Notification type="success">{t('Members Removed Successful')}</Notification>,
+                    {placement: 'top-center'},
+                )
             }
+
         } catch (errors) {
             toast.push(
-                <Notification type="danger">{errors?.response?.data?.message || errors.toString()}</Notification>,
+                <Notification type="danger">{t(errors?.response?.data?.message)}</Notification>,
                 {placement: 'top-center'},
             )
         } finally {
-            setSendMessageLoading(false)
+            setDeleteConfirmationOpen(false)
         }
     }
-
-    // const handleEmojiClick = (emojiData) => {
-    //     const emoji = emojiData.emoji;
-    //     setContent((prev) => prev + emoji);
-    //     setShowPicker(false)
-    // };
 
     return (
         <>
@@ -140,9 +78,11 @@ const CustomerListSelected = () => {
                                         <span className="font-semibold flex items-center gap-1">
                                             <span className="heading-text">
                                                 {selectedCustomer.length}{' '}
-                                                Subscribers
+                                                {t('member')}
                                             </span>
-                                            <span>selected</span>
+                                            <span>
+                                                {t('selected')}
+                                            </span>
                                         </span>
                                     </span>
                                 )}
@@ -158,14 +98,7 @@ const CustomerListSelected = () => {
                                     }
                                     onClick={handleDelete}
                                 >
-                                    Delete
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    variant="solid"
-                                    onClick={handelSendMessage}
-                                >
-                                    Message
+                                    {t('Remove from channel')}
                                 </Button>
                             </div>
                         </div>
@@ -175,7 +108,7 @@ const CustomerListSelected = () => {
             <ConfirmDialog
                 isOpen={deleteConfirmationOpen}
                 type="danger"
-                title="Remove subscribers"
+                title={t('Remove subscribers')}
                 onClose={handleCancel}
                 onRequestClose={handleCancel}
                 onCancel={handleCancel}
@@ -183,68 +116,9 @@ const CustomerListSelected = () => {
             >
                 <p>
                     {' '}
-                    Are you sure you want to remove these subscribers? This action
-                    can&apos;t be undo.{' '}
+                    {t('Are you sure you want to remove these subscribers?')}
                 </p>
             </ConfirmDialog>
-            <Dialog
-                isOpen={sendMessageDialogOpen}
-                onRequestClose={() => setSendMessageDialogOpen(false)}
-                onClose={() => setSendMessageDialogOpen(false)}
-                // width={800}
-            >
-                <h5>{t('Send message to the selected members')}</h5>
-                {/*<Avatar.Group*/}
-                {/*    chained*/}
-                {/*    omittedAvatarTooltip*/}
-                {/*    className="mt-4"*/}
-                {/*    maxCount={4}*/}
-                {/*    omittedAvatarProps={{ size: 30 }}*/}
-                {/*>*/}
-                {/*    {selectedCustomer.map((customer) => (*/}
-                {/*        <Tooltip key={customer.id} title={`${customer.first_name} ${customer.last_name}`}>*/}
-                {/*            <Avatar size={30} icon={<FaUser/>} alt="" />*/}
-                {/*        </Tooltip>*/}
-                {/*    ))}*/}
-                {/*</Avatar.Group>*/}
-                <div className="my-4 relative">
-                    <Input
-                        textArea
-                        className={'border-gray-200 dark:border-gray-700'}
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                    />
-                    {/*<button*/}
-                    {/*    type="button"*/}
-                    {/*    onClick={() => setShowPicker(!showPicker)}*/}
-                    {/*    className="text-xl"*/}
-                    {/*>*/}
-                    {/*    😊*/}
-                    {/*</button>*/}
-
-                    {/*{showPicker && (*/}
-                    {/*    <div className="absolute z-10 top-0">*/}
-                    {/*        <EmojiPicker onEmojiClick={handleEmojiClick} />*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
-                </div>
-                <div className="ltr:justify-end flex items-center gap-2">
-                    <Button
-                        size="sm"
-                        onClick={() => setSendMessageDialogOpen(false)}
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        size="sm"
-                        variant="solid"
-                        loading={sendMessageLoading}
-                        onClick={handleSend}
-                    >
-                        Send
-                    </Button>
-                </div>
-            </Dialog>
         </>
     )
 }

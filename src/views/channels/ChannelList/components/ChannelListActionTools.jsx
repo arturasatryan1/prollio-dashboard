@@ -30,9 +30,9 @@ const ChannelListActionTools = () => {
                 className="create-channel-btn"
                 variant="solid"
                 icon={<FaPlus className="text-xs" />}
-                onClick={() => navigate('/channels/create')}
+                onClick={() => navigate('/support/guide')}
             >
-                {t('Create Channel')}
+                {t('Connect Channel')}
             </Button>
         </div>
     )

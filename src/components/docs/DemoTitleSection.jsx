@@ -5,8 +5,8 @@ const DemoTitleSection = (props) => {
 
     return (
         <div className={className}>
-            <h2 className="mb-2">{title}</h2>
-            <p>{ReactHtmlParser(desc)}</p>
+            <h2 className="mb-3">{title}</h2>
+            <p className="whitespace-pre-line">{ReactHtmlParser(desc)}</p>
         </div>
     )
 }

@@ -33,6 +33,12 @@ export const protectedRoutes = [
         authority: [],
     },
     {
+        key: 'messages',
+        path: '/messages',
+        component: lazy(() => import('@/views/chat/Chat/Chat.jsx')),
+        authority: [],
+    },
+    {
         key: 'faq',
         path: '/support/faq',
         component: lazy(() => import('@/views/faq/Faq/Faq.jsx')),
@@ -45,9 +51,9 @@ export const protectedRoutes = [
         authority: [],
     },
     {
-        key: 'messages',
-        path: '/messages',
-        component: lazy(() => import('@/views/chat/Chat/Chat.jsx')),
+        key: 'guide',
+        path: '/support/guide',
+        component: lazy(() => import('@/views/guide/Guide.jsx')),
         authority: [],
     },
     ...channelRoute,

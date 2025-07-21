@@ -109,7 +109,6 @@
   "Platform Username:": "Platform Username:",
   "Selected Plan:": "Selected Plan:",
   "Social Links:": "Social Links:",
-
   "Full name": "Full name",
   "First name": "First name",
   "Last name": "Last name",
@@ -119,7 +118,6 @@
   "Current password": "Current password",
   "New password": "New password",
   "Confirm new password": "Confirm new password",
-
   "Email notification": "Email notification",
   "Personal information": "Personal information",
   "Payout Setup": "Payout Setup",
@@ -127,7 +125,6 @@
   "Notification": "Notification",
   "Security": "Security",
   "Profile": "Profile",
-
   "Date": "Date",
   "Joined At": "Joined At",
   "Created Date": "Created Date",
@@ -135,7 +132,6 @@
   "Completed At": "Completed At",
   "Start Time": "Start Time",
   "End Time": "End Time",
-
   "Share Link": "Share Link",
   "Page": "Page",
   "Code": "Code",
@@ -171,7 +167,6 @@
   "Visit": "Visit",
   "Member": "Member",
   "Request Date": "Request Date",
-
   "Tips & best practices": "Tips & best practices",
   "Event reminders": "Event reminders",
   "Platform updates": "Platform updates",
@@ -192,7 +187,6 @@
   "Select dates, and you will be prompted to create a new event": "Select dates, and you will be prompted to create a new event",
   "Remember, your password is your digital key to your account. Keep it safe, keep it secure!": "Remember, your password is your digital key to your account. Keep it safe, keep it secure!",
   "checkout_agreement": "By clicking the 'Pay' button, you agree to be charged {{price}} AMD every month. You can cancel the subscription at any time.",
-
   "Before You Contact Us": "Before You Contact Us",
   "Bot not responding?": "Bot not responding?",
   "Want to change plan?": "Want to change plan?",
@@ -200,7 +194,6 @@
   "to update your subscription.": "to update your subscription.",
   "Please make sure your bank details are up-to-date in": "Please make sure your bank details are up-to-date in",
   "You can also check our FAQ for quick solutions.": "You can also check our FAQ for quick solutions.",
-
   "Term & Conditions": "Term & Conditions",
   "Privacy & Policy": "Privacy & Policy",
   "Copyright": "Copyright",
@@ -208,7 +201,6 @@
   "Welcome back!": "Welcome back!",
   "Forgot password": "Forgot password",
   "Please enter your credentials to sign in!": "Please enter your credentials to sign in.",
-
   "basic": "Basic",
   "pro": "Pro",
   "business": "Business",
@@ -218,11 +210,9 @@
   "Refund Policy": "Refund Policy",
   "Privacy Policy": "Privacy Policy",
   "Terms of Use": "Terms of Use",
-
   "Welcome! You're about to join the event": "Welcome! You're about to join the event",
   "Secure your spot by completing the payment below.": "Secure your spot by completing the payment below.",
   "No data found!": "No data found!",
-
   "Account & Login Issues": "Account & Login Issues",
   "Subscription & Billing": "Subscription & Billing",
   "Event Management": "Event Management",
@@ -234,12 +224,37 @@
   "Advanced package": "Advanced package",
   "Complete solution for business": "Complete solution for business",
   "features": {
-    "channels": "Number of channels",
+    "availability_year": "Access for 1 year",
+    "availability_month": "Access for 1 month",
+    "channel_limit": "Number of channels",
+    "event_limit": "Number of events",
     "dashboard_access": "Dashboard access",
     "payment_system": "Payment system",
     "support": "24/7 technical support",
     "analytics": "Data analytics",
-    "engagement_bot": "Follower engagement bot",
-    "event_limit_per_channel": "Number of events per channel"
-  }
+    "lead_bot": "Follower engagement bot",
+    "cash_register": "Electronic cash register"
+  },
+  "guide": {
+    "title": "Prollio Dashboard Guide",
+    "description": "This guide will walk you through everything you need to get started with the Prollio platform — from connecting your Telegram channel, setting up pricing, and managing events, to sending messages and tracking your subscribers.\n\nWhether you're a coach, consultant, educator, or content expert, this dashboard is your central hub to monetize your knowledge and deliver exclusive value to your community.",
+    "connect_channel": {
+      "title": "Connect Your Telegram Channel to Prollio",
+      "step1": "Step 1: Open Your Channel Settings",
+      "step2": "Step 2. Add the Prollio Bot",
+      "step3": "Step 3. Verify that your channel is connected"
+    },
+    "create_bot": {
+      "title": "Create Your Telegram Bot with BotFather",
+      "step1": "Step 1: Start BotFather",
+      "step2": "Step 2: Create a New Bot",
+      "step3": "Step 3: Copy the Bot Token"
+    }
+  },
+  "Go to your channel → Tap the channel name → Open": "Go to your channel → Tap the channel name → Open",
+  "Tap Add Admin → Search for @ProllioBot → Select it → Grant following permissions Then tap": "Tap “Add Admin” → Search for @ProllioBot → Select it → Grant the necessary permissions → Tap “Done”",
+  "Return to the Prollio Dashboard → Go to the Channels page — if the bot was added correctly, your channel will appear there automatically.": "Return to the Prollio Dashboard → Go to the “Channels” page — if the bot was added correctly, your channel will automatically appear in the list",
+  "Open @BotFather in Telegram and tap /start.": "Open @BotFather in Telegram and tap /start.",
+  "Send /newbot and follow the instructions to set a name and username for your bot. Your bot username must end with bot (e.g., MyAwesomeBot).": "Send /newbot and follow the instructions to set a name and username for your bot. Your bot username must end with bot (e.g., MyAwesomeBot).",
+  "After creating the bot, BotFather will send you a message with your bot token. Copy this token — you’ll need it to connect your bot to Prollio.": "After creating the bot, BotFather will send you a message with your bot token. Copy this token — you’ll need it to connect your bot to Prollio."
 }

@@ -127,7 +127,7 @@ const Tools = () => {
                                                 className="h4"
                                                 displayType="text"
                                                 value={tool.price}
-                                                prefix={'֏'}
+                                                suffix={'֏'}
                                                 thousandSeparator={true}
                                             />
                                             <span className="text-lg font-bold">{' '}/{' '}{t('year')}</span>

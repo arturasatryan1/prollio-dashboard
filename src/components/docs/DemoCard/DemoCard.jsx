@@ -28,7 +28,7 @@ const DemoCard = (props) => {
     return (
         <div className="demo-card py-5" id={id}>
             <div className="mb-6">
-                <h4>{title}</h4>
+                <h3>{title}</h3>
                 {desc && (
                     <div className="mt-1 demo-card-description">
                         {ReactHtmlParser(desc)}

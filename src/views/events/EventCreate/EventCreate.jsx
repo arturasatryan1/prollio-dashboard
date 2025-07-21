@@ -33,8 +33,8 @@ const EventCreate = () => {
         () => apiGetChannelListAll(),
         {
             revalidateOnFocus: false,
-            revalidateIfStale: false,
-            revalidateOnReconnect: false,
+            // revalidateIfStale: false,
+            // revalidateOnReconnect: false,
         }
     )
 

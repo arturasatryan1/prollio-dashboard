@@ -13,7 +13,7 @@ export const usePageTour = () => {
 
     const stepsMap = {
         overview: getOverviewSteps(t),
-        channels: getChannelsSteps(t),
+        // channels: getChannelsSteps(t),
     }
 
     const steps = stepsMap[pageKey] || []

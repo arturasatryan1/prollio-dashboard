@@ -1,7 +1,7 @@
 import {
     PiArrowsInDuotone,
     PiBagSimpleDuotone,
-    PiBookBookmarkDuotone,
+    PiBookBookmarkDuotone, PiBookDuotone,
     PiBookOpenUserDuotone, PiCalendarDuotone,
     PiChartBarDuotone, PiCreditCard, PiPackage, PiQuestionDuotone, PiRocketDuotone, PiUserCircleDuotone, PiUsersDuotone,
 } from 'react-icons/pi'
@@ -38,6 +38,7 @@ const navigationIcon = {
     messages: <BsSend/>,
     event: <AiOutlineClockCircle/>,
     tools: <FiTrendingUp/>,
+    guide: <PiBookDuotone/>,
 }
 
 export default navigationIcon

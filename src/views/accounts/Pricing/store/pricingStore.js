@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 const initialState = {
-    paymentCycle: 'monthly',
+    paymentCycle: 'yearly',
     paymentDialog: false,
     selectedPlan: {},
 }

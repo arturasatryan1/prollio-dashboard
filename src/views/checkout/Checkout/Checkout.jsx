@@ -146,7 +146,7 @@ const Checkout = (props) => {
                                             <NumericFormat
                                                 displayType="text"
                                                 value={event?.price}
-                                                prefix={'֏'}
+                                                suffix={'֏'}
                                                 thousandSeparator={true}
                                             />
                                         </p>

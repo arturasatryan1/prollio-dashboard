@@ -101,7 +101,7 @@ const ChannelListTable = () => {
                     return (
                         <div className="flex items-center">
                             <Tag className={statusColor[row.status]}>
-                                {<span className="capitalize">{row.status}</span>}
+                                {<span className="capitalize">{t(row.status)}</span>}
                             </Tag>
                         </div>
                     )

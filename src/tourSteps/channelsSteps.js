@@ -1,7 +1,7 @@
 export const getChannelsSteps = (t) => [
     {
         selector: '.create-channel-btn',
-        content: t('Click here to create a new channel'),
+        content: t('Click here to get the guide on how to connect your channel'),
     },
     {
         selector: '.channel-search-input',

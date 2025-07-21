@@ -34,8 +34,8 @@ const EventEdit = () => {
         () => apiGetChannelListAll(),
         {
             revalidateOnFocus: false,
-            revalidateIfStale: false,
-            revalidateOnReconnect: false,
+            // revalidateIfStale: false,
+            // revalidateOnReconnect: false,
         }
     )
 

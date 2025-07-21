@@ -71,7 +71,7 @@ const ProfileImage = ({control}) => {
                                         className="mt-4"
                                         type="button"
                                     >
-                                        {t(field.value ? 'Change Image' : 'Upload Image')}
+                                        {t(field.value ? 'Change' : 'Upload')}
 
                                     </Button>
                                 </Upload>

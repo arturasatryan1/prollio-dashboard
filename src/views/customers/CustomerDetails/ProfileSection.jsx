@@ -16,7 +16,7 @@ const CustomerInfoField = ({title, value, decimal = false}) => {
                     className="heading-text block"
                     displayType="text"
                     value={(Math.round(value * 100) / 100).toFixed(2)}
-                    prefix={'֏'}
+                    suffix={'֏'}
                     thousandSeparator={true}
                 />) : (<p className="heading-text font-bold">{value}</p>)
             }

@@ -19,8 +19,8 @@ const RequestDetails = () => {
         ([_, params]) => apiGetRequest(params),
         {
             revalidateOnFocus: false,
-            revalidateIfStale: false,
-            revalidateOnReconnect: false,
+            // revalidateIfStale: false,
+            // revalidateOnReconnect: false,
         },
     )
 

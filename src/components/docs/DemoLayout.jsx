@@ -3,6 +3,7 @@ import Affix from '@/components/shared/Affix'
 import DemoCard from './DemoCard'
 import DemoTitleSection from './DemoTitleSection'
 import { Link } from 'react-scroll'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const DemoLayout = (props) => {
     const {
@@ -11,6 +12,7 @@ const DemoLayout = (props) => {
         demoCardClass,
         hideFooter,
         mdPrefixPath,
+        listTitle
     } = props
     return (
         <Container>
@@ -40,7 +42,7 @@ const DemoLayout = (props) => {
                     <div className="hidden xl:block">
                         <Affix offset={80}>
                             <h6 className="heading-text font-bold uppercase tracking-wide mb-3 text-sm lg:text-xs">
-                                ԲՈՎԱՆԴԱԿՈՒԹՅԱՆ ՑՈՒՑԱԿ
+                                {listTitle}
                             </h6>
                             <ul className="text-gray-500 dark:text-gray-400 font-medium ltr:border-l rtl:border-r border-gray-200 dark:border-gray-700 px-4">
                                 {demos.map((link) => (

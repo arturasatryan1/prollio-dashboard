@@ -69,7 +69,7 @@ const OverviewChart = ({data}) => {
                                 <NumericFormat
                                     displayType="text"
                                     value={data?.summary?.total_earned}
-                                    prefix={'֏'}
+                                    suffix={'֏'}
                                     thousandSeparator={true}
                                 />
                             </h3>
@@ -89,7 +89,7 @@ const OverviewChart = ({data}) => {
                                 <NumericFormat
                                     displayType="text"
                                     value={data?.summary?.pending_withdrawal}
-                                    prefix={'֏'}
+                                    suffix={'֏'}
                                     thousandSeparator={true}
                                 />
                             </h3>

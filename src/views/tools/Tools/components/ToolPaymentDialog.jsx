@@ -187,7 +187,7 @@ const ToolPaymentDialog = () => {
                                 <NumericFormat
                                     displayType="text"
                                     value={selectedTool.price}
-                                    prefix={'֏'}
+                                    suffix={'֏'}
                                     thousandSeparator={true}
                                 />
                             </span>

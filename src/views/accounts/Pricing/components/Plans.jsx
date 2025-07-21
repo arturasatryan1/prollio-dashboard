@@ -17,13 +17,16 @@ const Plans = () => {
     const {t} = useTranslation()
 
     const FEATURE_LABELS = {
-        channels: t('features.channels'),
+        availability_year: t('features.availability_year'),
+        availability_month: t('features.availability_month'),
+        channel_limit: t('features.channel_limit'),
+        event_limit: t('features.event_limit'),
         dashboard_access: t('features.dashboard_access'),
         payment_system: t('features.payment_system'),
         support: t('features.support'),
         analytics: t('features.analytics'),
-        engagement_bot: t('features.engagement_bot'),
-        event_limit_per_channel: t('features.event_limit_per_channel')
+        lead_bot: t('features.lead_bot'),
+        cash_register: t('features.cash_register'),
     }
 
     const {data} = useSWR(['/api/setting/pricing'], () => apiGetPricingPlans(), {
@@ -57,28 +60,35 @@ const Plans = () => {
                                     {t('Selected Plan')}
                                 </Tag>
                             )}
+                            {user?.expert?.active && subscription?.status === 'active' && subscription?.plan_id === plan.id && (
+                                <Tag className="rounded-full bg-green-200 font-bold">
+                                    {t('Current Plan')}
+                                </Tag>
+                            )}
                         </h5>
-                        <div className="">{t(plan.description)}</div>
-                        {plan.name !== 'basic' ? (
-                            <div className="mt-6">
-                                <NumericFormat
-                                    className="h3"
-                                    displayType="text"
-                                    value={plan.price_monthly}
-                                    prefix={'֏'}
-                                    thousandSeparator={true}
-                                />
-                                <span className="text-lg font-bold">
-                                {' '}
-                                    /{' '}
-                                    {t(paymentCycle === 'monthly' ? 'month' : 'year')}
-                            </span>
-                            </div>
-                        ) : (
-                            <div className="mt-6">
-                                <span className={'h3'}>{t('Free')}</span>
-                            </div>
-                        )}
+                        {/*<div className="">{t(plan.description)}</div>*/}
+                        <div className="mt-4">
+                            <NumericFormat
+                                className="h3"
+                                displayType="text"
+                                value={plan.price_yearly}
+                                suffix={'֏'}
+                                thousandSeparator={true}
+                            />
+                            {/*{plan.name !== 'basic' && (*/}
+                            {/*    <span className="text-lg font-bold">*/}
+                            {/*    {' '}*/}
+                            {/*    /{' '}*/}
+                            {/*        {t(paymentCycle === 'monthly' ? 'month' : 'year')}*/}
+                            {/*    </span>*/}
+                            {/*)}*/}
+                        </div>
+                        <p className={"mt-1"}>+<strong>{plan.fee}%</strong> {t("from each transaction")} </p>
+                        {/*<p className={"text-warning"}>*/}
+                        {/*    {plan.name === 'basic' && (*/}
+                        {/*        t('Availability is limited to 1 month only')*/}
+                        {/*    )}*/}
+                        {/*</p>*/}
 
                         <div className="flex flex-col gap-4 border-t border-gray-200 dark:border-gray-700 mt-6 pt-6">
                             {plan?.features?.map((feature) => (
@@ -90,11 +100,15 @@ const Plans = () => {
                                         <TbCheck
                                             className={classNames(
                                                 'text-2xl',
-                                                feature.value ? 'text-primary' : 'text-gray-100'
+                                                feature.value !== false ? 'text-primary' : 'text-gray-100'
                                             )}
                                         />
                                         <span>{FEATURE_LABELS[feature.key]}</span>
-                                        <span>{feature.value}</span>
+                                        {feature.value === 0 ? (
+                                            <span>({t('no limit')})</span>
+                                        ) : (
+                                            <span>{feature.value}</span>
+                                        )}
                                     </>
                                 </div>
                             ))}

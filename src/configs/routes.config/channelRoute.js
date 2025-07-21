@@ -23,9 +23,9 @@ const channelRoute = [
     },
     {
         key: 'channels.list',
-        path: `/channels/create`,
+        path: `/channels/connect`,
         component: lazy(
-            () => import('@/views/channels/ChannelCreate/ChannelCreate.jsx'),
+            () => import('@/views/channels/ChannelConnect/ChannelConnect.jsx'),
         ),
         authority: [ADMIN, USER],
         meta: {

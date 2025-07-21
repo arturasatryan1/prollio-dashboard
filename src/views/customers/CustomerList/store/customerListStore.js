@@ -13,7 +13,8 @@ export const initialTableData = {
 export const initialFilterData = {
     channel: null,
     event: null,
-    status: [],
+    type: [],
+    status: null,
     dateRange: null
 }
 

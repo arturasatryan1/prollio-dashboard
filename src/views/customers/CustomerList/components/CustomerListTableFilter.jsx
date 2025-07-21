@@ -7,25 +7,62 @@ import DatePicker from '@/components/ui/DatePicker'
 import {Controller, useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
 import {z} from 'zod'
-import {apiGetChannelListAll} from "@/services/ChannelService.js";
-import Select from "@/components/ui/Select/index.jsx";
+import Select, {Option as DefaultOption} from "@/components/ui/Select/index.jsx";
 import useCustomerList from "@/views/customers/CustomerList/hooks/useCustomerList.js";
 import {apiGetEventListAll} from "@/services/EventService.js";
 import useTranslation from "@/utils/hooks/useTranslation.js";
-import {Drawer} from "@/components/ui/index.js";
+import {Badge, Drawer} from "@/components/ui/index.js";
 import dayjs from "dayjs";
+import classNames from "@/utils/classNames.js";
+import {components} from 'react-select'
 
-const statusList = [
+const {Control} = components
+
+const typeList = [
     'guest',
-    'subscribed'
+    'subscriber'
 ]
-
 const validationSchema = z.object({
-    status: z.array(z.string()).optional(),
+    type: z.array(z.string()).optional(),
+    status: z
+        .object({
+            value: z.string(),
+            label: z.string(),
+            className: z.string(),
+        })
+        .nullable()
+        .optional(),
     channel: z.number().nullable().optional(),
     event: z.number().nullable().optional(),
     dateRange: z.tuple([z.date(), z.date()]).nullable().optional(),
 })
+
+const CustomControl = ({children, ...props}) => {
+    const selected = props.getValue()[0]
+
+    return (
+        <Control {...props}>
+            {selected && (
+                <Badge className={classNames('ml-4', selected.className)}/>
+            )}
+            {children}
+        </Control>
+    )
+}
+
+const CustomSelectOption = (props) => {
+    return (
+        <DefaultOption
+            {...props}
+            customLabel={(data, label) => (
+                <span className="flex items-center gap-2">
+                    <Badge className={data.className}/>
+                    <span className="ml-2 rtl:mr-2">{label}</span>
+                </span>
+            )}
+        />
+    )
+}
 
 const CustomerListTableFilter = () => {
     const [dialogIsOpen, setIsOpen] = useState(false)
@@ -34,6 +71,14 @@ const CustomerListTableFilter = () => {
     const [selectedChannel, setSelectedChannel] = useState(null)
     const {filterData, setFilterData} = useCustomerList()
     const {t} = useTranslation()
+
+    const statusOption = [
+        {value: '', label: t('All'), className: 'bg-gray-200'},
+        {value: 'active', label: t('Active'), className: 'bg-emerald-500'},
+        {value: 'expired', label: t('Expired'), className: 'bg-gray-500'},
+        {value: 'removed', label: t('Removed'), className: 'bg-orange-500'},
+        {value: 'blocked', label: t('Blocked'), className: 'bg-red-500'},
+    ];
 
     const {
         handleSubmit,
@@ -83,6 +128,7 @@ const CustomerListTableFilter = () => {
             values.dateRange = values.dateRange.map(date => dayjs(date).format('YYYY-MM-DD'));
         }
 
+        values.status = values?.status?.value
         setFilterData(values)
         setIsOpen(false)
     }
@@ -133,7 +179,7 @@ const CustomerListTableFilter = () => {
                                 <Controller
                                     name="dateRange"
                                     control={control}
-                                    render={({ field }) => {
+                                    render={({field}) => {
                                         return (
                                             (
                                                 <DatePicker.DatePickerRange
@@ -147,9 +193,9 @@ const CustomerListTableFilter = () => {
                                 />
                             </div>
                         </FormItem>
-                        <FormItem label={t('Status')}>
+                        <FormItem label={t('Type')}>
                             <Controller
-                                name="status"
+                                name="type"
                                 control={control}
                                 render={({field}) => (
                                     <Checkbox.Group
@@ -157,7 +203,7 @@ const CustomerListTableFilter = () => {
                                         className="flex mt-4"
                                         {...field}
                                     >
-                                        {statusList.map((source, index) => (
+                                        {typeList.map((source, index) => (
                                             <Checkbox
                                                 key={source + index}
                                                 name={field.name}
@@ -168,6 +214,30 @@ const CustomerListTableFilter = () => {
                                             </Checkbox>
                                         ))}
                                     </Checkbox.Group>
+                                )}
+                            />
+                        </FormItem>
+                        <FormItem
+                            label={t('Status')}
+                            invalid={Boolean(errors.status)}
+                            errorMessage={errors.status?.message}
+                        >
+                            <Controller
+                                name="status"
+                                control={control}
+                                render={({field}) => (
+                                    <Select
+                                        placeholder={t('Select Status')}
+                                        options={statusOption}
+                                        value={statusOption.filter((option) => option.value === field.value)}
+                                        components={{
+                                            Option: CustomSelectOption,
+                                            Control: CustomControl,
+                                        }}
+                                        onChange={(option) => field.onChange(option?.value)}
+                                        {...field}
+
+                                    />
                                 )}
                             />
                         </FormItem>

@@ -92,6 +92,7 @@ const Terms = () => {
                         header={demoHeader}
                         demos={demos}
                         mdPrefixPath="shared"
+                        listTitle={"ԲՈՎԱՆԴԱԿՈՒԹՅԱՆ ՑՈՒՑԱԿ"}
                     />
                 </div>
             </main>

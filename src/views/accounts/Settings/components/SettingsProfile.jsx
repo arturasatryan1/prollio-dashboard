@@ -183,7 +183,7 @@ const SettingsProfile = () => {
                                             type="button"
                                             icon={<TbPlus/>}
                                         >
-                                            {t('Upload Image')}
+                                            {t('Upload')}
                                         </Button>
                                     </Upload>
                                     <Button

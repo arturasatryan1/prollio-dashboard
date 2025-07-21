@@ -73,7 +73,7 @@ const PaymentHistorySection = ({ data }) => {
                         <NumericFormat
                             displayType="text"
                             value={(Math.round(row.amount * 100) / 100).toFixed(2)}
-                            prefix={'֏'}
+                            suffix={'֏'}
                             thousandSeparator={true}
                         />
                     </div>

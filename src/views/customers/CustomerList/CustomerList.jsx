@@ -24,7 +24,7 @@ const CustomerList = () => {
                     </div>
                 </AdaptiveCard>
             </Container>
-            {/*<CustomerListSelected />*/}
+            <CustomerListSelected />
         </>
     )
 }
