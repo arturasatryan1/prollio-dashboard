@@ -15,7 +15,6 @@ export default function useChannelList() {
 
     const { data, error, isLoading, mutate } = useSWR(
         ['/api/dashboard/channels', { ...tableData, ...filterData }],
-        // eslint-disable-next-line no-unused-vars
         ([_, params]) => apiGetChannelList(params),
         {
             revalidateOnFocus: false,

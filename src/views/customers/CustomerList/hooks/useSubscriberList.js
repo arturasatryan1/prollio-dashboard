@@ -12,7 +12,6 @@ export default function useSubscriberList(id) {
 
     const { data, error, isLoading, mutate } = useSWR(
         ['/api/dashboard/members', {id, ...tableData, ...filterData }],
-        // eslint-disable-next-line no-unused-vars
         ([_, params]) => apiGetEventSubscribers(params),
         {
             revalidateOnFocus: false,

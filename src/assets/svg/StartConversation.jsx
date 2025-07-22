@@ -1,4 +1,4 @@
-const StartConverstation = ({ height = 100, width = 100 }) => {
+const StartConversation = ({ height = 100, width = 100 }) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -139,4 +139,4 @@ const StartConverstation = ({ height = 100, width = 100 }) => {
     )
 }
 
-export default StartConverstation
+export default StartConversation

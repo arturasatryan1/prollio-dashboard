@@ -16,7 +16,6 @@ export default function useCustomerList() {
 
     const { data, error, isLoading, mutate } = useSWR(
         ['/api/dashboard/customers', { ...tableData, ...filterData }],
-        // eslint-disable-next-line no-unused-vars
         ([_, params]) => apiGetCustomersList(params),
         {
             revalidateOnFocus: false,

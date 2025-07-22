@@ -12,29 +12,41 @@ import dayjs from 'dayjs'
 import Th from "@/components/ui/Table/Th.jsx";
 import THead from "@/components/ui/Table/THead.jsx";
 import useTranslation from "@/utils/hooks/useTranslation.js";
+import useSWR from "swr";
+import {apiGetChannelEvents} from "@/services/ChannelService.js";
 
 const { Tr, Td, TBody } = Table
 
 const statusColor = {
-    completed: 'bg-emerald-500',
-    pending: 'bg-amber-400',
-    failed: 'bg-red-400',
+    upcoming: 'bg-blue-200 dark:bg-blue-300 text-gray-900 dark:text-gray-900',
+    ongoing: 'bg-green-200 dark:bg-green-300 text-gray-900 dark:text-gray-900',
+    finished: 'bg-gray-200 dark:bg-gray-300 text-gray-900 dark:text-gray-900',
+    cancelled: 'bg-red-200 dark:bg-red-300 text-gray-900 dark:text-gray-900',
 }
 
 const columnHelper = createColumnHelper()
 
-
-const PaymentHistorySection = ({ data }) => {
+const ChannelHistorySection = ({data}) => {
     const { t } = useTranslation()
 
+    const {data: channels, isLoading} = useSWR(
+        ['/api/channels/events', {id: data.id}],
+        ([_, params]) => apiGetChannelEvents(params),
+        {
+            revalidateOnFocus: false,
+            // revalidateIfStale: false,
+            // revalidateOnReconnect: false,
+        },
+    )
+
     const columns = [
-        columnHelper.accessor('event', {
-            header: t('Event'),
+        columnHelper.accessor('title', {
+            header: t('Title'),
             cell: (props) => {
                 const row = props.row.original
                 return (
-                    <div className="flex items-center gap-2">
-                        <span className="font-semibold">{row.event.name}</span>
+                    <div className="flex items-center gap-2 w-[200px]">
+                        <span className="font-semibold truncate">{row.title}</span>
                     </div>
                 )
             },
@@ -53,7 +65,7 @@ const PaymentHistorySection = ({ data }) => {
                 )
             },
         }),
-        columnHelper.accessor('date', {
+        columnHelper.accessor('created_at', {
             header: t('Date'),
             cell: (props) => {
                 const row = props.row.original
@@ -63,32 +75,15 @@ const PaymentHistorySection = ({ data }) => {
                     </div>
                 )
             },
-        }),
-        columnHelper.accessor('amount', {
-            header: t('Amount'),
-            cell: (props) => {
-                const row = props.row.original
-                return (
-                    <div className="flex items-center">
-                        <NumericFormat
-                            displayType="text"
-                            value={(Math.round(row.amount * 100) / 100).toFixed(2)}
-                            suffix={'֏'}
-                            thousandSeparator={true}
-                        />
-                    </div>
-                )
-            },
-        }),
+        })
     ]
 
     const table = useReactTable({
-        data: data.payments || [],
+        data: channels || [],
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
     })
-
 
     return (
         <>
@@ -129,33 +124,8 @@ const PaymentHistorySection = ({ data }) => {
                         })}
                 </TBody>
             </Table>
-            {/*<h6 className="mt-8">Addresses</h6>*/}
-            {/*<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">*/}
-            {/*    <Card>*/}
-            {/*        <div className="font-bold heading-text">*/}
-            {/*            Billing Address*/}
-            {/*        </div>*/}
-            {/*        <div className="mt-4 flex flex-col gap-1 font-semibold">*/}
-            {/*            <span>{data.payment?.channel?.name}</span>*/}
-            {/*            <span>{data.personalInfo?.city}</span>*/}
-            {/*            <span>{data.personalInfo?.postcode}</span>*/}
-            {/*            <span>{countryName}</span>*/}
-            {/*        </div>*/}
-            {/*    </Card>*/}
-            {/*    <Card>*/}
-            {/*        <div className="font-bold heading-text">*/}
-            {/*            Delivery Address*/}
-            {/*        </div>*/}
-            {/*        <div className="mt-4 flex flex-col gap-1 font-semibold">*/}
-            {/*            <span>{data.personalInfo?.address}</span>*/}
-            {/*            <span>{data.personalInfo?.city}</span>*/}
-            {/*            <span>{data.personalInfo?.postcode}</span>*/}
-            {/*            <span>{countryName}</span>*/}
-            {/*        </div>*/}
-            {/*    </Card>*/}
-            {/*</div>*/}
         </>
     )
 }
 
-export default PaymentHistorySection
+export default ChannelHistorySection

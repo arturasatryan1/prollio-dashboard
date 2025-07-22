@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import Card from '@/components/ui/Card'
-import StartConverstation from '@/assets/svg/StartConverstation'
+import StartConversation from '@/assets/svg/StartConversation'
 import {useChatStore} from '../store/chatStore'
 // import { apiGetConversation } from '@/services/ChatService'
 import classNames from '@/utils/classNames'
@@ -245,7 +245,7 @@ const ChatBody = () => {
             ) : (
                 <div
                     className="flex-1 h-full max-h-full flex flex-col items-center justify-center rounded-2xl border border-gray-200 dark:border-gray-800">
-                    <StartConverstation height={250} width={250}/>
+                    <StartConversation height={250} width={250}/>
                     {/*<div className="mt-10 text-center">*/}
                     {/*    <h3>{t('No Message Selected')}</h3>*/}
                     {/*    <p className="mt-2 text-base">*/}

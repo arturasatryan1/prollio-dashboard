@@ -20,7 +20,7 @@ const NameColumn = ({row}) => {
     return (
         <div className="flex items-center">
             <Link
-                className={`hover:text-primary font-semibold text-gray-900 dark:text-gray-100`}
+                className={`hover:text-primary font-semibold text-gray-900 dark:text-gray-100 truncate`}
                 to={`/events/${row.id}`}
             >
                 {row.title}
@@ -89,6 +89,7 @@ const EventListTable = () => {
                     const row = props.row.original
                     return <NameColumn row={row}/>
                 },
+                size: 250
             },
             {
                 header: t('Description'),
@@ -96,12 +97,12 @@ const EventListTable = () => {
                 size: 300
             },
             {
-                header: t('Members'),
-                accessorKey: 'members_count',
-            },
-            {
                 header: t('Price'),
                 accessorKey: 'price'
+            },
+            {
+                header: t('Members'),
+                accessorKey: 'members_count',
             },
             {
                 header: t('Status'),

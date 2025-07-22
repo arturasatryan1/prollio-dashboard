@@ -9,7 +9,6 @@ import useDebounce from '@/utils/hooks/useDebounce'
 import {TbSearch, TbTrash, TbX} from 'react-icons/tb'
 import dayjs from 'dayjs'
 import useTranslation from "@/utils/hooks/useTranslation.js";
-import {LiaTimesSolid} from "react-icons/lia";
 import ConfirmDialog from "../../../../components/shared/ConfirmDialog.jsx";
 import {apiDeleteMessage} from "@/services/MessageService.js";
 import toast from "@/components/ui/toast/index.js";
@@ -18,7 +17,6 @@ import ChatSegment from "../components/ChatSegment.jsx";
 
 const ChatList = () => {
     const messages = useChatStore((state) => state.chats)
-    const chatsFetched = useChatStore((state) => state.chatsFetched)
     const selectedChat = useChatStore((state) => state.selectedChat)
     const setSelectedChat = useChatStore((state) => state.setSelectedChat)
     const setMobileSidebar = useChatStore((state) => state.setMobileSidebar)
@@ -42,8 +40,14 @@ const ChatList = () => {
 
 
     useEffect(() => {
+        setSelectedChat({})
+        setSelectedChatType('draft')
+
         if (messages?.length) {
-            setSelectedChat(messages[0])
+            const firstDraft = messages.find(message => message.status === 'draft');
+            if (firstDraft) {
+                setSelectedChat(firstDraft);
+            }
         }
     }, [messages])
 
@@ -100,6 +104,10 @@ const ChatList = () => {
         setShowSearchBar(!showSearchBar)
     }
 
+    const handleChangeSegment = (value) => {
+        setSelectedChatType(value)
+    }
+
     return (
         <div className="flex flex-col h-full">
             <div className="mb-4">
@@ -122,7 +130,7 @@ const ChatList = () => {
                     {/*    {showSearchBar ? <TbX/> : <TbSearch/>}*/}
                     {/*</button>*/}
                 </div>
-                <ChatSegment/>
+                <ChatSegment handleChangeSegment={handleChangeSegment}/>
             </div>
             <ScrollBar className=" overflow-y-auto flex-1 overflow-auto">
                 <div className="flex flex-col gap-2 h-full">

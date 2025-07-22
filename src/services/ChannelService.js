@@ -46,3 +46,12 @@ export async function apiDeleteChannel({ id }) {
         method: 'delete'
     })
 }
+
+export async function apiGetChannelEvents({ id }) {
+
+    console.log(id);
+    return ApiService.fetchDataWithAxios({
+        url: `/dashboard/channels/${id}/events`,
+        method: 'get'
+    })
+}

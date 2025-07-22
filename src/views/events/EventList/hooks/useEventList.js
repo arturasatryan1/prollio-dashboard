@@ -15,7 +15,6 @@ export default function useEventList() {
 
     const { data, error, isLoading, mutate } = useSWR(
         ['/api/dashboard/events', { ...tableData, ...filterData }],
-        // eslint-disable-next-line no-unused-vars
         ([_, params]) => apiGetEventList(params),
         {
             revalidateOnFocus: false,

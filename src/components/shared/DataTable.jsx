@@ -16,6 +16,7 @@ import {
     useReactTable,
 } from '@tanstack/react-table'
 import useTranslation from "@/utils/hooks/useTranslation.js";
+import Tooltip from "@/components/ui/Tooltip/index.jsx";
 
 const {Tr, Th, Td, THead, TBody, Sorter} = Table
 
@@ -297,19 +298,26 @@ function DataTable(props) {
                                             {row
                                                 .getVisibleCells()
                                                 .map((cell) => {
+                                                    const content = flexRender(
+                                                        cell.column.columnDef.cell,
+                                                        cell.getContext(),
+                                                    );
+
                                                     return (
                                                         <Td
                                                             key={cell.id}
                                                             style={{
                                                                 width: cell.column.getSize(),
+                                                                maxWidth: cell.column.getSize(),
                                                             }}
+                                                            className={'truncate'}
                                                         >
-                                                            {flexRender(
-                                                                cell.column
-                                                                    .columnDef
-                                                                    .cell,
-                                                                cell.getContext(),
-                                                            )}
+                                                            {cell.column.id === 'description' ? (
+                                                                <Tooltip
+                                                                    title={content}>
+                                                                    {content}
+                                                                </Tooltip>
+                                                            ) : content}
                                                         </Td>
                                                     )
                                                 })}

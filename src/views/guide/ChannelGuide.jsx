@@ -23,7 +23,7 @@ const ChannelGuide = () => {
                     {t('Go to your channel → Tap the channel name → Open')}
                     <strong> Administrators</strong>.
                 </p>
-                <div className={"flex gap-4"}>
+                <div className={"flex flex-col md:flex-row gap-4"}>
                 <img
                     src="/img/guide/1.jpeg"
                     alt="Create Telegram Channel"
@@ -44,8 +44,8 @@ const ChannelGuide = () => {
                     {/*Tap <strong>Add Admin</strong> → Search for <code>@ProllioBot</code> → Select it →*/}
                     {/*Grant following permissions Then tap <strong>Done</strong>.*/}
                 </p>
-               <div className={'flex gap-4'}>
-                   <img
+                <div className={"flex flex-col md:flex-row gap-4"}>
+                <img
                        src="/img/guide/3.jpeg"
                        alt="Create Telegram Channel"
                        className="rounded-xl border shadow-md w-full max-w-[300px]"

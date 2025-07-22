@@ -21,7 +21,7 @@ const NameColumn = ({row}) => {
         <div className="flex items-center">
             <Avatar size={50} shape="circle" src={row?.image}/>
             <Link
-                className={`hover:text-primary ml-2 rtl:mr-2 font-semibold text-gray-900 dark:text-gray-100`}
+                className={`hover:text-primary ml-2 rtl:mr-2 font-semibold text-gray-900 dark:text-gray-100 truncate`}
                 to={`/channels/${row.id}`}
             >
                 {row.name}
@@ -33,15 +33,15 @@ const NameColumn = ({row}) => {
 const ActionColumn = ({onEdit, onViewDetail}) => {
     return (
         <div className="flex items-center gap-3 justify-end">
-            <Tooltip title="Edit">
-                <div
-                    className={`text-xl cursor-pointer select-none font-semibold`}
-                    role="button"
-                    onClick={onEdit}
-                >
-                    <TbPencil size={25}/>
-                </div>
-            </Tooltip>
+            {/*<Tooltip title="Edit">*/}
+            {/*    <div*/}
+            {/*        className={`text-xl cursor-pointer select-none font-semibold`}*/}
+            {/*        role="button"*/}
+            {/*        onClick={onEdit}*/}
+            {/*    >*/}
+            {/*        <TbPencil size={25}/>*/}
+            {/*    </div>*/}
+            {/*</Tooltip>*/}
             <Tooltip title="View">
                 <div
                     className={`text-xl cursor-pointer select-none font-semibold`}
@@ -87,6 +87,7 @@ const ChannelListTable = () => {
                     const row = props.row.original
                     return <NameColumn row={row}/>
                 },
+                size: 250
             },
             {
                 header: t('Description'),
@@ -107,18 +108,18 @@ const ChannelListTable = () => {
                     )
                 },
             },
+            // {
+            //     header: t('Members'),
+            //     accessorKey: 'members_count',
+            // },
             {
-                header: t('Members'),
-                accessorKey: 'members_count',
-            },
-            {
-                header: t('Created Date'),
+                header: t('Connected At'),
                 accessorKey: 'created_at',
                 cell: (props) => {
                     const row = props.row.original
                     return (
                         <div>
-                            {dayjs(row.created_at).format('DD/MM/YYYY HH:mm')}
+                            {dayjs(row?.created_at).format('DD/MM/YYYY HH:mm')}
                         </div>
                     )
                 },
@@ -128,7 +129,7 @@ const ChannelListTable = () => {
                 id: 'action',
                 cell: (props) => (
                     <ActionColumn
-                        onEdit={() => handleEdit(props.row.original)}
+                        // onEdit={() => handleEdit(props.row.original)}
                         onViewDetail={() =>
                             handleViewDetails(props.row.original)
                         }
