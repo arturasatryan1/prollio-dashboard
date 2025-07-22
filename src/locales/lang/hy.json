@@ -97,10 +97,9 @@
   "active": "Ակտիվ",
   "inactive": "Ոչ ակտիվ",
 
-  "Active": "Ակտիվ",
-  "Expired": "Ժամկետանց",
-  "Removed": "Հեռացված",
-  "Blocked": "Արգելափակված",
+  "expired": "Ժամկետանց",
+  "removed": "Հեռացված",
+  "blocked": "Արգելափակված",
 
   "completed": "Ավարտված",
   "upcoming": "Սպասվող",
