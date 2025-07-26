@@ -32,7 +32,7 @@ const SignInForm = (props) => {
         control,
     } = useForm({
         defaultValues: {
-            email: 'admin@prollio.ai',
+            email: '',
             password: '',
         },
         resolver: zodResolver(validationSchema),
