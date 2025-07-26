@@ -31,7 +31,7 @@ export const usePageTour = () => {
 
                 const updatedSeen = { ...seenPages, [pageKey]: true }
                 localStorage.setItem(seenKey, JSON.stringify(updatedSeen))
-            }, 500)
+            }, 1000)
 
             return () => clearTimeout(timeout)
         }

@@ -1,16 +1,17 @@
 import Button from '@/components/ui/Button'
-import { TbCloudDownload, TbUserPlus } from 'react-icons/tb'
-import { useNavigate } from 'react-router'
+import {useNavigate} from 'react-router'
 import useEventList from '../hooks/useEventList.js'
-import { CSVLink } from 'react-csv'
 import {FaPlus} from "react-icons/fa";
 import useTranslation from "@/utils/hooks/useTranslation.js";
+import {useAuth} from "@/auth/index.js";
 
 const EventListActionTools = () => {
     const navigate = useNavigate()
     const {t} = useTranslation()
 
-    const { customerList } = useEventList()
+    const {itemListTotal} = useEventList()
+    const {user} = useAuth()
+    const subscriptionPlan = user?.expert?.plan
 
     return (
         <div className="flex flex-col md:flex-row gap-3">
@@ -28,10 +29,14 @@ const EventListActionTools = () => {
             {/*</CSVLink>*/}
             <Button
                 variant="solid"
-                icon={<FaPlus className="text-xs" />}
+                icon={<FaPlus className="text-xs"/>}
                 onClick={() => navigate('/events/create')}
+                disabled={
+                    (subscriptionPlan?.name === 'basic' && itemListTotal >= 1) ||
+                    (subscriptionPlan?.name === 'pro' && itemListTotal >= 15)
+                }
             >
-                {t('Create New')}
+                {t('Create Event')}
             </Button>
         </div>
     )

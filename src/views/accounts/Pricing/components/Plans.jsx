@@ -6,7 +6,7 @@ import classNames from '@/utils/classNames'
 import isLastChild from '@/utils/isLastChild'
 import useSWR from 'swr'
 import {NumericFormat} from 'react-number-format'
-import {TbCheck} from 'react-icons/tb'
+import {TbCheck, TbMinus} from 'react-icons/tb'
 import {useAuth} from "@/auth/index.js";
 import useTranslation from "@/utils/hooks/useTranslation.js";
 
@@ -48,7 +48,7 @@ const Plans = () => {
                     )}
                 >
                     <div>
-                        <h5 className="mb-2 flex items-center gap-2">
+                        <div className="mb-2 flex items-center gap-2">
                             <h3>{t(plan.name)}</h3>
                             {index === 1 && !subscription && (
                                 <Tag className="rounded-full bg-green-200 font-bold">
@@ -65,7 +65,7 @@ const Plans = () => {
                                     {t('Current Plan')}
                                 </Tag>
                             )}
-                        </h5>
+                        </div>
                         {/*<div className="">{t(plan.description)}</div>*/}
                         <div className="mt-4">
                             <NumericFormat
@@ -97,12 +97,23 @@ const Plans = () => {
                                     className="flex items-center gap-4 font-semibold heading-text"
                                 >
                                     <>
-                                        <TbCheck
-                                            className={classNames(
-                                                'text-2xl',
-                                                feature.value !== false ? 'text-primary' : 'text-gray-100'
-                                            )}
-                                        />
+                                        {feature.value === false ? (
+                                            <TbMinus
+                                                className={classNames(
+                                                    'text-2xl',
+                                                    'text-error'
+                                                )}
+                                            />
+                                        ) : (
+                                            <TbCheck
+                                                className={classNames(
+                                                    'text-2xl',
+                                                    'text-primary'
+                                                )}
+                                            />
+                                        )
+                                        }
+
                                         <span>{FEATURE_LABELS[feature.key]}</span>
                                         {feature.value === 0 ? (
                                             <span>({t('no limit')})</span>
@@ -125,7 +136,7 @@ const Plans = () => {
                                 setSelectedPlan({
                                     paymentCycle,
                                     name: plan.name,
-                                    price: plan.price_monthly,
+                                    price: plan.price_yearly,
                                     id: plan.id,
                                 })
                                 setPaymentDialog(true)

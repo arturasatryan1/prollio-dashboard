@@ -37,14 +37,14 @@ const UpcomingEvents = () => {
         <Card>
             <div className="flex items-center justify-between">
                 <h4>{t('Upcoming Events')}</h4>
-                <Button
-                    variant="solid"
-                    type="button"
-                    size="sm"
-                    onClick={() => navigate('/events/create')}
-                >
-                    {t('Create New')}
-                </Button>
+                {/*<Button*/}
+                {/*    variant="solid"*/}
+                {/*    type="button"*/}
+                {/*    size="sm"*/}
+                {/*    onClick={() => navigate('/events/create')}*/}
+                {/*>*/}
+                {/*    {t('Create New')}*/}
+                {/*</Button>*/}
             </div>
             <div className="mt-6">
                 <Table hoverable={false}>

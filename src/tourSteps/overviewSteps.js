@@ -10,9 +10,5 @@ export const getOverviewSteps = (t) => [
     {
         selector: '.overview-metrics',
         content: t('Quick glance at key stats like members and visitors.'),
-    },
-    {
-        selector: '.upcoming-events-card',
-        content: t('These are your upcoming events. Make sure everything is scheduled properly.'),
-    },
+    }
 ]

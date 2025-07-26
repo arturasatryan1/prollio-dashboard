@@ -98,7 +98,7 @@ const ContactUs = () => {
             <h3 className="mt-2">{t('Contact Us')}</h3>
 
             <div className="grid grid-cols-10 gap-10">
-                <Form onSubmit={handleSubmit(onSubmit)} className={`mt-2 col-span-5`}>
+                <Form onSubmit={handleSubmit(onSubmit)} className="mt-2 col-span-10 lg:col-span-5">
                     <p className="text-sm text-gray-500 my-4">
                         {t('If you have any issues or questions, feel free to contact us using the form below.')}
                     </p>
@@ -110,15 +110,15 @@ const ContactUs = () => {
                         <Controller
                             name="subject"
                             control={control}
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <Select
                                     placeholder={t('Choose a topic')}
                                     options={options}
                                     value={options.filter(
-                                        (option) => option.value === field.value,
+                                        (option) => option.value === field.value
                                     )}
                                     onChange={(selected) => {
-                                        field.onChange(selected?.value)
+                                        field.onChange(selected?.value);
                                     }}
                                 />
                             )}
@@ -133,7 +133,7 @@ const ContactUs = () => {
                         <Controller
                             name="message"
                             control={control}
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <Input
                                     textArea
                                     placeholder={t('Write your message here')}
@@ -147,37 +147,46 @@ const ContactUs = () => {
                         {t(isSubmitting ? 'Sending...' : 'Send Message')}
                     </Button>
                 </Form>
-                <div className="col-span-5">
+
+                <div className="col-span-10 lg:col-span-5">
                     <div className="p-4">
                         <h4 className="text-base font-semibold mb-3">{t('Before You Contact Us')}</h4>
                         <ul className="pl-5 text-md space-y-5 text-gray-700">
                             <li>
-                                <p className={'my-1'}><strong>{t('No withdrawal was made?')}</strong></p>
+                                <p className={'my-1'}>
+                                    <strong>{t('No withdrawal was made?')}</strong>
+                                </p>
                                 <p>
                                     {t('Please make sure your bank details are up-to-date in')}{' '}
-                                    <Link to="/settings/payout"
-                                          className="text-blue-700 underline">{t('Bank Account Setup')}</Link>
-                                </p>
-                            </li>
-                            <li>
-                                <p className={'my-1'}><strong>{t('Want to change plan?')}</strong></p>
-                                <p>
-                                    {t('Visit')}{' '}
-                                    <Link to="/settings/pricing"
-                                          className="text-blue-700 underline">{t('Pricing')}</Link> {' '}
-                                    {t('to update your subscription.')}
-                                </p>
-                            </li>
-                            <li>
-                                <p className={'my-1'}><strong>{t('Bot not responding?')}</strong></p>
-                                <p>
-                                    {t('Try reconnecting your Telegram or checking event setup.')}
+                                    <Link to="/settings/payout" className="text-blue-700 underline">
+                                        {t('Bank Account Setup')}
+                                    </Link>
                                 </p>
                             </li>
                             <li>
                                 <p className={'my-1'}>
+                                    <strong>{t('Want to change plan?')}</strong>
+                                </p>
+                                <p>
+                                    {t('Visit')}{' '}
+                                    <Link to="/settings/pricing" className="text-blue-700 underline">
+                                        {t('Pricing')}
+                                    </Link>{' '}
+                                    {t('to update your subscription.')}
+                                </p>
+                            </li>
+                            <li>
+                                <p className={'my-1'}>
+                                    <strong>{t('Bot not responding?')}</strong>
+                                </p>
+                                <p>{t('Try reconnecting your Telegram or checking event setup.')}</p>
+                            </li>
+                            <li>
+                                <p className={'my-1'}>
                                     <span>{t('You can also check our')}{' '}</span>
-                                    <Link to="/support/faq" className="text-blue-700 underline">{t('FAQ')}</Link>{' '}
+                                    <Link to="/support/faq" className="text-blue-700 underline">
+                                        {t('FAQ')}
+                                    </Link>{' '}
                                     <span>{t('for quick solutions.')}</span>
                                 </p>
                             </li>
@@ -185,6 +194,7 @@ const ContactUs = () => {
                     </div>
                 </div>
             </div>
+
         </Card>
     )
 }

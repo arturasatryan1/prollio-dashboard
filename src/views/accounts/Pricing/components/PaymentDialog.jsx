@@ -148,55 +148,7 @@ const PaymentDialog = () => {
                     )}
                     {selectedPlan.name !== 'basic' && (
                         <div>
-                            <div className="mt-6">
-                                <Segment
-                                    defaultValue={selectedPlan.paymentCycle}
-                                    className="gap-4 flex bg-transparent"
-                                    onChange={(value) => handlePaymentChange(value)}
-                                >
-                                    <Segment.Item value={selectedPlan.price}>
-                                        {({active, onSegmentItemClick}) => {
-                                            return (
-                                                <div
-                                                    className={classNames(
-                                                        'flex justify-between border rounded-xl border-gray-300 dark:border-gray-600 py-5 px-4 select-none ring-1',
-                                                        active
-                                                            ? 'ring-primary border-primary'
-                                                            : 'ring-transparent bg-gray-100 dark:bg-gray-600',
-                                                    )}
-                                                    role="button"
-                                                    onClick={onSegmentItemClick}
-                                                >
-                                                    <div>
-                                                        <div className="heading-text mb-0.5">
-                                                            {t('Pay Monthly')}
-                                                        </div>
-                                                        <span className="text-lg font-bold heading-text flex gap-0.5">
-                                                            <NumericFormat
-                                                                displayType="text"
-                                                                value={selectedPlan.price}
-                                                                suffix={'֏'}
-                                                                thousandSeparator={
-                                                                    true
-                                                                }
-                                                            />
-                                                            <span>{'/'}</span>
-                                                            <span>
-                                                                {t('month')}
-                                                            </span>
-                                                        </span>
-                                                    </div>
-                                                    {(
-                                                        <TbCheck className="text-primary text-xl"/>
-                                                    )}
-                                                </div>
-                                            )
-                                        }}
-                                    </Segment.Item>
-
-                                </Segment>
-                            </div>
-                            <h4 className={`mt-5 mb-3`}>{t('Select Payment Method')}</h4>
+                            <h5 className={`mt-5 mb-3`}>{t('Select Payment Method')}</h5>
                             <div>
                                 <Segment
                                     defaultValue={selectedMethod}

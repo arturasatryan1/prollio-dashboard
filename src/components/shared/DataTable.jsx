@@ -310,7 +310,9 @@ function DataTable(props) {
                                                                 width: cell.column.getSize(),
                                                                 maxWidth: cell.column.getSize(),
                                                             }}
-                                                            className={'truncate'}
+                                                            className={
+                                                                ['description', 'title', 'event'].includes(cell.column.id) ? 'truncate' : ''
+                                                            }
                                                         >
                                                             {cell.column.id === 'description' ? (
                                                                 <Tooltip

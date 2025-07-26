@@ -3,7 +3,7 @@ import {
     NAV_ITEM_TYPE_ITEM,
     NAV_ITEM_TYPE_COLLAPSE,
 } from '@/constants/navigation.constant'
-import {ADMIN, USER} from "@/constants/roles.constant.js";
+import {ADMIN, BUSINESS, LEAD_BOT, PRO, USER} from "@/constants/roles.constant.js";
 
 const navigationConfig = [
     {
@@ -87,7 +87,7 @@ const navigationConfig = [
                 translateKey: 'nav.messages',
                 icon: 'messages',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [USER],
+                authority: [LEAD_BOT],
                 subMenu: [],
             },
             {
@@ -134,7 +134,7 @@ const navigationConfig = [
         translateKey: 'nav.settings',
         icon: 'settings',
         type: NAV_ITEM_TYPE_TITLE,
-        authority: [ADMIN, USER],
+        authority: [USER],
         meta: {
             horizontalMenu: {
                 layout: 'default',
@@ -148,7 +148,7 @@ const navigationConfig = [
                 translateKey: 'nav.account',
                 icon: 'account',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [ADMIN, USER],
+                authority: [USER],
                 // meta: {
                 //     description: {
                 //         translateKey: 'nav.settings',
@@ -181,7 +181,7 @@ const navigationConfig = [
         title: 'Additional Features',
         translateKey: 'nav.additional',
         type: NAV_ITEM_TYPE_TITLE,
-        authority: [ADMIN, USER],
+        authority: [PRO, BUSINESS],
         subMenu: [
             {
                 key: 'tools',
@@ -190,7 +190,7 @@ const navigationConfig = [
                 translateKey: 'nav.tools',
                 icon: 'tools',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [ADMIN, USER],
+                authority: [PRO, BUSINESS],
                 subMenu: [],
             },
         ],
@@ -201,7 +201,7 @@ const navigationConfig = [
         title: 'Support',
         translateKey: 'nav.support',
         type: NAV_ITEM_TYPE_TITLE,
-        authority: [ADMIN, USER],
+        authority: [USER],
         subMenu: [
             {
                 key: 'contactUs',
@@ -210,7 +210,7 @@ const navigationConfig = [
                 translateKey: 'nav.contactUs',
                 icon: 'support',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [ADMIN, USER],
+                authority: [USER],
                 subMenu: [],
             },
             {
@@ -220,7 +220,7 @@ const navigationConfig = [
                 translateKey: 'nav.faq',
                 icon: 'question',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [ADMIN, USER],
+                authority: [USER],
                 subMenu: [],
             },
             {
@@ -230,7 +230,7 @@ const navigationConfig = [
                 translateKey: 'nav.guide',
                 icon: 'guide',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [ADMIN, USER],
+                authority: [USER],
                 subMenu: [],
             }
         ],

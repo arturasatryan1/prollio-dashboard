@@ -1,16 +1,18 @@
 import Button from '@/components/ui/Button'
-import { TbCloudDownload, TbUserPlus } from 'react-icons/tb'
-import { useNavigate } from 'react-router'
+import {useNavigate} from 'react-router'
 import useChannelList from '../hooks/useChannelList.js'
-import { CSVLink } from 'react-csv'
 import {FaPlus} from "react-icons/fa";
 import useTranslation from "@/utils/hooks/useTranslation.js";
+import {useAuth} from "@/auth/index.js";
 
 const ChannelListActionTools = () => {
     const navigate = useNavigate()
 
-    const { customerList } = useChannelList()
-    const { t } = useTranslation()
+    const {itemListTotal} = useChannelList()
+    const {t} = useTranslation()
+
+    const {user} = useAuth()
+    const subscriptionPlan = user?.expert?.plan
 
     return (
         <div className="flex flex-col md:flex-row gap-3">
@@ -29,8 +31,12 @@ const ChannelListActionTools = () => {
             <Button
                 className="create-channel-btn"
                 variant="solid"
-                icon={<FaPlus className="text-xs" />}
+                icon={<FaPlus className="text-xs"/>}
                 onClick={() => navigate('/support/guide')}
+                disabled={
+                    (subscriptionPlan?.name === 'basic' && itemListTotal >= 1) ||
+                    (subscriptionPlan?.name === 'pro' && itemListTotal >= 5)
+                }
             >
                 {t('Connect Channel')}
             </Button>
