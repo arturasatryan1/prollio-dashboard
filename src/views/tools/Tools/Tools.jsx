@@ -31,11 +31,11 @@ const Tools = () => {
 
     const tools = [
         {
-            name: "Telegram Lead Bot",
+            name: "Lead Bot",
             slug: "lead-bot",
             icon: <FiMessageCircle className="text-primary"/>,
-            description: "Convert Telegram users into paying clients with your personalized bot.",
-            note: 'After completing your payment, you can either connect your existing Telegram bot for immediate activation, or request a new bot, which will be personalized and activated within 24 hours.',
+            description: "Convert users into paying clients with your personalized bot.",
+            note: 'After completing your payment, you can either connect your existing bot for immediate activation, or request a new bot, which will be personalized and activated within 24 hours.',
             price: 32500,
             button_text: 'Activate Lead Bot',
             coming: false,
@@ -107,7 +107,7 @@ const Tools = () => {
                                             toolStatus === 'paid' && (
                                                 <div className={'bg-amber-200 p-3 rounded'}>
                                                     <h6 className={'flex items-center'}><CiWarning size={18} className={'mr-1'}/> {t('Waiting for Bot Setup')}</h6>
-                                                    <p className={''}>{t('You’ve successfully paid for the Lead Bot. To proceed, please complete the setup form so we can create your personalized Telegram bot.')}</p>
+                                                    <p className={''}>{t('You’ve successfully paid for the Lead Bot. To proceed, please complete the setup form so we can create your personalized bot.')}</p>
                                                 </div>
                                             )
                                         }

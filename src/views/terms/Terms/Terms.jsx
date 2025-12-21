@@ -3,9 +3,12 @@ import LanguageSelector from "@/components/template/LanguageSelector.jsx";
 import Header from "@/components/template/Header.jsx";
 import classNames from "@/utils/classNames.js";
 import Logo from "@/components/template/Logo.jsx";
+import Concept from "@/views/terms/Terms/Concept.jsx";
 import TermOfUse from "@/views/terms/Terms/TermOfUse.jsx";
 import Privacy from "@/views/terms/Terms/Privacy.jsx";
-import Refund from "@/views/terms/Terms/Refund.jsx";
+import Payment from "@/views/terms/Terms/Payment.jsx";
+import SubscriptionTermination from "@/views/terms/Terms/SubscriptionTermination.jsx";
+import Other from "@/views/terms/Terms/Other.jsx";
 import {APP_NAME} from "@/constants/app.constant.js";
 import {Container} from "@/components/shared/index.jsx";
 import useTranslation from "@/utils/hooks/useTranslation.js";
@@ -14,50 +17,44 @@ const demos = [
     {
         mdName: 'tm1',
         title: 'ՀԻՄՆԱԿԱՆ ՀԱՍԿԱՑՈՒԹՅՈՒՆՆԵՐ',
-        component: <TermOfUse/>,
+        component: <Concept/>,
     },
     {
         mdName: 'tm2',
-        title: 'ՕԳՏԱԳՈՐԾՄԱՆ ՊԱՅՄԱՆՆԵՐԸ, ՄԻԱՑՄԱՆ ԿԱՐԳԸ',
-        component: <Privacy/>,
+        title: 'ՕԳՏԱԳՈՐԾՄԱՆ ԿԱՆՈՆՆԵՐ ԵՎ ՊԱՅՄԱՆՆԵՐ',
+        component: <TermOfUse/>,
     },
     {
         mdName: 'tm3',
-        title: 'ՓՈՂԵՐԻ ԼՎԱՑՄԱՆ ԵՎ ԱՀԱԲԵԿՉՈՒԹՅԱՆ ՖԻՆԱՆԱՍԱՎՈՐՄԱՆ ԴԵՄ ՊԱՅՔԱՐԻ ՎԵՐԱԲԵՐՅԱԼ ԴՐՈՒՅԹՆԵՐ',
-        component: <Refund/>,
+        title: 'ԲԱԺԱՆՈՐԴԱԳՐՈՒԹՅԱՆ ՎՃԱՐԸ ԵՎ ՎՃԱՐՄԱՆ ԿԱՐԳԸ',
+        component: <Payment/>,
     },
     {
         mdName: 'tm4',
-        title: 'ՊԱՅՄԱՆԱԳԻՐ ԿՆՔԵԼՈՒ ԳՈՐԾՈՒՆԱԿՈՒԹՅՈՒՆ',
-        component: <Refund/>,
+        title: 'ԳԱՂՏՆԻՈՒԹՅՈՒՆ',
+        component: <Privacy/>,
     },
     {
         mdName: 'tm5',
-        title: 'ԲԱԺԱՆՈՐԴԱԳՐՈՒԹՅԱՆ ՎՃԱՐԸ ԵՎ ՎՃԱՐՄԱՆ ԿԱՐԳԸ',
-        component: <Refund/>,
+        title: 'ԲԱԺԱՆՈՐԴԱԳՐՈՒԹՅԱՆ ԴԱԴԱՐԵՑՈՒՄ',
+        component: <SubscriptionTermination/>,
     },
     {
         mdName: 'tm6',
-        title: 'ԲԱԺԱՆՈՐԴԱԳՐՈՒԹՅԱՆ ՎՃԱՐԸ ԵՎ ՎՃԱՐՄԱՆ ԿԱՐԳԸ',
-        component: <Refund/>,
-    }, {
-        mdName: 'tm7',
-        title: 'ՊԱՏԱՍԽԱՆԱՏՎՈՒԹՅՈՒՆԸ',
-        component: <Refund/>,
-    },
+        title: 'ԱՅԼ ԴՐՈՒՅԹՆԵՐ',
+        component: <Other/>,
+    }
 ];
 
 const demoHeader = {
-    title: 'ԲԱԺԱՆՈՐԴԱԳՐՈՒԹՅԱՆ ՊԱՅՄԱՆՆԵՐ',
-    desc: "Վերջին անգամ թարմացվել է 23.05.2025թ.\n" +
+    title: 'ԲԱԺԱՆՈՐԴԱԳՐՈՒԹՅԱՆ ԵՎ ՕԳՏԱԳՈՐԾՄԱՆ ՊԱՅՄԱՆՆԵՐ',
+    desc: "Վերջին անգամ թարմացվել է 15.10.2025 թվականին\n" +
         "\n" +
-        "Սույն կանոնները հանդիսանում են «ՊՐՈԼԼԻՈ» ՍՊԸ-ի կողմից Ալիքի (chanel) ստեղծման և օգտագործման վերաբերյալ բաժանորդագրության պայմաններ (այսուհետ նաև` Պայմաններ):\n" +
+        "ՍՈՒՅՆ ԲԱԺԱՆՈՐԴԱԳՐՈՒԹՅԱՆ ՊԱՅՄԱՆՆԵՐԸ ԿԱՐԳԱՎՈՐՈՒՄ ԵՆ ԱԼԻՔԻ ԲԱԺԱՆՈՐԴԱԳՐՈՒԹՅԱՆ ԵՎ ՕԳՏԱԳՈՐԾՄԱՆ ՊԱՅՄԱՆՆԵՐԸ ՁԵՐ (ՕԳՏԱԳՈՐԾՈՂՆԵՐԻ) ԿՈՂՄԻՑ:\n" +
         "\n" +
-        "ԽՆԴՐՈՒՄ ԵՆՔ ՈՒՇԱԴԻՐ ԿԱՐԴԱԼ ԲԱԺԱՆՈՐԴԱԳՐՈՒԹՅԱՆ ՊԱՅՄԱՆՆԵՐԸ, ՔԱՆԻ ՈՐ ԴՐԱՆՔ ԿԱՐԳԱՎՈՐՈՒՄ ԵՆ ՁԵՐ ԵՎ ԻՐԱՎԱՏԻՐՈՋ, ԻՆՉՊԵՍ ՆԱԵՎ ՁԵՐ ԵՎ ՁԵՐ ԱԼԻՔԻՑ ՕԳՏՎՈՂՆԵՐԻ (ՕԳՏԱԳՈՐԾՈՂՆԵՐԻ) ՄԻՋԵՎ ԾԱԳԱԾ ՀԱՐԱԲԵՐՈՒԹՅՈՒՆՆԵՐԸ:\n" +
+        "ԱԼԻՔԻՆ ՄԻԱՆԱԼՈՒ ՆՊԱՏԱԿՈՎ ԿԱՏԱՐՎԱԾ ՑԱՆԿԱՑԱԾ ՈՒՂՂԱԿԻ ԿԱՄ ԱՆՈՒՂՂԱԿԻ ԳՈՐԾՈՂՈՒԹՅԱՆ ԴԵՊՔՈՒՄ ԴՈՒՔ ՀԱՍՏԱՏՈՒՄ ԵՔ, ՈՐ ԿԱՐԴԱՑԵԼ ԵՔ ՍՈՒՅՆ ՊԱՅՄԱՆՆԵՐԸ ԵՎ ՀԱՄԱՁԱՅՆ ԵՔ ԴՐԱՆՑ ՀԵՏ:\n" +
         "\n" +
-        "ՊԱՅՄԱՆՆԵՐՈՒՄ ԺԱՄԱՆԱԿ ԱՌ ԺԱՄԱՆԱԿ ՏԵՂԻ ԵՆ ՈՒՆԵՆՈՒՄ ՓՈՓՈԽՈՒԹՅՈՒՆՆԵՐ, ՈՐՈՆՑ ԵՎՍ ԿԱՐՈՂ ԵՔ ԾԱՆՈԹԱՆԱԼ ՀԱՐԹԱԿԻ ՄԻՋՈՑՈՎ։\n" +
-        "\n" +
-        "Ներկայացված պայմանները Ձեր կողմից համարվում են լրիվ և անվերապահ ընդունված, եթե Հարթակի միջոցով Ձեր կողմից կատարվել է ցանկացած այնպիսի գործողություն, որը միտված է Հարթակի ծառայություններից օգտվելուն (ներառյալ, բայց չսահմանափակվելով՝ տվյալների լրացում կամ Պայմաններին համաձայնություն):"
+        "ԵԹԵ ԴՈՒՔ ՀԱՄԱՁԱՅՆ ՉԵՔ ՊԱՅՄԱՆՆԵՐԻՆ, ԽՆԴՐՈՒՄ ԵՆՔ ԴԱԴԱՐԵՑՆԵԼ ԱԼԻՔԻ ՕԳՏԱԳՈՐԾՈՒՄԸ: ԱԼԻՔՈՒՄ ԳՏՆՎԵԼԸ, ՎՃԱՐՈՒՄ ԿԱՏԱՐԵԼԸ` ԱՆԿԱԽ ՁԵՐ ԿՈՂՄԻՑ ՀՐԱՊԱՐԱԿՈՒՄՆԵՐԻՆ ԾԱՆՈԹԱՆԱԼՈՒ, ԱԼԻՔԻՆ ՉՀԵՏԵՎԵԼՈՒ ՀԱՆԳԱՄԱՆՔԻՑ, ՓԱՍՏՈՒՄ ԵՆ ՁԵՐ ԿՈՂՄԻՑ ՊԱՅՄԱՆՆԵՐԻ ԱՆՎԵՐԱՊԱՀ ԸՆԴՈՒՆՈՒՄԸ (ՕՖԵՐՏԱՅԻ ԱԿՑԵՊՏԱՎՈՐՈՒՄԸ):\n"
 }
 
 const pageContainerDefaultClass =

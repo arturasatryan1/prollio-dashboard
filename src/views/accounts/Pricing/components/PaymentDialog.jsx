@@ -5,7 +5,7 @@ import Segment from '@/components/ui/Segment'
 import classNames from '@/utils/classNames'
 import sleep from '@/utils/sleep'
 import {usePricingStore} from '../store/pricingStore'
-import {TbCheck} from 'react-icons/tb'
+import {TbCheck, TbCreditCardOff} from 'react-icons/tb'
 import {NumericFormat,} from 'react-number-format'
 import {Link} from 'react-router'
 import useTranslation from "@/utils/hooks/useTranslation.js";
@@ -14,7 +14,7 @@ import {Controller, useForm} from "react-hook-form";
 import {Checkbox, Form} from "@/components/ui/index.js";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
-import {submitExpertCheckout} from "@/services/CheckoutService.js";
+import {apiCheckPaymentStatus, submitExpertCheckout} from "@/services/CheckoutService.js";
 import toast from "@/components/ui/toast/index.js";
 import Notification from "@/components/ui/Notification/index.jsx";
 import {useSessionUser} from "@/store/authStore.js";
@@ -22,8 +22,8 @@ import {apiGetSettingsProfile} from "@/services/AccontsService.js";
 
 const paymentMethods = [
     {id: 'arca', label: 'Card', logo: 'arca-logo.jpg'},
-    {id: 'idram', label: 'IDram', logo: 'idram.webp'},
-    {id: 'telcell', label: 'TelCell', logo: 'telcell-logo.jpg'},
+    // {id: 'idram', label: 'IDram', logo: 'idram.webp'},
+    // {id: 'telcell', label: 'TelCell', logo: 'telcell-logo.jpg'},
 ]
 
 const validationSchema = z
@@ -38,6 +38,8 @@ const validationSchema = z
 const PaymentDialog = () => {
     const [loading, setLoading] = useState(false)
     const [paymentSuccessful, setPaymentSuccessful] = useState(false)
+    const [paymentFailed, setPaymentFailed] = useState(false)
+    const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
 
     const {t} = useTranslation(false)
 
@@ -68,6 +70,8 @@ const PaymentDialog = () => {
         reset()
         setSelectedPlan({})
         setPaymentSuccessful(false)
+        setPaymentFailed(false)
+        setPaymentErrorMessage('')
     }
 
     const handlePaymentChange = (paymentCycle) => {
@@ -86,21 +90,75 @@ const PaymentDialog = () => {
                 plan_id: selectedPlan.id,
                 ...values
             })
+            if (result && result.basic) {
+                setLoading(false);
+                setPaymentSuccessful(true)
 
-            if (result) {
                 const res = await apiGetSettingsProfile()
+
                 if (res) {
                     setUser(res)
                 }
+
+                return ;
             }
 
-            setPaymentSuccessful(true)
+            if (result && !result?.error && result.formUrl) {
+                const popup = window.open(
+                    result.formUrl,
+                    'paymentWindow',
+                    'width=500,height=600'
+                );
+
+                const popupCheckInterval = setInterval(() => {
+                    if (!popup || popup.closed) {
+                        clearInterval(popupCheckInterval);
+                        clearInterval(checkPaymentStatusInterval);
+                        setLoading(false);
+                    }
+                }, 500);
+
+                const checkPaymentStatusInterval = setInterval(async () => {
+                    const transaction = await apiCheckPaymentStatus({
+                        orderId: result.orderId
+                    })
+
+                    if (!transaction) {
+                        clearInterval(checkPaymentStatusInterval);
+                        clearInterval(popupCheckInterval);
+                        popup.close();
+                        setLoading(false);
+                    }
+
+                    if (transaction.status === 'completed') {
+                        clearInterval(checkPaymentStatusInterval);
+                        clearInterval(popupCheckInterval);
+                        popup.close();
+                        setLoading(false);
+                        setPaymentSuccessful(true)
+
+                        const res = await apiGetSettingsProfile()
+
+                        if (res) {
+                            setUser(res)
+                        }
+
+                    } else if (transaction.status === 'failed') {
+                        clearInterval(checkPaymentStatusInterval);
+                        clearInterval(popupCheckInterval);
+                        popup.close();
+                        setLoading(false);
+                        setPaymentFailed(true)
+                        setPaymentErrorMessage(transaction.description)
+                    }
+
+                }, 2000);
+            }
         } catch (errors) {
             toast.push(
                 <Notification type="danger">{errors?.response?.data?.message || errors.toString()}</Notification>,
                 {placement: 'top-center'},
             )
-        } finally {
             setLoading(false)
         }
     }
@@ -112,7 +170,7 @@ const PaymentDialog = () => {
             onClose={handleDialogClose}
             onRequestClose={handleDialogClose}
         >
-            {paymentSuccessful ? (
+            {paymentSuccessful && (
                 <>
                     <div className="text-center mt-6 mb-2">
                         <div className="inline-flex rounded-full p-5 bg-success">
@@ -138,7 +196,36 @@ const PaymentDialog = () => {
                         </div>
                     </div>
                 </>
-            ) : (
+            )}
+            {paymentFailed && (
+                <>
+                    <div className="text-center mt-6 mb-2">
+                        <div className="inline-flex rounded-full p-5 bg-error">
+                            <TbCreditCardOff className="text-5xl text-white"/>
+                        </div>
+                        <div className="mt-6">
+                            <h4>{t("Payment failed")}</h4>
+                            <p className="text-base max-w-[400px] mx-auto mt-4 leading-relaxed">
+                                {t(paymentErrorMessage)}
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 gap-2 mt-8">
+                            {/*<Button block onClick={handleManageSubscription}>*/}
+                            {/*    {t('Manage subscription')}*/}
+                            {/*</Button>*/}
+                            <Button
+                                block
+                                variant="solid"
+                                onClick={handleDialogClose}
+                            >
+                                {t('Close')}
+                            </Button>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {(!paymentSuccessful && !paymentFailed) && (
                 <Form onSubmit={handleSubmit(handlePay)}>
                     <h4>{t('Plan')} {' '} {t(selectedPlan.name)}</h4>
                     {selectedPlan.name === 'basic' && (

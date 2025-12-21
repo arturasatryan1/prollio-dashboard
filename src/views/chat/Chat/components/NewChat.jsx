@@ -292,7 +292,7 @@ const NewChat = ({onClose}) => {
                             <div className="mb-6">
                                 <ScrollBar
                                     className={classNames(
-                                        'overflow-y-auto h-80',
+                                        'overflow-y-auto',
                                     )}
                                 >
                                     <div className="h-full pr-3 flex flex-col gap-2">

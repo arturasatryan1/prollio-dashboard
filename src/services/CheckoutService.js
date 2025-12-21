@@ -24,3 +24,11 @@ export async function apiSubmitToolPayment(data) {
         data,
     })
 }
+export async function apiCheckPaymentStatus(params) {
+    return ApiService.fetchDataWithAxios({
+        url: endpointConfig.checkPaymentStatus,
+        method: 'get',
+        params,
+    })
+}
+

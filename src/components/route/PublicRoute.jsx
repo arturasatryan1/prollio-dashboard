@@ -7,7 +7,15 @@ const { authenticatedEntryPath } = appConfig
 const PublicRoute = () => {
     const { authenticated } = useAuth()
 
-    return authenticated ? <Navigate to={authenticatedEntryPath} /> : <Outlet />
+    const pathName = location.pathname
+
+    const allowedPaths = ['/terms', '/checkout']
+
+    if (authenticated && !allowedPaths.includes(pathName)) {
+        return <Navigate to={authenticatedEntryPath} />
+    }
+
+    return <Outlet />
 }
 
 export default PublicRoute

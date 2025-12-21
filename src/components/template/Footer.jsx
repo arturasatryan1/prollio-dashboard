@@ -1,8 +1,9 @@
 import Container from '@/components/shared/Container'
 import classNames from '@/utils/classNames'
-import { APP_NAME } from '@/constants/app.constant'
-import { PAGE_CONTAINER_GUTTER_X } from '@/constants/theme.constant'
+import {APP_NAME} from '@/constants/app.constant'
+import {PAGE_CONTAINER_GUTTER_X} from '@/constants/theme.constant'
 import useTranslation from "@/utils/hooks/useTranslation.js";
+import {Link} from "react-router";
 
 const FooterContent = () => {
 
@@ -12,32 +13,30 @@ const FooterContent = () => {
         <div className="flex items-center justify-between flex-auto w-full">
             <span>
                 {t('Copyright')}{' '}
-                 &copy;{`${new Date().getFullYear()}`}{' '}
+                &copy;{`${new Date().getFullYear()}`}{' '}
                 <span className="font-semibold">{`${APP_NAME}`}</span>{' '}
                 {t('All rights reserved.')}
             </span>
             <div className="">
-                <a
+                <Link
                     className="text-gray"
-                    href="/#"
-                    onClick={(e) => e.preventDefault()}
+                    to="/terms"
                 >
                     {t('Term & Conditions')}
-                </a>
+                </Link>
                 <span className="mx-2 text-muted"> | </span>
-                <a
+                <Link
                     className="text-gray"
-                    href="/#"
-                    onClick={(e) => e.preventDefault()}
+                    to="/terms"
                 >
                     {t('Privacy & Policy')}
-                </a>
+                </Link>
             </div>
         </div>
     )
 }
 
-export default function Footer({ pageContainerType = 'contained', className }) {
+export default function Footer({pageContainerType = 'contained', className}) {
     return (
         <footer
             className={classNames(
@@ -47,10 +46,10 @@ export default function Footer({ pageContainerType = 'contained', className }) {
         >
             {pageContainerType === 'contained' ? (
                 <Container>
-                    <FooterContent />
+                    <FooterContent/>
                 </Container>
             ) : (
-                <FooterContent />
+                <FooterContent/>
             )}
         </footer>
     )

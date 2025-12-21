@@ -16,11 +16,11 @@ const Guide = () => {
             title: t('guide.connect_channel.title'),
             component: <ChannelGuide/>,
         },
-        {
-            mdName: 'tm2',
-            title: t('guide.create_bot.title'),
-            component: <BotGuide/>,
-        },
+        // {
+        //     mdName: 'tm2',
+        //     title: t('guide.create_bot.title'),
+        //     component: <BotGuide/>,
+        // },
     ];
 
     const demoHeader = {

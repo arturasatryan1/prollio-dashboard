@@ -26,16 +26,16 @@ const ToolPaymentDialog = () => {
 
             <div class="space-y-4 text-sm text-gray-700">
                 <p>
-                    🤖 <strong>Lead Bot</strong> is your personal Telegram assistant designed to help you grow your
+                    🤖 <strong>Lead Bot</strong> is your personal assistant designed to help you grow your
                     audience and increase conversions. It collects leads, tracks who visited your events, and lets you
                     follow up — even if they didn’t buy.
                 </p>
 
                 <p>
-                    You can either <strong>connect your existing Telegram bot</strong> or request Prollio to create a
+                    You can either <strong>connect your existing bot</strong> or request Prollio to create a
                     new one for you.
-                    If you already have a bot from
-                    <a href="https://t.me/BotFather" target="_blank" className="text-blue-600 underline">BotFather</a>,
+                    If you already have a bot 
+                    {/*<a href="https://t.me/BotFather" target="_blank" className="text-blue-600 underline">BotFather</a>,*/}
                     you can activate it instantly by providing your bot token.
                 </p>
 
