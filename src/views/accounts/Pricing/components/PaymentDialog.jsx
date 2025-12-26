@@ -120,7 +120,8 @@ const PaymentDialog = () => {
 
                 const checkPaymentStatusInterval = setInterval(async () => {
                     const transaction = await apiCheckPaymentStatus({
-                        orderId: result.orderId
+                        orderId: result.orderId,
+                        action: 'transaction'
                     })
 
                     if (!transaction) {

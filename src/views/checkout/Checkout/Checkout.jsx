@@ -17,7 +17,7 @@ import Loading from "@/components/shared/Loading.jsx";
 import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import {Link} from "react-router";
-import {submitCheckout} from "@/services/CheckoutService.js";
+import {apiCheckPaymentStatus, apiHandlePaymentSuccess, submitCheckout} from "@/services/CheckoutService.js";
 import toast from "@/components/ui/toast/index.js";
 import Notification from "@/components/ui/Notification/index.jsx";
 import useTranslation from "@/utils/hooks/useTranslation.js";
@@ -39,6 +39,10 @@ const validationSchema = z
 const Checkout = (props) => {
     const searchParams = new URLSearchParams(location.search)
     const [isSubmitting, setSubmitting] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [paymentSuccessful, setPaymentSuccessful] = useState(false)
+    const [paymentFailed, setPaymentFailed] = useState(false)
+    const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
 
     const {t} = useTranslation()
 
@@ -83,9 +87,56 @@ const Checkout = (props) => {
         try {
             const result = await submitCheckout(values)
 
-            if (result) {
-                window.location.href = result.url;
+            if (result && !result?.error && result.formUrl) {
+                const popup = window.open(
+                    result.formUrl,
+                    'paymentWindow',
+                    'width=500,height=600'
+                );
+
+                const popupCheckInterval = setInterval(() => {
+                    if (!popup || popup.closed) {
+                        clearInterval(popupCheckInterval);
+                        clearInterval(checkPaymentStatusInterval);
+                        setSubmitting(false);
+                    }
+                }, 500);
+
+                const checkPaymentStatusInterval = setInterval(async () => {
+                    const payment = await apiCheckPaymentStatus({
+                        orderId: result.orderId,
+                        action: 'payment',
+                    })
+
+                    if (!payment) {
+                        clearInterval(checkPaymentStatusInterval);
+                        clearInterval(popupCheckInterval);
+                        popup.close();
+                        setSubmitting(false);
+                    } else if (payment.status === 'completed') {
+                        clearInterval(checkPaymentStatusInterval);
+                        clearInterval(popupCheckInterval);
+                        popup.close();
+
+                        const handlePaymentSuccessResult = await apiHandlePaymentSuccess({
+                            uuid: payment.uuid
+                        })
+
+                        if (handlePaymentSuccessResult && handlePaymentSuccessResult.redirect) {
+                            window.location.href = handlePaymentSuccessResult.redirect;
+                        }
+
+                    } else if (payment.status === 'failed') {
+                        clearInterval(checkPaymentStatusInterval);
+                        clearInterval(popupCheckInterval);
+                        popup.close();
+                        setSubmitting(false);
+                        setPaymentFailed(true)
+                        setPaymentErrorMessage(payment.description)
+                    }
+                }, 2000);
             }
+
         } catch (errors) {
             toast.push(
                 <Notification type="danger">
@@ -93,7 +144,7 @@ const Checkout = (props) => {
                 </Notification>,
                 {placement: 'top-center'},
             )
-        } finally {
+
             setSubmitting(false)
         }
     }

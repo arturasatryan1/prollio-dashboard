@@ -34,7 +34,7 @@ const ToolPaymentDialog = () => {
                 <p>
                     You can either <strong>connect your existing bot</strong> or request Prollio to create a
                     new one for you.
-                    If you already have a bot 
+                    If you already have a bot
                     {/*<a href="https://t.me/BotFather" target="_blank" className="text-blue-600 underline">BotFather</a>,*/}
                     you can activate it instantly by providing your bot token.
                 </p>
