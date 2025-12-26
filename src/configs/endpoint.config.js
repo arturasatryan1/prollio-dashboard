@@ -11,8 +11,7 @@ const endpointConfig = {
     checkout: '/checkout',
     expertCheckout: '/expert-checkout',
     toolCheckout: '/tool-checkout',
-    checkPaymentStatus: '/check-payment-status',
-    handlePaymentSuccess: '/handle-payment-success',
+    checkPaymentStatus: '/check-payment-status'
 }
 
 export default endpointConfig

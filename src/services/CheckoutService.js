@@ -31,11 +31,4 @@ export async function apiCheckPaymentStatus(params) {
         params,
     })
 }
-export async function apiHandlePaymentSuccess(params) {
-    return ApiService.fetchDataWithAxios({
-        url: endpointConfig.handlePaymentSuccess,
-        method: 'get',
-        params,
-    })
-}
 

@@ -6,7 +6,7 @@ import {Form, FormItem} from "@/components/ui/Form/index.jsx";
 import {Controller, useForm} from "react-hook-form";
 import Input from "@/components/ui/Input/index.jsx";
 import Button from "@/components/ui/Button/index.jsx";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 import {Card, Checkbox} from "@/components/ui/index.js";
@@ -17,7 +17,7 @@ import Loading from "@/components/shared/Loading.jsx";
 import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import {Link} from "react-router";
-import {apiCheckPaymentStatus, apiHandlePaymentSuccess, submitCheckout} from "@/services/CheckoutService.js";
+import {submitCheckout} from "@/services/CheckoutService.js";
 import toast from "@/components/ui/toast/index.js";
 import Notification from "@/components/ui/Notification/index.jsx";
 import useTranslation from "@/utils/hooks/useTranslation.js";
@@ -48,6 +48,22 @@ const Checkout = (props) => {
 
     const memberId = searchParams.get('mid');
     const eventId = searchParams.get('eid');
+    const status = searchParams.get('status');
+
+    useEffect(() => {
+        if (status === 'failed') {
+            toast.push(
+                <Notification type="danger">
+                    {t('Payment failed. Please try again.')}
+                </Notification>,
+                {placement: 'top-center'}
+            );
+
+            const url = new URL(window.location);
+            url.searchParams.delete('status');
+            window.history.replaceState(null, '', url);
+        }
+    }, [status, t]);
 
     const {data: event, isLoading: isEventLoading} = useSWR(
         [`/api/events`, {id: eventId}],
@@ -84,69 +100,27 @@ const Checkout = (props) => {
     const submit = async (values) => {
         setSubmitting(true)
 
-        try {
-            const result = await submitCheckout(values)
-
-            if (result && !result?.error && result.formUrl) {
-                const popup = window.open(
-                    result.formUrl,
-                    'paymentWindow',
-                    'width=500,height=600'
-                );
-
-                const popupCheckInterval = setInterval(() => {
-                    if (!popup || popup.closed) {
-                        clearInterval(popupCheckInterval);
-                        clearInterval(checkPaymentStatusInterval);
-                        setSubmitting(false);
-                    }
-                }, 500);
-
-                const checkPaymentStatusInterval = setInterval(async () => {
-                    const payment = await apiCheckPaymentStatus({
-                        orderId: result.orderId,
-                        action: 'payment',
-                    })
-
-                    if (!payment) {
-                        clearInterval(checkPaymentStatusInterval);
-                        clearInterval(popupCheckInterval);
-                        popup.close();
-                        setSubmitting(false);
-                    } else if (payment.status === 'completed') {
-                        clearInterval(checkPaymentStatusInterval);
-                        clearInterval(popupCheckInterval);
-                        popup.close();
-
-                        const handlePaymentSuccessResult = await apiHandlePaymentSuccess({
-                            uuid: payment.uuid
-                        })
-
-                        if (handlePaymentSuccessResult && handlePaymentSuccessResult.redirect) {
-                            window.location.href = handlePaymentSuccessResult.redirect;
-                        }
-
-                    } else if (payment.status === 'failed') {
-                        clearInterval(checkPaymentStatusInterval);
-                        clearInterval(popupCheckInterval);
-                        popup.close();
-                        setSubmitting(false);
-                        setPaymentFailed(true)
-                        setPaymentErrorMessage(payment.description)
-                    }
-                }, 2000);
+        submitCheckout(values).then((res) => {
+            if (res && !res?.error && res.formUrl) {
+                window.location.href = res.formUrl;
+            } else {
+                toast.push(
+                    <Notification type="danger">
+                        {t("Something went wrong") || errors.toString()}
+                    </Notification>,
+                    {placement: 'top-center'},
+                )
             }
-
-        } catch (errors) {
+        }).catch(error => {
             toast.push(
                 <Notification type="danger">
-                    {t(errors?.response?.data?.message) || errors.toString()}
+                    {t(error?.response?.data?.message) || errors.toString()}
                 </Notification>,
                 {placement: 'top-center'},
             )
-
+        }).finally(() => {
             setSubmitting(false)
-        }
+        })
     }
 
     return (
