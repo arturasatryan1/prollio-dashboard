@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Button from '@/components/ui/Button'
 import Dialog from '@/components/ui/Dialog'
 import Segment from '@/components/ui/Segment'
@@ -14,9 +14,7 @@ import {Controller, useForm} from "react-hook-form";
 import {Checkbox, Form} from "@/components/ui/index.js";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
-import {apiCheckPaymentStatus, submitExpertCheckout} from "@/services/CheckoutService.js";
-import toast from "@/components/ui/toast/index.js";
-import Notification from "@/components/ui/Notification/index.jsx";
+import {submitExpertCheckout} from "@/services/CheckoutService.js";
 import {useSessionUser} from "@/store/authStore.js";
 import {apiGetSettingsProfile} from "@/services/AccontsService.js";
 
@@ -36,12 +34,48 @@ const validationSchema = z
     })
 
 const PaymentDialog = () => {
+    const searchParams = new URLSearchParams(location.search)
+
     const [loading, setLoading] = useState(false)
     const [paymentSuccessful, setPaymentSuccessful] = useState(false)
     const [paymentFailed, setPaymentFailed] = useState(false)
-    const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
+    const [paymentErrorMessage, setPaymentErrorMessage] = useState('Payment failed')
+    const [selectedMethod, setSelectedMethod] = useState('arca')
+
+    const {paymentDialog, setPaymentDialog, selectedPlan, setSelectedPlan} = usePricingStore()
+    const setUser = useSessionUser((state) => state.setUser)
+
+
+    const status = searchParams.get('status');
+    const errorMessage = searchParams.get('errorMessage');
 
     const {t} = useTranslation(false)
+
+    useEffect(() => {
+        if (!status) return;
+
+        const run = async () => {
+            if (status === 'failed') {
+                setPaymentFailed(true)
+                setPaymentErrorMessage(errorMessage)
+            } else if (status === 'completed') {
+                setPaymentSuccessful(true)
+
+                const res = await apiGetSettingsProfile()
+                if (res) {
+                    setUser(res)
+                }
+            }
+
+            const url = new URL(window.location)
+            url.searchParams.delete('status')
+            url.searchParams.delete('errorMessage')
+            window.history.replaceState(null, '', url)
+        }
+
+        run()
+    }, [status, errorMessage]);
+
 
     const {
         register,
@@ -57,12 +91,6 @@ const PaymentDialog = () => {
         resolver: zodResolver(validationSchema),
     })
 
-
-    const {paymentDialog, setPaymentDialog, selectedPlan, setSelectedPlan} = usePricingStore()
-    const setUser = useSessionUser((state) => state.setUser)
-
-    const [selectedMethod, setSelectedMethod] = useState('arca')
-
     const handleDialogClose = async () => {
         reset()
         setPaymentDialog(false)
@@ -71,211 +99,97 @@ const PaymentDialog = () => {
         setSelectedPlan({})
         setPaymentSuccessful(false)
         setPaymentFailed(false)
-        setPaymentErrorMessage('')
-    }
-
-    const handlePaymentChange = (paymentCycle) => {
-        setSelectedPlan({
-            ...selectedPlan,
-            paymentCycle,
-        })
     }
 
     const handlePay = async (values) => {
         setLoading(true)
 
-        try {
-            const result = await submitExpertCheckout({
-                payment_method: selectedMethod,
-                plan_id: selectedPlan.id,
-                ...values
-            })
-            if (result && result.basic) {
-                setLoading(false);
+        submitExpertCheckout({
+            payment_method: selectedMethod,
+            plan_id: selectedPlan.id,
+            ...values
+        }).then(async (res) => {
+            if (res?.basic) {
                 setPaymentSuccessful(true)
-
                 const res = await apiGetSettingsProfile()
 
                 if (res) {
+                    setPaymentDialog(false)
                     setUser(res)
                 }
 
-                return ;
+            } else if (!res?.error && res.formUrl) {
+                window.location.href = res.formUrl;
+            } else {
+                setPaymentFailed(true);
+                setPaymentErrorMessage(errors.toString());
             }
-
-            if (result && !result?.error && result.formUrl) {
-                const popup = window.open(
-                    result.formUrl,
-                    'paymentWindow',
-                    'width=500,height=600'
-                );
-
-                const popupCheckInterval = setInterval(() => {
-                    if (!popup || popup.closed) {
-                        clearInterval(popupCheckInterval);
-                        clearInterval(checkPaymentStatusInterval);
-                        setLoading(false);
-                    }
-                }, 500);
-
-                const checkPaymentStatusInterval = setInterval(async () => {
-                    const transaction = await apiCheckPaymentStatus({
-                        orderId: result.orderId,
-                        action: 'transaction'
-                    })
-
-                    if (!transaction) {
-                        clearInterval(checkPaymentStatusInterval);
-                        clearInterval(popupCheckInterval);
-                        popup.close();
-                        setLoading(false);
-                    }
-
-                    if (transaction.status === 'completed') {
-                        clearInterval(checkPaymentStatusInterval);
-                        clearInterval(popupCheckInterval);
-                        popup.close();
-                        setLoading(false);
-                        setPaymentSuccessful(true)
-
-                        const res = await apiGetSettingsProfile()
-
-                        if (res) {
-                            setUser(res)
-                        }
-
-                    } else if (transaction.status === 'failed') {
-                        clearInterval(checkPaymentStatusInterval);
-                        clearInterval(popupCheckInterval);
-                        popup.close();
-                        setLoading(false);
-                        setPaymentFailed(true)
-                        setPaymentErrorMessage(transaction.description)
-                    }
-
-                }, 2000);
-            }
-        } catch (errors) {
-            toast.push(
-                <Notification type="danger">{errors?.response?.data?.message || errors.toString()}</Notification>,
-                {placement: 'top-center'},
-            )
-            setLoading(false)
-        }
+        }).catch((error) => {
+            setPaymentFailed(true);
+            setPaymentErrorMessage(error?.response?.data?.message);
+        }).finally(() => {
+            setLoading(false);
+        })
     }
 
     return (
-        <Dialog
-            isOpen={paymentDialog}
-            closable={!paymentSuccessful}
-            onClose={handleDialogClose}
-            onRequestClose={handleDialogClose}
-        >
-            {paymentSuccessful && (
-                <>
-                    <div className="text-center mt-6 mb-2">
-                        <div className="inline-flex rounded-full p-5 bg-success">
-                            <TbCheck className="text-5xl text-white"/>
-                        </div>
-                        <div className="mt-6">
-                            <h4>{t("You're all set!")}</h4>
-                            <p className="text-base max-w-[400px] mx-auto mt-4 leading-relaxed">
-                                {t('Your subscription is now active. You Will receive a confirmation email shortly')}
-                            </p>
-                        </div>
-                        <div className="grid grid-cols-1 gap-2 mt-8">
-                            {/*<Button block onClick={handleManageSubscription}>*/}
-                            {/*    {t('Manage subscription')}*/}
-                            {/*</Button>*/}
-                            <Button
-                                block
-                                variant="solid"
-                                onClick={handleDialogClose}
-                            >
-                                {t('Close')}
-                            </Button>
-                        </div>
-                    </div>
-                </>
-            )}
-            {paymentFailed && (
-                <>
-                    <div className="text-center mt-6 mb-2">
-                        <div className="inline-flex rounded-full p-5 bg-error">
-                            <TbCreditCardOff className="text-5xl text-white"/>
-                        </div>
-                        <div className="mt-6">
-                            <h4>{t("Payment failed")}</h4>
-                            <p className="text-base max-w-[400px] mx-auto mt-4 leading-relaxed">
-                                {t(paymentErrorMessage)}
-                            </p>
-                        </div>
-                        <div className="grid grid-cols-1 gap-2 mt-8">
-                            {/*<Button block onClick={handleManageSubscription}>*/}
-                            {/*    {t('Manage subscription')}*/}
-                            {/*</Button>*/}
-                            <Button
-                                block
-                                variant="solid"
-                                onClick={handleDialogClose}
-                            >
-                                {t('Close')}
-                            </Button>
-                        </div>
-                    </div>
-                </>
-            )}
-
-            {(!paymentSuccessful && !paymentFailed) && (
-                <Form onSubmit={handleSubmit(handlePay)}>
-                    <h4>{t('Plan')} {' '} {t(selectedPlan.name)}</h4>
-                    {selectedPlan.name === 'basic' && (
-                        <div className={'mt-6'}>
-                            <p>{t("The Basic Plan is free and gives you the basics to explore the platform. When you're ready for more tools and flexibility, you can always upgrade.")}</p>
-                        </div>
-                    )}
-                    {selectedPlan.name !== 'basic' && (
-                        <div>
-                            <h5 className={`mt-5 mb-3`}>{t('Select Payment Method')}</h5>
-                            <div>
-                                <Segment
-                                    defaultValue={selectedMethod}
-                                    className="gap-4 flex bg-transparent"
-                                    onChange={(value) => setSelectedMethod(value)}
-                                >
-                                    {paymentMethods.map((method) => (
-                                        <Segment.Item key={method.id} value={method.id}>
-                                            {({active, onSegmentItemClick}) => (
-                                                <div
-                                                    className={classNames(
-                                                        'flex items-center relative border rounded-xl border-gray-300 dark:border-gray-600 py-5 px-4 select-none cursor-pointer',
-                                                        active
-                                                            ? 'ring-primary border-primary bg-white dark:bg-gray-700'
-                                                            : 'ring-transparent bg-gray-100 dark:bg-gray-600'
-                                                    )}
-                                                    onClick={onSegmentItemClick}
-                                                >
-                                                    <img
-                                                        className="h-[40px] w-[40px]"
-                                                        src={`/img/others/${method.logo}`}
-                                                        alt="Google sign in"
-                                                    />
-                                                    <span
-                                                        className="text-base font-medium ml-2 hidden lg:block">{t(method.label)}</span>
-                                                    {active &&
-                                                        <TbCheck size={25}
-                                                                 className="text-primary absolute right-1 top-0"/>}
-                                                </div>
-                                            )}
-                                        </Segment.Item>
-                                    ))}
-                                </Segment>
-
+        <>
+            <Dialog
+                isOpen={paymentDialog}
+                closable={!paymentSuccessful}
+                onClose={handleDialogClose}
+                onRequestClose={handleDialogClose}
+            >
+                {(!paymentSuccessful && !paymentFailed) && (
+                    <Form onSubmit={handleSubmit(handlePay)}>
+                        <h4>{t('Plan')} {' '} {t(selectedPlan.name)}</h4>
+                        {selectedPlan.name === 'basic' && (
+                            <div className={'mt-6'}>
+                                <p>{t("The Basic Plan is free and gives you the basics to explore the platform. When you're ready for more tools and flexibility, you can always upgrade.")}</p>
                             </div>
-                            <div className="mt-6 flex flex-col items-end">
-                                <h4>
-                                    <span>{t('Amount')}: </span>
-                                    <span>
+                        )}
+                        {selectedPlan.name !== 'basic' && (
+                            <div>
+                                <h5 className={`mt-5 mb-3`}>{t('Select Payment Method')}</h5>
+                                <div>
+                                    <Segment
+                                        defaultValue={selectedMethod}
+                                        className="gap-4 flex bg-transparent"
+                                        onChange={(value) => setSelectedMethod(value)}
+                                    >
+                                        {paymentMethods.map((method) => (
+                                            <Segment.Item key={method.id} value={method.id}>
+                                                {({active, onSegmentItemClick}) => (
+                                                    <div
+                                                        className={classNames(
+                                                            'flex items-center relative border rounded-xl border-gray-300 dark:border-gray-600 py-5 px-4 select-none cursor-pointer',
+                                                            active
+                                                                ? 'ring-primary border-primary bg-white dark:bg-gray-700'
+                                                                : 'ring-transparent bg-gray-100 dark:bg-gray-600'
+                                                        )}
+                                                        onClick={onSegmentItemClick}
+                                                    >
+                                                        <img
+                                                            className="h-[40px] w-[40px]"
+                                                            src={`/img/others/${method.logo}`}
+                                                            alt="Google sign in"
+                                                        />
+                                                        <span
+                                                            className="text-base font-medium ml-2 hidden lg:block">{t(method.label)}</span>
+                                                        {active &&
+                                                            <TbCheck size={25}
+                                                                     className="text-primary absolute right-1 top-0"/>}
+                                                    </div>
+                                                )}
+                                            </Segment.Item>
+                                        ))}
+                                    </Segment>
+
+                                </div>
+                                <div className="mt-6 flex flex-col items-end">
+                                    <h4>
+                                        <span>{t('Amount')}: </span>
+                                        <span>
                                 <NumericFormat
                                     displayType="text"
                                     value={selectedPlan.price}
@@ -283,53 +197,101 @@ const PaymentDialog = () => {
                                     thousandSeparator={true}
                                 />
                             </span>
-                                </h4>
-                                {/*<div className="max-w-[350px] ltr:text-right rtl:text-left leading-none mt-2 opacity-80">*/}
-                                {/*    <small>*/}
-                                {/*        {t('checkout_agreement', {*/}
-                                {/*            price: selectedPlan.price*/}
-                                {/*        })}*/}
-                                {/*    </small>*/}
-                                {/*</div>*/}
+                                    </h4>
+                                    {/*<div className="max-w-[350px] ltr:text-right rtl:text-left leading-none mt-2 opacity-80">*/}
+                                    {/*    <small>*/}
+                                    {/*        {t('checkout_agreement', {*/}
+                                    {/*            price: selectedPlan.price*/}
+                                    {/*        })}*/}
+                                    {/*    </small>*/}
+                                    {/*</div>*/}
+                                </div>
                             </div>
+                        )}
+
+                        <div className={'mt-5'}>
+                            <FormItem
+                                invalid={Boolean(errors.agree)}
+                                errorMessage={t(errors.agree?.message)}
+                            >
+                                <Controller
+                                    name="agree"
+                                    control={control}
+                                    render={({field}) => {
+                                        return (
+                                            <Checkbox
+                                                {...field}
+                                            >
+                                                <span className={'text-xs'}>{t('I agree with')} {''}</span>
+                                                <Link to={`/terms`} className={'underline'}>
+                                                    <span className={'text-xs'}>{t('Terms of Use')}</span>
+                                                </Link>
+                                            </Checkbox>
+                                        )
+                                    }}
+                                />
+                            </FormItem>
+                        </div>
+                        <div className="mt-6">
+                            <Button
+                                block
+                                variant="solid"
+                                loading={loading}
+                            >
+                                {t(selectedPlan.name === 'basic' ? 'Activate' : 'Pay')}
+                            </Button>
+                        </div>
+                    </Form>
+                )}
+            </Dialog>
+            <Dialog
+                isOpen={paymentSuccessful || paymentFailed}
+                closable={false}
+            >
+                <div className="text-center mt-6 mb-2">
+                    {paymentSuccessful && (
+                        <div className="inline-flex rounded-full p-5 bg-success">
+                            <TbCheck className="text-5xl text-white"/>
                         </div>
                     )}
 
-                    <div className={'mt-5'}>
-                        <FormItem
-                            invalid={Boolean(errors.agree)}
-                            errorMessage={t(errors.agree?.message)}
-                        >
-                            <Controller
-                                name="agree"
-                                control={control}
-                                render={({field}) => {
-                                    return (
-                                        <Checkbox
-                                            {...field}
-                                        >
-                                            <span className={'text-xs'}>{t('I agree with')} {''}</span>
-                                            <Link to={`/terms`} className={'underline'}>
-                                                <span className={'text-xs'}>{t('Terms of Use')}</span>
-                                            </Link>
-                                        </Checkbox>
-                                    )
-                                }}
-                            />
-                        </FormItem>
-                    </div>
-                    <div className="mt-6">
-                        <Button
-                            block
-                            variant="solid"
-                            loading={loading}
-                        >
-                            {t(selectedPlan.name === 'basic' ? 'Activate' : 'Pay')}
-                        </Button>
-                    </div>
-                </Form>
-            )}
-        </Dialog>
+                    {paymentFailed && (
+                        <div className="inline-flex rounded-full p-5 bg-error">
+                            <TbCreditCardOff className="text-5xl text-white"/>
+                        </div>
+                    )}
+
+                    {paymentSuccessful && (
+                        <div className="mt-6">
+                            <h4>{t("You're all set!")}</h4>
+                            <p className="text-base max-w-[400px] mx-auto mt-4">
+                                {t('Your subscription is now active. You Will receive a confirmation email shortly')}
+                            </p>
+                        </div>
+                    )}
+                    {paymentFailed && (
+                        <div className="mt-6">
+                            <h4>{t("Payment Filed!")}</h4>
+                            <p className="text-base max-w-[400px] mx-auto mt-4">
+                                {t(paymentErrorMessage)}
+                            </p>
+                        </div>
+                    )}
+
+                    <Button
+                        block
+                        variant="solid"
+                        className="mt-8"
+                        onClick={() => {
+                            setPaymentSuccessful(false)
+                            setPaymentFailed(false)
+                        }}
+                    >
+                        {t('Close')}
+                    </Button>
+                </div>
+            </Dialog>
+        </>
     )
 }
 

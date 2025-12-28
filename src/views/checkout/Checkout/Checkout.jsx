@@ -39,10 +39,6 @@ const validationSchema = z
 const Checkout = (props) => {
     const searchParams = new URLSearchParams(location.search)
     const [isSubmitting, setSubmitting] = useState(false)
-    const [loading, setLoading] = useState(false)
-    const [paymentSuccessful, setPaymentSuccessful] = useState(false)
-    const [paymentFailed, setPaymentFailed] = useState(false)
-    const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
 
     const {t} = useTranslation()
 
