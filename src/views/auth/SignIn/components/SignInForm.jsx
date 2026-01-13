@@ -71,7 +71,7 @@ const SignInForm = (props) => {
                             <Input
                                 type="email"
                                 placeholder={t('Email')}
-                                autoComplete="off"
+                                // autoComplete="off"
                                 {...field}
                             />
                         )}
