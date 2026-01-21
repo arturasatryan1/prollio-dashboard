@@ -50,21 +50,21 @@ const Plans = () => {
                     <div>
                         <div className="mb-2 flex items-center gap-2">
                             <h3>{t(plan.name)}</h3>
-                            {index === 1 && !subscription && (
+                            {(index === 1 && !subscription) && (
                                 <Tag className="rounded-full bg-green-200 font-bold">
                                     {t('Recommended')}
                                 </Tag>
                             )}
-                            {!user?.expert?.active && subscription?.plan_id === plan.id && (
+                            {(!user?.expert?.active && subscription?.plan_id === plan.id) && (
                                 <Tag className="rounded-full bg-green-200 font-bold">
                                     {t('Selected Plan')}
                                 </Tag>
                             )}
-                            {user?.expert?.active && subscription?.status === 'active' && subscription?.plan_id === plan.id && (
-                                <Tag className="rounded-full bg-green-200 font-bold">
-                                    {t('Current Plan')}
-                                </Tag>
-                            )}
+                            {user?.expert?.active === 1 && subscription?.status === 'active' && subscription?.plan_id === plan.id && (
+                                    <Tag className="rounded-full bg-green-200 font-bold">
+                                        {t('Current Plan')}
+                                    </Tag>
+                                )}
                         </div>
                         {/*<div className="">{t(plan.description)}</div>*/}
                         <div className="mt-4">

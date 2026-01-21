@@ -29,7 +29,7 @@ const MenuItem = (props) => {
         className,
     )
 
-    const hanldeOnClick = (e) => {
+    const handleOnClick = (e) => {
         if (onSelect) {
             onSelect(eventKey, e)
         }
@@ -40,7 +40,7 @@ const MenuItem = (props) => {
             ref={ref}
             className={menuItemClass}
             style={{ height: `${menuItemHeight}px`, ...style }}
-            onClick={hanldeOnClick}
+            onClick={handleOnClick}
             {...rest}
         >
             {dotIndent ? (

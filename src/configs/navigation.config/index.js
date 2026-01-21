@@ -77,7 +77,7 @@ const navigationConfig = [
                 translateKey: 'nav.calendar',
                 icon: 'calendar',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [ADMIN, USER],
+                authority: [USER],
                 subMenu: [],
             },
             {
@@ -164,7 +164,7 @@ const navigationConfig = [
                 translateKey: 'nav.pricing',
                 icon: 'pricing',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [ADMIN, USER],
+                authority: [USER],
                 meta: {
                     description: {
                         translateKey: 'nav.conceptsAccount.pricingDesc',

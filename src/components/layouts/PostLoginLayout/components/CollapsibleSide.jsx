@@ -55,11 +55,11 @@ const CollapsibleSide = ({ children }) => {
                                 <Alert type="warning" className="rounded-none px-8 py-2">
                                     {t('To start using Prollio and access your dashboard features, please activate your expert account by completing the payment for the subscription plan you selected.')}
                                     {' '}
-                                    {t('Go to')}{' '}
+                                    {/*{t('Go to')}{' '}*/}
                                     <Link to="/settings/pricing" className="text-blue-500 underline">
-                                        {t('Pricing')}
+                                        {t('here')}
                                     </Link>
-                                    {' '} {t('and activate')}
+                                    {' '} {t('and pay')}
                                 </Alert>
                             )}
                         {user?.expert && !user?.expert?.bank_account && (

@@ -12,7 +12,14 @@ const ChannelListActionTools = () => {
     const {t} = useTranslation()
 
     const {user} = useAuth()
-    const subscriptionPlan = user?.expert?.plan
+    const expert = user?.expert
+    const subscriptionPlan = expert?.plan
+
+    const disabled = expert && (
+        (subscriptionPlan?.name === 'basic' && itemListTotal >= 1) ||
+        (subscriptionPlan?.name === 'pro' && itemListTotal >= 15) ||
+        (!expert?.active)
+    )
 
     return (
         <div className="flex flex-col md:flex-row gap-3">
@@ -33,10 +40,7 @@ const ChannelListActionTools = () => {
                 variant="solid"
                 icon={<FaPlus className="text-xs"/>}
                 onClick={() => navigate('/support/guide')}
-                disabled={
-                    (subscriptionPlan?.name === 'basic' && itemListTotal >= 1) ||
-                    (subscriptionPlan?.name === 'pro' && itemListTotal >= 5)
-                }
+                disabled={disabled}
             >
                 {t('Connect Channel')}
             </Button>

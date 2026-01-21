@@ -2,10 +2,10 @@ import Tooltip from '@/components/ui/Tooltip'
 import Menu from '@/components/ui/Menu'
 import AuthorityCheck from '@/components/shared/AuthorityCheck'
 import VerticalMenuIcon from './VerticalMenuIcon'
-import { Link } from 'react-router'
+import {Link} from 'react-router'
 import Dropdown from '@/components/ui/Dropdown'
 
-const { MenuItem } = Menu
+const {MenuItem} = Menu
 
 const CollapsedItem = ({
     nav,
@@ -60,27 +60,36 @@ const DefaultItem = (props) => {
         indent,
         showIcon = true,
         userAuthority,
+        disabled = false,
         t,
     } = props
 
     return (
         <AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
-            <MenuItem key={nav.key} eventKey={nav.key} dotIndent={indent}>
-                <Link
-                    to={nav.path}
-                    className="flex items-center gap-2 h-full w-full"
-                    target={nav.isExternalLink ? '_blank' : ''}
-                    onClick={() =>
-                        onLinkClick?.({
-                            key: nav.key,
-                            title: nav.title,
-                            path: nav.path,
-                        })
-                    }
-                >
-                    {showIcon && <VerticalMenuIcon icon={nav.icon} />}
-                    {showTitle && <span>{t(nav.translateKey, nav.title)}</span>}
-                </Link>
+            <MenuItem key={nav.key} eventKey={nav.key} dotIndent={indent} disabled={nav.disabled}>
+                {nav.disabled ? (
+                    <span className="flex items-center gap-2 h-full w-full">
+                        {showIcon && <VerticalMenuIcon icon={nav.icon}/>}
+                        {showTitle && <span>{t(nav.translateKey, nav.title)}</span>}
+                    </span>
+                ) : (
+                    <Link
+                        to={nav.path}
+                        className="flex items-center gap-2 h-full w-full"
+                        target={nav.isExternalLink ? '_blank' : ''}
+                        onClick={() =>
+                            onLinkClick?.({
+                                key: nav.key,
+                                title: nav.title,
+                                path: nav.path,
+                            })
+                        }
+                    >
+                        {showIcon && <VerticalMenuIcon icon={nav.icon}/>}
+                        {showTitle && <span>{t(nav.translateKey, nav.title)}</span>}
+                    </Link>
+                )}
+
             </MenuItem>
         </AuthorityCheck>
     )

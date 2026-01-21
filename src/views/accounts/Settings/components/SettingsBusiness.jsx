@@ -171,7 +171,7 @@ const SettingsBusiness = () => {
                                 control={control}
                                 render={({field}) => (
                                     <Input
-                                        placeholder="e.g. Artur Asatryan"
+                                        placeholder={t("e.g.") + " Aram Manukyan"}
                                         {...field}
                                     />
                                 )}
@@ -211,7 +211,10 @@ const SettingsBusiness = () => {
                                 name="accountNumber"
                                 control={control}
                                 render={({field}) => (
-                                    <Input placeholder="e.g. 123456789012345678" {...field} />
+                                    <Input
+                                        placeholder={t("e.g.") + " 123456789012345678"}
+                                        {...field}
+                                    />
                                 )}
                             />
                         </FormItem>
