@@ -17,7 +17,7 @@ const ChannelListActionTools = () => {
 
     const disabled = expert && (
         (subscriptionPlan?.name === 'basic' && itemListTotal >= 1) ||
-        (subscriptionPlan?.name === 'pro' && itemListTotal >= 15) ||
+        (subscriptionPlan?.name === 'pro' && itemListTotal >= 5) ||
         (!expert?.active)
     )
 

@@ -4,3 +4,17 @@
 @import './template/index.css';
 @import './others/index.css';
 @import './vendors/index.css';
+
+@layer base {
+    /* Target mobile screens (default in Tailwind) */
+    input, textarea, select {
+        @apply text-base; /* Sets font-size to 1rem (16px) */
+    }
+
+    /* Optional: Revert to smaller text on Desktop (md and up) */
+    @media (min-width: 768px) {
+        input, textarea, select {
+            @apply text-sm; /* Sets font-size to 0.875rem (14px) if you prefer small text on desktop */
+        }
+    }
+}
