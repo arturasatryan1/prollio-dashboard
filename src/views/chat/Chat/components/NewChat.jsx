@@ -173,7 +173,7 @@ const NewChat = ({onClose}) => {
         setEventFetching(true)
         try {
             const data = await apiGetEventListAll({
-                channel: selectedChannel?.value
+                only_leads: true
             })
             setEvents(data)
         } catch (err) {
@@ -228,8 +228,8 @@ const NewChat = ({onClose}) => {
                             <h4 className="mb-1">{t('Subscribers List')}</h4>
                         </div>
 
-                        <div className={'md:flex md:gap-4'}>
-                            <FormItem className="flex-1">
+                        <div className={'flex flex-col gap-4 md:flex-row md:gap-4'}>
+                            <FormItem className="flex-1 mb-0">
                                 <Select
                                     name={'event'}
                                     placeholder={t('Select Event')}
@@ -239,7 +239,7 @@ const NewChat = ({onClose}) => {
                                     onChange={(item) => handleChange('event', item)}
                                 />
                             </FormItem>
-                            <FormItem className="flex-1">
+                            <FormItem className="flex-1 mb-0">
                                 <Select
                                     isDisabled={!filterData.event}
                                     name={'type'}
@@ -253,7 +253,7 @@ const NewChat = ({onClose}) => {
 
                                 />
                             </FormItem>
-                            <FormItem className="flex-1">
+                            <FormItem className="flex-1 mb-0">
                                 <Select
                                     isDisabled={!filterData.event}
                                     name={'status'}
@@ -293,6 +293,8 @@ const NewChat = ({onClose}) => {
                                 <ScrollBar
                                     className={classNames(
                                         'overflow-y-auto',
+                                        'max-h-[25vh]',
+                                        'md:max-h-[50vh]'
                                     )}
                                 >
                                     <div className="h-full pr-3 flex flex-col gap-2">
@@ -339,7 +341,7 @@ const NewChat = ({onClose}) => {
                                                     loading={isLoading}
                                                     onClick={handleLoadMore}
                                                 >
-                                                    Load More
+                                                    {t('Load More')}
                                                 </Button>
                                             </div>
                                         )}

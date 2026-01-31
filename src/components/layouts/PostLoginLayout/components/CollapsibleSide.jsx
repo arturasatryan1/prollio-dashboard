@@ -42,7 +42,7 @@ const CollapsibleSide = ({ children }) => {
                         }
                         headerEnd={
                             <>
-                                <TourButton />
+                                {/*<TourButton />*/}
                                 <LanguageSelector />
                                 <Notification />
                                 {/*<SidePanel />*/}

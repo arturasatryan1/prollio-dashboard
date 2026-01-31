@@ -122,7 +122,7 @@ const BillingHistory = ({ data = [], ...rest }) => {
                 const row = props.row.original
                 return (
                     <div className="flex items-center">
-                        {dayjs(row.created_at).format('MM/DD/YYYY')}
+                        {dayjs(row.created_at).format('MM.DD.YYYY')}
                     </div>
                 )
             },

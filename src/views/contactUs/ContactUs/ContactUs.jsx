@@ -11,9 +11,7 @@ import {Link} from "react-router";
 import useTranslation from "@/utils/hooks/useTranslation.js";
 import toast from "@/components/ui/toast/index.js";
 import Notification from "@/components/ui/Notification/index.jsx";
-import {
-    apiExpertContact,
-} from '@/services/ContactService.js'
+import {apiExpertContact,} from '@/services/ContactService.js'
 
 
 const validationSchema = z.object({
@@ -95,13 +93,18 @@ const ContactUs = () => {
 
     return (
         <Card>
-            <h3 className="mt-2">{t('Contact Us')}</h3>
+            <h3 className="mt-2 text-lg md:text-xl font-semibold">{t('Contact Us')}</h3>
 
-            <div className="grid grid-cols-10 gap-10">
-                <Form onSubmit={handleSubmit(onSubmit)} className="mt-2 col-span-10 lg:col-span-5">
-                    <p className="text-sm text-gray-500 my-4">
+            <div className="grid grid-cols-1 lg:grid-cols-10 gap-6 lg:gap-10 mt-2">
+                {/* Form Section */}
+                <Form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="col-span-1 lg:col-span-5 space-y-4"
+                >
+                    <p className="text-sm md:text-base text-gray-500 mb-3">
                         {t('If you have any issues or questions, feel free to contact us using the form below.')}
                     </p>
+
                     <FormItem
                         label={t('Subject')}
                         invalid={Boolean(errors.subject)}
@@ -110,16 +113,12 @@ const ContactUs = () => {
                         <Controller
                             name="subject"
                             control={control}
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <Select
                                     placeholder={t('Choose a topic')}
                                     options={options}
-                                    value={options.filter(
-                                        (option) => option.value === field.value
-                                    )}
-                                    onChange={(selected) => {
-                                        field.onChange(selected?.value);
-                                    }}
+                                    value={options.filter(option => option.value === field.value)}
+                                    onChange={selected => field.onChange(selected?.value)}
                                 />
                             )}
                         />
@@ -133,7 +132,7 @@ const ContactUs = () => {
                         <Controller
                             name="message"
                             control={control}
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <Input
                                     textArea
                                     placeholder={t('Write your message here')}
@@ -148,14 +147,13 @@ const ContactUs = () => {
                     </Button>
                 </Form>
 
-                <div className="col-span-10 lg:col-span-5">
-                    <div className="p-4">
-                        <h4 className="text-base font-semibold mb-3">{t('Before You Contact Us')}</h4>
-                        <ul className="pl-5 text-md space-y-5 text-gray-700">
+                {/* Info Section */}
+                <div className="col-span-1 lg:col-span-5 mt-6 lg:mt-0">
+                    <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-md">
+                        <h4 className="text-base md:text-lg font-semibold mb-3">{t('Before You Contact Us')}</h4>
+                        <ul className="pl-5 text-sm md:text-md space-y-4 text-gray-700 dark:text-gray-300">
                             <li>
-                                <p className={'my-1'}>
-                                    <strong>{t('No withdrawal was made?')}</strong>
-                                </p>
+                                <p className="my-1 font-medium">{t('No withdrawal was made?')}</p>
                                 <p>
                                     {t('Please make sure your bank details are up-to-date in')}{' '}
                                     <Link to="/settings/payout" className="text-blue-700 underline">
@@ -164,9 +162,7 @@ const ContactUs = () => {
                                 </p>
                             </li>
                             <li>
-                                <p className={'my-1'}>
-                                    <strong>{t('Want to change plan?')}</strong>
-                                </p>
+                                <p className="my-1 font-medium">{t('Want to change plan?')}</p>
                                 <p>
                                     {t('Visit')}{' '}
                                     <Link to="/settings/pricing" className="text-blue-700 underline">
@@ -176,13 +172,11 @@ const ContactUs = () => {
                                 </p>
                             </li>
                             <li>
-                                <p className={'my-1'}>
-                                    <strong>{t('Bot not responding?')}</strong>
-                                </p>
+                                <p className="my-1 font-medium">{t('Bot not responding?')}</p>
                                 <p>{t('Try reconnecting your Telegram or checking event setup.')}</p>
                             </li>
                             <li>
-                                <p className={'my-1'}>
+                                <p className="my-1">
                                     <span>{t('You can also check our')}{' '}</span>
                                     <Link to="/support/faq" className="text-blue-700 underline">
                                         {t('FAQ')}
@@ -194,8 +188,8 @@ const ContactUs = () => {
                     </div>
                 </div>
             </div>
-
         </Card>
+
     )
 }
 

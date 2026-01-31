@@ -18,24 +18,24 @@ export const usePageTour = () => {
 
     const steps = stepsMap[pageKey] || []
 
-    useEffect(() => {
-        setSteps(steps)
-
-        const seenKey = 'tour_seen'
-        const seenPages = JSON.parse(localStorage.getItem(seenKey) || '{}')
-
-        if (!seenPages[pageKey]) {
-            const timeout = setTimeout(() => {
-                setCurrentStep(0)
-                setIsOpen(true)
-
-                const updatedSeen = { ...seenPages, [pageKey]: true }
-                localStorage.setItem(seenKey, JSON.stringify(updatedSeen))
-            }, 1000)
-
-            return () => clearTimeout(timeout)
-        }
-    }, [pathname])
+    // useEffect(() => {
+    //     setSteps(steps)
+    //
+    //     const seenKey = 'tour_seen'
+    //     const seenPages = JSON.parse(localStorage.getItem(seenKey) || '{}')
+    //
+    //     if (!seenPages[pageKey]) {
+    //         const timeout = setTimeout(() => {
+    //             setCurrentStep(0)
+    //             setIsOpen(true)
+    //
+    //             const updatedSeen = { ...seenPages, [pageKey]: true }
+    //             localStorage.setItem(seenKey, JSON.stringify(updatedSeen))
+    //         }, 1000)
+    //
+    //         return () => clearTimeout(timeout)
+    //     }
+    // }, [pathname])
 
     const restartTour = () => {
         setSteps(steps)

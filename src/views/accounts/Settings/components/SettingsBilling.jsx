@@ -73,30 +73,32 @@ const SettingsBilling = () => {
                                     </Tag>
                                 </div>
                                 <div className="font-semibold">
-                                    <span>
-                                    {t('Billing')} {t(subscription?.type)}
-                                </span>
-                                    <span> | </span>
-                                    <span>
-                                    {t('Next payment on')} {' '}
-                                        {dayjs(
-                                            subscription?.ends_at ||
-                                            0,
-                                        )
-                                            .format('MM/DD/YYYY')}
-                                </span>
-                                    <span>
-                                    <span className="mx-1">
-                                            {t('for')}
-                                    </span>
-                                    <NumericFormat
-                                        className="font-bold heading-text"
-                                        displayType="text"
-                                        value={subscription?.plan?.price_monthly}
-                                        suffix={'֏'}
-                                        thousandSeparator={true}
-                                    />
-                                </span>
+
+                                    <span> {t("Active until")} {dayjs(subscription.ends_at).format('MM.DD.YYYY')}</span>
+                                {/*    <span>*/}
+                                {/*    {t('Billing')} {t(subscription?.type)}*/}
+                                {/*</span>*/}
+                                {/*    <span> | </span>*/}
+                                {/*    <span>*/}
+                                {/*    {t('Next payment on')} {' '}*/}
+                                {/*        {dayjs(*/}
+                                {/*            subscription?.ends_at ||*/}
+                                {/*            0,*/}
+                                {/*        )*/}
+                                {/*            .format('MM/DD/YYYY')}*/}
+                                {/*</span>*/}
+                                {/*    <span>*/}
+                                {/*    <span className="mx-1">*/}
+                                {/*            {t('for')}*/}
+                                {/*    </span>*/}
+                                {/*    <NumericFormat*/}
+                                {/*        className="font-bold heading-text"*/}
+                                {/*        displayType="text"*/}
+                                {/*        value={subscription?.plan?.price_monthly}*/}
+                                {/*        suffix={'֏'}*/}
+                                {/*        thousandSeparator={true}*/}
+                                {/*    />*/}
+                                {/*</span>*/}
 
                                 </div>
                             </div>

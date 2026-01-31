@@ -63,48 +63,37 @@ const CustomerListSelected = () => {
         <>
             {selectedCustomer.length > 0 && (
                 <StickyFooter
-                    className=" flex items-center justify-between py-4 bg-white dark:bg-gray-800"
-                    stickyClass="-mx-4 sm:-mx-8 border-t border-gray-200 dark:border-gray-700 px-8"
-                    defaultClass="container mx-auto px-8 rounded-xl border border-gray-200 dark:border-gray-600 mt-4"
+                    className="bg-white dark:bg-gray-800 py-4"
+                    stickyClass="-mx-4 sm:-mx-8 border-t border-gray-200 dark:border-gray-700 px-4 sm:px-8"
+                    defaultClass="rounded-xl border border-gray-200 dark:border-gray-600 mt-4 px-4 sm:px-8"
                 >
-                    <div className="container mx-auto">
-                        <div className="flex items-center justify-between">
-                            <span>
-                                {selectedCustomer.length > 0 && (
-                                    <span className="flex items-center gap-2">
-                                        <span className="text-lg text-primary">
-                                            <TbChecks/>
-                                        </span>
-                                        <span className="font-semibold flex items-center gap-1">
-                                            <span className="heading-text">
-                                                {selectedCustomer.length}{' '}
-                                                {t('member')}
-                                            </span>
-                                            <span>
-                                                {t('selected')}
-                                            </span>
-                                        </span>
-                                    </span>
-                                )}
-                            </span>
+                    <div className="flex flex-col md:flex-row items-center justify-center md:justify-between gap-3 md:gap-0">
+                        {/* Selected Members Info */}
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <TbChecks className="text-lg text-primary" />
+                            <span className="font-semibold heading-text">
+            {selectedCustomer.length} {t('member')} {t('selected')}
+          </span>
+                        </div>
 
-                            <div className="flex items-center">
-                                <Button
-                                    size="sm"
-                                    className="ltr:mr-3 rtl:ml-3"
-                                    type="button"
-                                    customColorClass={() =>
-                                        'border-error ring-1 ring-error text-error hover:border-error hover:ring-error hover:text-error'
-                                    }
-                                    onClick={handleDelete}
-                                >
-                                    {t('Remove from channel')}
-                                </Button>
-                            </div>
+                        {/* Action Button */}
+                        <div className="flex-shrink-0">
+                            <Button
+                                size="sm"
+                                className="w-full md:w-auto"
+                                customColorClass={() =>
+                                    'border-error ring-1 ring-error text-error hover:border-error hover:ring-error hover:text-error'
+                                }
+                                type="button"
+                                onClick={handleDelete}
+                            >
+                                {t('Remove from channel')}
+                            </Button>
                         </div>
                     </div>
                 </StickyFooter>
             )}
+
             <ConfirmDialog
                 isOpen={deleteConfirmationOpen}
                 type="danger"
@@ -114,10 +103,7 @@ const CustomerListSelected = () => {
                 onCancel={handleCancel}
                 onConfirm={handleConfirmDelete}
             >
-                <p>
-                    {' '}
-                    {t('Are you sure you want to remove these subscribers?')}
-                </p>
+                <p>{t('Are you sure you want to remove these subscribers?')}</p>
             </ConfirmDialog>
         </>
     )

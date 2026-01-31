@@ -32,16 +32,6 @@ const Calendar = () => {
         }
     )
 
-    const {data: channels} = useSWR(
-        '/api/channels-list',
-        () => apiGetChannelListAll(),
-        {
-            revalidateOnFocus: false,
-            // revalidateIfStale: false,
-            // revalidateOnReconnect: false,
-        }
-    )
-
     const handleCellSelect = (event) => {
 
         const {start, end} = event

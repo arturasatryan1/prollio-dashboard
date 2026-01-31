@@ -30,27 +30,30 @@ const OverviewChart = ({data}) => {
 
     return (
         <Card className="h-full">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <h4></h4>
-                <div className="inline-flex items-center gap-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-start md:justify-end gap-4 w-full">
+                <h4 className="text-left md:text-right">{/* Optional title */}</h4>
+
+                <div className="flex flex-col sm:flex-row items-start md:items-center gap-2 sm:gap-6">
                     <div className="flex items-center gap-1.5">
                         <div
                             className="h-3.5 w-3.5 rounded-sm"
-                            style={{backgroundColor: COLORS[0]}}
+                            style={{ backgroundColor: COLORS[0] }}
                         />
                         <div>{t('Total Earnings')}</div>
                     </div>
+
                     <div className="flex items-center gap-1.5">
                         <div
                             className="h-3.5 w-3.5 rounded-sm"
-                            style={{backgroundColor: COLORS[7]}}
+                            style={{ backgroundColor: COLORS[7] }}
                         />
                         <div>{t('Net Earnings')}</div>
                     </div>
+
                     <div className="flex items-center gap-1.5">
                         <div
                             className="h-3.5 w-3.5 rounded-sm"
-                            style={{backgroundColor: COLORS[8]}}
+                            style={{ backgroundColor: COLORS[8] }}
                         />
                         <div>{t('Service Fee')}</div>
                     </div>
