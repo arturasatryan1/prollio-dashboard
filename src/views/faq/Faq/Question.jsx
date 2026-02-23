@@ -35,8 +35,8 @@ const Question = (props) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
+                        dangerouslySetInnerHTML={{ __html: t(content) }}
                     >
-                        {t(content)}
                     </motion.div>
                 )}
             </AnimatePresence>
