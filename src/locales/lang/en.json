@@ -257,5 +257,70 @@
   "Return to the Prollio Dashboard → Go to the Channels page — if the bot was added correctly, your channel will appear there automatically.": "Return to the Prollio Dashboard → Go to the “Channels” page — if the bot was added correctly, your channel will automatically appear in the list",
   "Open @BotFather in Telegram and tap /start.": "Open @BotFather in Telegram and tap /start.",
   "Send /newbot and follow the instructions to set a name and username for your bot. Your bot username must end with bot (e.g., MyAwesomeBot).": "Send /newbot and follow the instructions to set a name and username for your bot. Your bot username must end with bot (e.g., MyAwesomeBot).",
-  "After creating the bot, BotFather will send you a message with your bot token. Copy this token — you’ll need it to connect your bot to Prollio.": "After creating the bot, BotFather will send you a message with your bot token. Copy this token — you’ll need it to connect your bot to Prollio."
+  "After creating the bot, BotFather will send you a message with your bot token. Copy this token — you’ll need it to connect your bot to Prollio.": "After creating the bot, BotFather will send you a message with your bot token. Copy this token — you’ll need it to connect your bot to Prollio.",
+  "faq": {
+    "category": {
+      "general": "General Information",
+      "application": "Application and Approval",
+      "payments": "Payments and Plans",
+      "commission": "Commission and Financial Flows",
+      "content": "Content and Responsibility"
+    },
+    "general": {
+      "q1": "What is Prollio and what is it for?",
+      "a1": "Prollio is a web platform (prollio.ai) where you can create your personal Dashboard, manage your content, monetize it, post informational materials and videos, organize events, and connect a messenger app for management.",
+      "q2": "What is the Dashboard?",
+      "a2": "The Dashboard is your personal page on Prollio. Initially, it is inactive and becomes active after payment.",
+      "q3": "How do I start using Prollio?",
+      "a3": "Submit an Application → Prollio reviews it → Upon approval, you receive an email → Create a password → After payment, the Dashboard becomes active.",
+      "q4": "Can I stop using the services at any time?",
+      "a4": "Yes. However, the paid amount is non-refundable.",
+      "q5": "Who should I contact if I have questions?",
+      "a5": "You can write to wecare@prollio.ai."
+    },
+    "application": {
+      "q1": "Is there a fee to submit an application?",
+      "a1": "No. There is no fee for application review.",
+      "q2": "What happens after I submit an application?",
+      "a2": "Prollio reviews the submitted data and planned activity.",
+      "q3": "Will additional documents be required?",
+      "a3": "Yes, additional documents or information may be requested if needed.",
+      "q4": "When will I know if my application is approved?",
+      "a4": "You will receive an email within 24 hours informing you of approval or rejection.",
+      "q5": "Why could my application be rejected?",
+      "a5": "If the planned activity does not meet platform criteria or poses legal/compliance risks."
+    },
+    "payments": {
+      "q1": "How do I make payments for services?",
+      "a1": "Payment is made according to the chosen plan, as a one-time yearly payment, via any payment method.",
+      "q2": "Is there a free option?",
+      "a2": "Yes, the basic 30-day plan is free. Only the commission from sales applies.",
+      "q3": "Is the paid amount refundable?",
+      "a3": "No, service payments are non-refundable.",
+      "q4": "Where can I see pricing plans?",
+      "a4": "Here: prollio.ai/pricing",
+      "q5": "How are event participation payments processed?",
+      "a5": "Participants pay via the messenger app linked to the payment terminal, owned by Prollio LLC."
+    },
+    "commission": {
+      "q1": "What is the Commission?",
+      "a1": "The Commission is the fee given to Prollio from revenue generated through the Dashboard; amount depends on the chosen plan.",
+      "q2": "When do I receive my funds?",
+      "a2": "Funds are transferred twice a month, on the 1st and 15th, automatically to the bank account linked to your Dashboard.",
+      "q3": "What happens if I underpay or don’t pay?",
+      "a3": "Prollio sends a notification; payment must be made within 1 business day. Otherwise, services are suspended.",
+      "q4": "What if I don’t pay within 30 days?",
+      "a4": "The inactive Dashboard will be deleted, but you can submit a new Application."
+    },
+    "content": {
+      "q1": "What content is allowed/not allowed?",
+      "a1": "Content must comply with terms, laws, not contain discrimination, violence, drugs, or defamatory material.",
+      "q2": "What happens if rules are violated?",
+      "a2": "Prollio may suspend services without refund.",
+      "q3": "Is Prollio responsible for issues between me and participants?",
+      "a3": "No, Prollio is not responsible, but there is a public offer binding between you and participants.",
+      "q4": "Can Prollio monitor my transactions or content?",
+      "a4": "Yes, Prollio can monitor activity and take action on suspicious or illegal content."
+    }
+  }
 }

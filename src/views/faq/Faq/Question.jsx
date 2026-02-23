@@ -2,11 +2,13 @@ import { useState } from 'react'
 import classNames from '@/utils/classNames'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TbMinus, TbPlus } from 'react-icons/tb'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const Question = (props) => {
     const { title, content, defaultExpand, border, isFirstChild } = props
 
     const [expand, setExpand] = useState(defaultExpand)
+    let {t} = useTranslation()
 
     return (
         <div
@@ -24,7 +26,7 @@ const Question = (props) => {
                 <span className="text-2xl">
                     {expand ? <TbPlus /> : <TbMinus />}
                 </span>
-                <span className="group-hover:text-primary">{title}</span>
+                <span className="group-hover:text-primary">{t(title)}</span>
             </div>
             <AnimatePresence>
                 {expand && (
@@ -34,7 +36,7 @@ const Question = (props) => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                     >
-                        {content}
+                        {t(content)}
                     </motion.div>
                 )}
             </AnimatePresence>

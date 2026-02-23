@@ -4,9 +4,11 @@ import Menu from '@/components/ui/Menu'
 import Question from './Question'
 import { questionList, questionCategory } from '../constants'
 import isLastChild from '@/utils/isLastChild'
+import useTranslation from "@/utils/hooks/useTranslation.js";
 
 const Faq = () => {
-    const [selectedCategory, setSelectedCategory] = useState('subscription')
+    const [selectedCategory, setSelectedCategory] = useState('general')
+    let {t} = useTranslation()
 
     return (
         <Card>
@@ -21,7 +23,7 @@ const Faq = () => {
                                 eventKey={key}
                                 onSelect={setSelectedCategory}
                             >
-                                {questionCategory[key]}
+                                {t(questionCategory[key])}
                             </Menu.MenuItem>
                         ))}
                     </Menu>
@@ -31,7 +33,7 @@ const Faq = () => {
                         {questionList[selectedCategory].map(
                             (question, index) => (
                                 <Question
-                                    key={question.title}
+                                    key={t(question.title)}
                                     border={
                                         !isLastChild(
                                             questionList[selectedCategory],
