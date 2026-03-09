@@ -16,7 +16,6 @@ const Pricing = () => {
                 </div>
                 <Plans />
             </Card>
-            <Faq />
             <PaymentDialog />
         </>
     )
