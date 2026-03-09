@@ -50,85 +50,74 @@ const SettingsBilling = () => {
     return (
         <div>
             <h4 className="mb-4">{t('Plan')}</h4>
-            <div className="bg-gray-100 dark:bg-gray-700 rounded-xl p-6">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                        <div>
-                            <Avatar
-                                className={subscription ? "bg-emerald-500" : ""}
-                                shape="circle"
-                                icon={<PiLightningFill/>}
-                            />
-                        </div>
-                        {subscription && (
-                            <div>
-                                <div className="flex items-center mb-2">
-                                    <h6 className="font-bold mr-2">
+
+            <div className="bg-gray-100 dark:bg-gray-700 rounded-xl p-4 sm:p-6">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+
+                    {/* LEFT SIDE */}
+                    <div className="flex flex-col sm:flex-row sm:items-start gap-4 w-full">
+
+                        <Avatar
+                            className={subscription ? "bg-emerald-500 shrink-0" : "shrink-0"}
+                            shape="circle"
+                            icon={<PiLightningFill />}
+                        />
+
+                        {subscription ? (
+                            <div className="w-full">
+
+                                {/* Plan Name + Status */}
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                                    <h6 className="font-bold text-base sm:text-lg">
                                         {t(subscription?.plan?.name)}
                                     </h6>
-                                    <Tag className={`rounded-md border-0 ${statusColor[subscription?.status]}`}>
-                                    <span className={`capitalize`}>
-                                        {t(subscription?.status)}
-                                    </span>
+
+                                    <Tag
+                                        className={`rounded-md border-0 w-fit ${statusColor[subscription?.status]}`}
+                                    >
+                                <span className="capitalize">
+                                    {t(subscription?.status)}
+                                </span>
                                     </Tag>
                                 </div>
-                                <div className="font-semibold">
 
-                                    <span> {t("Active until")} {dayjs(subscription.ends_at).format('MM.DD.YYYY')}</span>
-                                {/*    <span>*/}
-                                {/*    {t('Billing')} {t(subscription?.type)}*/}
-                                {/*</span>*/}
-                                {/*    <span> | </span>*/}
-                                {/*    <span>*/}
-                                {/*    {t('Next payment on')} {' '}*/}
-                                {/*        {dayjs(*/}
-                                {/*            subscription?.ends_at ||*/}
-                                {/*            0,*/}
-                                {/*        )*/}
-                                {/*            .format('MM/DD/YYYY')}*/}
-                                {/*</span>*/}
-                                {/*    <span>*/}
-                                {/*    <span className="mx-1">*/}
-                                {/*            {t('for')}*/}
-                                {/*    </span>*/}
-                                {/*    <NumericFormat*/}
-                                {/*        className="font-bold heading-text"*/}
-                                {/*        displayType="text"*/}
-                                {/*        value={subscription?.plan?.price_monthly}*/}
-                                {/*        suffix={'֏'}*/}
-                                {/*        thousandSeparator={true}*/}
-                                {/*    />*/}
-                                {/*</span>*/}
-
+                                {/* Expiration */}
+                                <div className="font-semibold text-sm sm:text-base">
+                                    {t("Active until")}{" "}
+                                    {dayjs(subscription.ends_at).format('MM.DD.YYYY')}
                                 </div>
                             </div>
-                        )}
-                        {!subscription && (
-                            <div>
-                                <div className="flex items-center">
-                                    <h6 className="font-bold">
-                                        {t("You don’t have an active plan at the moment")}
-                                    </h6>
-                                </div>
+                        ) : (
+                            <div className="w-full">
+                                <h6 className="font-bold text-base sm:text-lg">
+                                    {t("You don’t have an active plan at the moment")}
+                                </h6>
                             </div>
                         )}
-
                     </div>
-                    <div className="flex">
+
+                    {/* RIGHT SIDE BUTTON */}
+                    <div className="w-full lg:w-auto">
                         <Button
                             size="sm"
                             variant="solid"
+                            className="w-full lg:w-auto"
                             onClick={handleChangePlan}
                         >
-                            {t(subscription? 'Change Plan' : 'Buy Plan')}
+                            {t(subscription ? 'Change Plan' : 'Buy Plan')}
                         </Button>
                     </div>
                 </div>
             </div>
-            <div className="mt-8">
-                <h5>{t('Transaction history')}</h5>
+
+            {/* Transaction History */}
+            <div className="mt-6 sm:mt-8">
+                <h5 className="text-base sm:text-lg">
+                    {t('Transaction history')}
+                </h5>
+
                 <BillingHistory
-                    className="mt-4"
+                    className="mt-4 overflow-x-auto"
                     data={transactions}
                 />
             </div>

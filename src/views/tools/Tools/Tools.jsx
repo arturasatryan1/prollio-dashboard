@@ -13,6 +13,7 @@ import Tag from "@/components/ui/Tag/index.jsx";
 import {HiOutlineExclamationCircle} from "react-icons/hi";
 import {CiClock1, CiClock2, CiWarning} from "react-icons/ci";
 import {FaClock} from "react-icons/fa";
+import dayjs from "dayjs";
 
 const toolStatusColor = {
     pending: 'bg-amber-400 text-white',
@@ -49,20 +50,24 @@ const Tools = () => {
             name: "AI Assistant (Coming Soon)",
             slug: "ai-assistant",
             icon: <FiCpu className="text-primary"/>,
-            description: "Generate content, analyze event data, and get smart suggestions to grow your audience.",
+            description: "",
+            // description: "Generate content, analyze event data, and get smart suggestions to grow your audience.",
             price: null,
             button_text: null,
             coming: true,
             list_items: [
-                'Generate post/event ideas',
-                'Analyze engagement & suggest improvements',
-                'Save time with AI-generated content',
+                // 'Generate post/event ideas',
+                // 'Analyze engagement & suggest improvements',
+                // 'Save time with AI-generated content',
             ]
         }
     ]
 
     const expertToolMap = new Map(
-        expertTools.map(toolAccess => [toolAccess.tool?.slug, toolAccess.status])
+        expertTools.map(toolAccess => [toolAccess.tool?.slug, {
+            status: toolAccess.status,
+            expires_at: toolAccess.expires_at
+        }])
     );
 
     return (
@@ -74,16 +79,16 @@ const Tools = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {tools.map((tool, idx) => {
                     const hasTool = expertToolMap.has(tool.slug);
-                    const toolStatus = expertToolMap.get(tool.slug);
+                    const activeTool = expertToolMap.get(tool.slug);
 
                     return (
                         <Card
                             key={idx}
                             className={`rounded-2xl relative shadow-md p-2 flex flex-col justify-between ${tool.coming && 'opacity-60'}`}
                         >
-                            {toolStatus && (
-                                <Tag className={`rounded-full bg-green-200 font-bold absolute right-2 top-2 ${toolStatusColor[toolStatus]}`}>
-                                    {t(toolStatus)}
+                            {activeTool && (
+                                <Tag className={`rounded-full bg-green-200 font-bold absolute right-2 top-2 ${toolStatusColor[activeTool.status]}`}>
+                                    {t(activeTool.status)}
                                 </Tag>
                             )}
 
@@ -101,44 +106,50 @@ const Tools = () => {
                                     ))}
                                 </ul>
 
-                                {toolStatus ? (
+                                {activeTool && activeTool.status && (
                                     <div className={'mt-5 mb-7'}>
                                         {
-                                            toolStatus === 'paid' && (
-                                                <div className={'bg-amber-200 p-3 rounded'}>
+                                            activeTool.status === 'paid' && (
+                                                <div className={'bg-amber-200 p-2 rounded'}>
                                                     <h6 className={'flex items-center'}><CiWarning size={18} className={'mr-1'}/> {t('Waiting for Bot Setup')}</h6>
                                                     <p className={''}>{t('You’ve successfully paid for the Lead Bot. To proceed, please complete the setup form.')}</p>
                                                 </div>
                                             )
                                         }
                                         {
-                                            toolStatus === 'setup' && (
-                                                <div className={'bg-amber-200 p-3 rounded'}>
+                                            activeTool.status === 'setup' && (
+                                                <div className={'bg-amber-200 p-2 rounded'}>
                                                     <h6 className={'flex items-center'}><CiClock1 size={18} className={'mr-1'}/> {t('Setting Up Your Lead Bot')}</h6>
                                                     <p className={''}>{t('Your Lead Bot setup request has been received. It’s being personalized and will be ready within 24 hours. You’ll be notified once it’s live.')}</p>
                                                 </div>
                                             )
                                         }
+                                        {
+                                            activeTool.status === 'active' && (
+                                                <div className={'bg-amber-200 p-2 rounded'}>
+                                                    <p className={'flex items-center'}><CiClock1 size={18} className={'mr-1'}/> {t('Active until')}{" "} {dayjs(activeTool.expires_at).format('DD/MM/YYYY')}</p>
+                                                </div>
+                                            )
+                                        }
                                     </div>
-                                ) : (
-                                    tool.price && (
-                                        <div className="mt-6">
-                                            <NumericFormat
-                                                className="h4"
-                                                displayType="text"
-                                                value={tool.price}
-                                                suffix={'֏'}
-                                                thousandSeparator={true}
-                                            />
-                                            <span className="text-lg font-bold">{' '}/{' '}{t('year')}</span>
-                                        </div>
-                                    )
+                                )}
+                                {tool.price && (
+                                    <div className="mt-6">
+                                        <NumericFormat
+                                            className="h4"
+                                            displayType="text"
+                                            value={tool.price}
+                                            suffix={'֏'}
+                                            thousandSeparator={true}
+                                        />
+                                        <span className="text-lg font-bold">{' '}/{' '}{t('year')}</span>
+                                    </div>
                                 )}
                             </div>
                             {tool.button_text && (
                                 <div className="flex gap-2 mt-4">
                                     {hasTool ? (
-                                        toolStatus === 'paid' && (
+                                        activeTool.status === 'paid' && (
                                             <Button
                                                 variant="solid"
                                                 onClick={() => {

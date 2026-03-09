@@ -153,11 +153,18 @@ const SettingsBusiness = () => {
 
 
     return (
-        <div className={'gap-4'}>
+        <div className="gap-4">
             <Card>
                 <h4 className="mb-4">{t('Bank Account Setup')}</h4>
-                <div className="grid grid-cols-10 gap-10">
-                    <Form onSubmit={handleSubmit(onSubmit)} className="mt-8 col-span-5">
+
+                {/* Responsive grid */}
+                <div className="grid grid-cols-1 md:grid-cols-10 gap-6 md:gap-10">
+
+                    {/* Full width on mobile, half on desktop */}
+                    <Form
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="mt-4 md:mt-8 col-span-1 md:col-span-5"
+                    >
                         <p className="text-sm text-gray-500 mb-6">
                             {t('Enter your bank account information to receive earnings. Please make sure the information is accurate.')}
                         </p>
@@ -169,7 +176,7 @@ const SettingsBusiness = () => {
                             <Controller
                                 name="holderName"
                                 control={control}
-                                render={({field}) => (
+                                render={({ field }) => (
                                     <Input
                                         placeholder={t("e.g.") + " Aram Manukyan"}
                                         {...field}
@@ -185,18 +192,16 @@ const SettingsBusiness = () => {
                             <Controller
                                 name="bankName"
                                 control={control}
-                                render={({field}) => (
+                                render={({ field }) => (
                                     <Select
                                         searchable
                                         options={banks}
-                                        // components={{
-                                        //     Option: CustomSelectOption,
-                                        //     Control: CustomControl,
-                                        // }}
-                                        value={banks?.filter((option) => option.value === field.value)}
+                                        value={banks?.filter(
+                                            (option) => option.value === field.value
+                                        )}
                                         placeholder={t('Select Bank')}
                                         onChange={(selected) => {
-                                            field.onChange(selected?.value)
+                                            field.onChange(selected?.value);
                                         }}
                                     />
                                 )}
@@ -210,7 +215,7 @@ const SettingsBusiness = () => {
                             <Controller
                                 name="accountNumber"
                                 control={control}
-                                render={({field}) => (
+                                render={({ field }) => (
                                     <Input
                                         placeholder={t("e.g.") + " 123456789012345678"}
                                         {...field}
@@ -219,21 +224,13 @@ const SettingsBusiness = () => {
                             />
                         </FormItem>
 
-                        {/*<FormItem*/}
-                        {/*    label={t('SWIFT / BIC Code')}*/}
-                        {/*    invalid={Boolean(errors.swift)}*/}
-                        {/*>*/}
-                        {/*    <Controller*/}
-                        {/*        name="swift"*/}
-                        {/*        control={control}*/}
-                        {/*        render={({field}) => (*/}
-                        {/*            <Input placeholder={`${t('e.g.')} HSBKAM22`} {...field} />*/}
-                        {/*        )}*/}
-                        {/*    />*/}
-                        {/*</FormItem>*/}
-
                         <FormItem>
-                            <Button block loading={isSubmitting} variant="solid" type="submit">
+                            <Button
+                                block
+                                loading={isSubmitting}
+                                variant="solid"
+                                type="submit"
+                            >
                                 {t('Save')}
                             </Button>
                         </FormItem>
