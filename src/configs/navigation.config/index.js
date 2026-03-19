@@ -124,6 +124,16 @@ const navigationConfig = [
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [ADMIN, USER],
                 subMenu: [],
+            },
+            {
+                key: 'transfers.list',
+                path: '/transfers',
+                title: 'Transfers',
+                translateKey: 'nav.transfers',
+                icon: 'coin',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: [ADMIN],
+                subMenu: [],
             }
         ]
     },

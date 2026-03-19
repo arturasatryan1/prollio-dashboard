@@ -9,6 +9,7 @@ import channelRoute from "@/configs/routes.config/channelRoute.js";
 import calendarRoute from "@/configs/routes.config/calendarRoute.js";
 import eventRoute from "@/configs/routes.config/eventRoute.js";
 import paymentRoute from "@/configs/routes.config/paymentRoute.js";
+import transferRoute from "@/configs/routes.config/transferRoute.js";
 import toolRoute from "@/configs/routes.config/toolRoute.js";
 
 export const publicRoutes = [
@@ -64,6 +65,7 @@ export const protectedRoutes = [
     ...requestRoute,
     ...calendarRoute,
     ...paymentRoute,
+    ...transferRoute,
     ...toolRoute,
     ...othersRoute,
 ]
