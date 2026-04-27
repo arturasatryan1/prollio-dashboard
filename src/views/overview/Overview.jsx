@@ -22,7 +22,7 @@ const Overview = () => {
     const handlePeriodChange = (option) => {
         if (option?.value) {
             setSelectedPeriod(option?.value);
-            mutate('/api/dashboard/overview')
+            // mutate('/api/dashboard/overview')
         }
     }
 

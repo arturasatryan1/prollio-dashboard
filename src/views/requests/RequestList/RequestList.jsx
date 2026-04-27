@@ -4,10 +4,29 @@ import RequestListTable from './components/RequestListTable.jsx'
 import RequestListActionTools from './components/RequestListActionTools.jsx'
 import RequestListTableTools from './components/RequestListTableTools.jsx'
 import RequestListSelected from './components/RequestListSelected.jsx'
-import useTranslation from "@/utils/hooks/useTranslation.js";
+import useTranslation from '@/utils/hooks/useTranslation.js'
+import { useEffect } from 'react'
+import resetListStore from '@/utils/resetListStore.js'
+import {
+    initialFilterData,
+    initialTableData,
+    useRequestListStore,
+} from './store/requestListStore.js'
 
 const RequestList = () => {
-    const {t} = useTranslation()
+    const { t } = useTranslation()
+
+    useEffect(() => {
+        return () => {
+            resetListStore({
+                store: useRequestListStore,
+                initialTableData,
+                initialFilterData,
+                selectedState: { selectedItem: [] },
+            })
+        }
+    }, [])
+
     return (
         <>
             <Container>

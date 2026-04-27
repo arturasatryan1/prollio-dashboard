@@ -3,11 +3,28 @@ import Container from '@/components/shared/Container'
 import TransferListTable from './components/TransferListTable.jsx'
 import TransferListActionTools from './components/TransferListActionTools.jsx'
 import TransferListTableTools from './components/TransferListTableTools.jsx'
-import useTranslation from "@/utils/hooks/useTranslation.js";
+import useTranslation from '@/utils/hooks/useTranslation.js'
+import { useEffect } from 'react'
+import resetListStore from '@/utils/resetListStore.js'
+import {
+    initialFilterData,
+    initialTableData,
+    useTransferListStore,
+} from './store/transferListStore.js'
 
 const TransferList = () => {
+    const { t } = useTranslation()
 
-    const {t} =  useTranslation()
+    useEffect(() => {
+        return () => {
+            resetListStore({
+                store: useTransferListStore,
+                initialTableData,
+                initialFilterData,
+                selectedState: { selectedItem: [] },
+            })
+        }
+    }, [])
 
     return (
         <>

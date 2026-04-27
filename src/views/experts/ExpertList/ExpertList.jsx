@@ -4,10 +4,28 @@ import ExpertListTable from './components/ExpertListTable.jsx'
 import ExpertListActionTools from './components/ExpertListActionTools.jsx'
 import ExpertListTableTools from './components/ExpertListTableTools.jsx'
 import ExpertListSelected from './components/ExpertListSelected.jsx'
-import useTranslation from "@/utils/hooks/useTranslation.js";
+import useTranslation from '@/utils/hooks/useTranslation.js'
+import { useEffect } from 'react'
+import resetListStore from '@/utils/resetListStore.js'
+import {
+    initialFilterData,
+    initialTableData,
+    useExpertListStore,
+} from './store/expertListStore.js'
 
 const ExpertList = () => {
-    const {t} = useTranslation();
+    const { t } = useTranslation()
+
+    useEffect(() => {
+        return () => {
+            resetListStore({
+                store: useExpertListStore,
+                initialTableData,
+                initialFilterData,
+                selectedState: { selectedExpert: [] },
+            })
+        }
+    }, [])
 
     return (
         <>

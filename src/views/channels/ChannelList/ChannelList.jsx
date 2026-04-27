@@ -4,11 +4,28 @@ import ChannelListTable from './components/ChannelListTable.jsx'
 import ChannelListActionTools from './components/ChannelListActionTools.jsx'
 import ChannelListTableTools from './components/ChannelListTableTools.jsx'
 import ChannelListSelected from './components/ChannelListSelected.jsx'
-import useTranslation from "@/utils/hooks/useTranslation.js";
+import useTranslation from '@/utils/hooks/useTranslation.js'
+import { useEffect } from 'react'
+import resetListStore from '@/utils/resetListStore.js'
+import {
+    initialFilterData,
+    initialTableData,
+    useChannelListStore,
+} from './store/channelListStore.js'
 
 const ChannelList = () => {
+    const { t } = useTranslation()
 
-    const {t} = useTranslation()
+    useEffect(() => {
+        return () => {
+            resetListStore({
+                store: useChannelListStore,
+                initialTableData,
+                initialFilterData,
+                selectedState: { selectedItem: [] },
+            })
+        }
+    }, [])
 
     return (
         <>

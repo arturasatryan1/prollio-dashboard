@@ -4,11 +4,31 @@ import CustomerListTable from './components/CustomerListTable'
 import CustomerListActionTools from './components/CustomerListActionTools'
 import CustomersListTableTools from './components/CustomersListTableTools'
 import CustomerListSelected from './components/CustomerListSelected'
-import useTranslation from "@/utils/hooks/useTranslation.js";
+import useTranslation from '@/utils/hooks/useTranslation.js'
+import { useEffect } from 'react'
+import resetListStore from '@/utils/resetListStore.js'
+import {
+    initialFilterData,
+    initialTableData,
+    useCustomerListStore,
+} from './store/customerListStore.js'
 
 const CustomerList = () => {
+    const { t } = useTranslation()
 
-    const {t} = useTranslation()
+    useEffect(() => {
+        return () => {
+            resetListStore({
+                store: useCustomerListStore,
+                initialTableData,
+                initialFilterData,
+                selectedState: {
+                    selectedCustomer: [],
+                    selectedAllCustomers: false,
+                },
+            })
+        }
+    }, [])
 
     return (
         <>
