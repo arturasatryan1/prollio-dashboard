@@ -12,6 +12,8 @@ import {ConfirmDialog} from "@/components/shared/index.jsx";
 import toast from "@/components/ui/toast/index.js";
 import Notification from "@/components/ui/Notification/index.jsx";
 import ChannelHistorySection from "@/views/channels/ChannelDetails/ChannelHistorySection.jsx";
+import Button from '@/components/ui/Button'
+import { MdArrowBack } from 'react-icons/md'
 
 const {TabNav, TabList, TabContent} = Tabs
 
@@ -51,48 +53,61 @@ const ChannelDetails = () => {
     }
 
     return (
-        <Loading loading={isLoading}>
-            {!isEmpty(data) && (
-                <div className="flex flex-col xl:flex-row gap-4">
-                    <div className="min-w-[330px] max-w-[330px] 2xl:min-w-[400px]">
-                        <InfoSection data={data} handleDialogOpen={handleDialogOpen}/>
+        <div>
+            <div className="mb-4">
+                <Button
+                    variant="plain"
+                    size="sm"
+                    onClick={() => navigate(-1)}
+                    icon={<MdArrowBack />}
+                    iconAlignment="start"
+                >
+                    {t('Back')}
+                </Button>
+            </div>
+            <Loading loading={isLoading}>
+                {!isEmpty(data) && (
+                    <div className="flex flex-col xl:flex-row gap-4">
+                        <div className="min-w-[330px] max-w-[330px] 2xl:min-w-[400px]">
+                            <InfoSection data={data} handleDialogOpen={handleDialogOpen}/>
+                        </div>
+                        <Card className="w-full">
+                            <Tabs defaultValue="billing">
+                                <TabList>
+                                    <TabNav value="billing">{t('Event History')}</TabNav>
+                                    {/*<TabNav value="activity">Activity</TabNav>*/}
+                                </TabList>
+                                <div className="p-4">
+                                    <TabContent value="billing">
+                                        <ChannelHistorySection data={data}/>
+                                    </TabContent>
+                                    <TabContent value="activity">
+                                        {/*<ActivitySection*/}
+                                        {/*    customerName={data.name}*/}
+                                        {/*    id={id}*/}
+                                        {/*/>*/}
+                                    </TabContent>
+                                </div>
+                            </Tabs>
+                        </Card>
+                        <ConfirmDialog
+                            isOpen={dialogOpen}
+                            type="danger"
+                            title={t('Delete Channel')}
+                            onClose={() => setDialogOpen(false)}
+                            onRequestClose={() => setDialogOpen(false)}
+                            onCancel={() => setDialogOpen(false)}
+                            onConfirm={handleConfirmDisconnect}
+                        >
+                            <p>
+                                {t('Are you sure you want to delete?')}
+                            </p>
+                        </ConfirmDialog>
                     </div>
-                    <Card className="w-full">
-                        <Tabs defaultValue="billing">
-                            <TabList>
-                                <TabNav value="billing">{t('Event History')}</TabNav>
-                                {/*<TabNav value="activity">Activity</TabNav>*/}
-                            </TabList>
-                            <div className="p-4">
-                                <TabContent value="billing">
-                                    <ChannelHistorySection data={data}/>
-                                </TabContent>
-                                <TabContent value="activity">
-                                    {/*<ActivitySection*/}
-                                    {/*    customerName={data.name}*/}
-                                    {/*    id={id}*/}
-                                    {/*/>*/}
-                                </TabContent>
-                            </div>
-                        </Tabs>
-                    </Card>
-                    <ConfirmDialog
-                        isOpen={dialogOpen}
-                        type="danger"
-                        title={t('Delete Channel')}
-                        onClose={() => setDialogOpen(false)}
-                        onRequestClose={() => setDialogOpen(false)}
-                        onCancel={() => setDialogOpen(false)}
-                        onConfirm={handleConfirmDisconnect}
-                    >
-                        <p>
-                            {t('Are you sure you want to delete?')}
-                        </p>
-                    </ConfirmDialog>
-                </div>
 
-            )}
-        </Loading>
+                )}
+            </Loading>
+        </div>
     )
 }
 

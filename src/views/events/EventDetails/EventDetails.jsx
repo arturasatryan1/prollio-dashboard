@@ -21,12 +21,13 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 import toast from "@/components/ui/toast/index.js";
 import Notification from "@/components/ui/Notification/index.jsx";
+import {MdArrowBack} from "react-icons/md";
 
 const {TabNav, TabList, TabContent} = Tabs
 
 const validationSchema = z
     .object({
-        reason: z.string({required_error: 'Reason is required'}),
+        reason: z.string({required_error: ''}),
     })
 
 const EventDetails = () => {
@@ -38,7 +39,6 @@ const EventDetails = () => {
     const navigate = useNavigate()
 
     const {
-        register,
         reset,
         handleSubmit,
         formState: {errors},
@@ -95,73 +95,89 @@ const EventDetails = () => {
     return (
         <Loading loading={isLoading}>
             {!isEmpty(data) && (
-                <div className="flex flex-col xl:flex-row gap-4">
-                    <div className="min-w-[330px] 2xl:min-w-[400px]">
-                        <InfoSection
-                            data={data}
-                            handleCancel={handleCancel}
-                        />
+                <>
+                    <div className="mb-4">
+                        <Button
+                            variant="plain"
+                            size="sm"
+                            onClick={() => navigate(-1)}
+                            icon={<MdArrowBack />}
+                            iconAlignment="start"
+                        >
+                            {t('Back')}
+                        </Button>
                     </div>
-                    <Card className="w-full">
-                        <Tabs defaultValue="promos">
-                            <TabList>
-                                <TabNav value="promos">{t('Promo Codes')}</TabNav>
-                            </TabList>
-                            <div className="p-4">
-                                <TabContent value="promos">
-                                    <PromoCodesSection data={data.promo_codes ?? []}/>
-                                </TabContent>
-                                <TabContent value="activity">
-                                    {/* {activeTab === 'activity' && <ActivitySection />} */}
-                                </TabContent>
-                            </div>
-                        </Tabs>
-                    </Card>
+                    <div className="flex flex-col xl:flex-row gap-4">
+                        <div className="min-w-[330px] 2xl:min-w-[400px]">
+                            <InfoSection
+                                data={data}
+                                handleCancel={handleCancel}
+                            />
+                        </div>
+                        <Card className="w-full">
+                            <Tabs defaultValue="promos">
+                                <TabList>
+                                    <TabNav value="promos">{t('Promo Codes')}</TabNav>
+                                    {/* <TabNav value="activity">{t('Activity')}</TabNav> */}
+                                </TabList>
+                                <div className="p-4">
+                                    <TabContent value="promos">
+                                        <PromoCodesSection data={data.promo_codes ?? []}/>
+                                    </TabContent>
+                                    {/* <TabContent value="activity">
+                                        <ActivitySection
+                                            customerName={data.title}
+                                            id={id}
+                                        />
+                                    </TabContent> */}
+                                </div>
+                            </Tabs>
+                        </Card>
 
-                    <Dialog
-                        isOpen={deleteConfirmationOpen}
-                        closable={!isCanceling}
-                        onClose={() => setDeleteConfirmationOpen(false)}
-                        onRequestClose={() => setDeleteConfirmationOpen(false)}
-                    >
-                        <Form onSubmit={handleSubmit(handleSubmitCancel)}>
-                            <h5>{t('Are you sure you want to cancel this event?')}</h5>
-                            <p>{t('This action cannot be undone.')}</p>
-                            <div className={'mt-5'}>
-                                <FormItem
-                                    label={t('Cancellation Reason (will be sent to paid members)')}
-                                    invalid={Boolean(errors.reason)}
-                                    errorMessage={t(errors.reason?.message)}
-                                >
-                                    <Controller
-                                        name="reason"
-                                        control={control}
-                                        render={({field}) => {
-                                            return (
-                                                <Input
-                                                    textArea
-                                                    type="text"
-                                                    autoComplete="off"
-                                                    placeholder={t('Please provide a reason for canceling the event')}
-                                                    {...field}
-                                                />
-                                            )
-                                        }}
-                                    />
-                                </FormItem>
-                            </div>
-                            <div className="mt-6">
-                                <Button
-                                    block
-                                    variant="solid"
-                                    loading={isCanceling}
-                                >
-                                    {t("Confirm And Cancel")}
-                                </Button>
-                            </div>
-                        </Form>
-                    </Dialog>
-                </div>
+                        <Dialog
+                            isOpen={deleteConfirmationOpen}
+                            closable={!isCanceling}
+                            onClose={() => setDeleteConfirmationOpen(false)}
+                            onRequestClose={() => setDeleteConfirmationOpen(false)}
+                        >
+                            <Form onSubmit={handleSubmit(handleSubmitCancel)}>
+                                <h5>{t('Are you sure you want to cancel this event?')}</h5>
+                                <div className={'mt-5'}>
+                                    <FormItem
+                                        label={t('Cancellation Reason (will be sent to paid members)')}
+                                        invalid={Boolean(errors.reason)}
+                                        errorMessage={t(errors.reason?.message)}
+                                    >
+                                        <Controller
+                                            name="reason"
+                                            control={control}
+                                            render={({field}) => {
+                                                return (
+                                                    <Input
+                                                        textArea
+                                                        type="text"
+                                                        autoComplete="off"
+                                                        placeholder={t('Please provide a reason for canceling the event')}
+                                                        {...field}
+                                                    />
+                                                )
+                                            }}
+                                        />
+                                    </FormItem>
+                                </div>
+                                <div className="mt-6">
+                                    <Button
+                                        block
+                                        variant="solid"
+                                        loading={isCanceling}
+                                    >
+                                        {t("Cancel")}
+                                    </Button>
+                                </div>
+                            </Form>
+                        </Dialog>
+                    </div>
+                </>
             )}
         </Loading>
     )

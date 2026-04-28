@@ -11,6 +11,7 @@ import { NumericFormat } from 'react-number-format'
 import dayjs from 'dayjs'
 import Th from "@/components/ui/Table/Th.jsx";
 import THead from "@/components/ui/Table/THead.jsx";
+import useTranslation from '@/utils/hooks/useTranslation'
 
 const { Tr, Td, TBody } = Table
 
@@ -22,62 +23,64 @@ const statusColor = {
 
 const columnHelper = createColumnHelper()
 
-const columns = [
-    columnHelper.accessor('event', {
-        header: 'Event',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center gap-2">
-                    <span className="font-semibold">{row.event.title}</span>
-                </div>
-            )
-        },
-    }),
-    columnHelper.accessor('status', {
-        header: 'Status',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center gap-2">
-                    <Badge className={statusColor[row.status]} />
-                    <span className="heading-text font-bold capitalize">
-                        {row.status}
-                    </span>
-                </div>
-            )
-        },
-    }),
-    columnHelper.accessor('date', {
-        header: 'Joned At',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center">
-                    {dayjs(row.created_at).format('DD/MM/YYYY HH:mm')}
-                </div>
-            )
-        },
-    }),
-    columnHelper.accessor('amount', {
-        header: 'Amount',
-        cell: (props) => {
-            const row = props.row.original
-            return (
-                <div className="flex items-center">
-                    <NumericFormat
-                        displayType="text"
-                        value={(Math.round(row.amount * 100) / 100).toFixed(2)}
-                        suffix={'֏'}
-                        thousandSeparator={true}
-                    />
-                </div>
-            )
-        },
-    }),
-]
-
 const PaymentHistorySection = ({ data }) => {
+    const { t } = useTranslation()
+
+    const columns = [
+        columnHelper.accessor('event', {
+            header: t('Event'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <div className="flex items-center gap-2">
+                        <span className="font-semibold">{row.event.title}</span>
+                    </div>
+                )
+            },
+        }),
+        columnHelper.accessor('status', {
+            header: t('Status'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <div className="flex items-center gap-2">
+                        <Badge className={statusColor[row.status]} />
+                        <span className="heading-text font-bold capitalize">
+                            {row.status}
+                        </span>
+                    </div>
+                )
+            },
+        }),
+        columnHelper.accessor('date', {
+            header: t('Joined At'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <div className="flex items-center">
+                        {dayjs(row.created_at).format('DD/MM/YYYY HH:mm')}
+                    </div>
+                )
+            },
+        }),
+        columnHelper.accessor('amount', {
+            header: t('Amount'),
+            cell: (props) => {
+                const row = props.row.original
+                return (
+                    <div className="flex items-center">
+                        <NumericFormat
+                            displayType="text"
+                            value={(Math.round(row.amount * 100) / 100).toFixed(2)}
+                            suffix={'֏'}
+                            thousandSeparator={true}
+                        />
+                    </div>
+                )
+            },
+        }),
+    ]
+
     const table = useReactTable({
         data: data.payments || [],
         columns,

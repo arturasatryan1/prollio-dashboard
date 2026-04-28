@@ -71,7 +71,7 @@ const SignInForm = (props) => {
                             <Input
                                 type="email"
                                 placeholder={t('Email')}
-                                // autoComplete="off"
+                                autoComplete="email"
                                 {...field}
                             />
                         )}
@@ -94,7 +94,7 @@ const SignInForm = (props) => {
                             <PasswordInput
                                 type="text"
                                 placeholder={t('Password')}
-                                autoComplete="off"
+                                autoComplete="current-password"
                                 {...field}
                             />
                         )}

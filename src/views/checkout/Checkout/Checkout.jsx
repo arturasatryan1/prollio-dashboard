@@ -84,6 +84,8 @@ const Checkout = (props) => {
         handleSubmit,
         formState: {errors},
         control,
+        watch,
+        reset,
     } = useForm({
         defaultValues: {
             member_id: memberId || '',
@@ -93,11 +95,34 @@ const Checkout = (props) => {
         resolver: zodResolver(validationSchema),
     })
 
+    // Load saved form data from localStorage on mount
+    useEffect(() => {
+        const savedForm = localStorage.getItem('checkoutForm');
+        if (savedForm) {
+            try {
+                const parsedForm = JSON.parse(savedForm);
+                reset(parsedForm);
+            } catch (error) {
+                console.error('Error parsing saved form data:', error);
+            }
+        }
+    }, [reset]);
+
+    // Save form data to localStorage whenever it changes
+    useEffect(() => {
+        const subscription = watch((value) => {
+            localStorage.setItem('checkoutForm', JSON.stringify(value));
+        });
+        return () => subscription.unsubscribe();
+    }, [watch]);
+
     const submit = async (values) => {
         setSubmitting(true)
 
         submitCheckout(values).then((res) => {
             if (res && !res?.error && res.formUrl) {
+                // Clear saved form data after successful submission
+                localStorage.removeItem('checkoutForm');
                 window.location.href = res.formUrl;
             } else {
                 toast.push(

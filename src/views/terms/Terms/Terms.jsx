@@ -12,6 +12,9 @@ import Other from "@/views/terms/Terms/Other.jsx";
 import {APP_NAME} from "@/constants/app.constant.js";
 import {Container} from "@/components/shared/index.jsx";
 import useTranslation from "@/utils/hooks/useTranslation.js";
+import {useNavigate} from "react-router";
+import Button from "@/components/ui/Button/index.jsx";
+import { MdArrowBack } from 'react-icons/md';
 
 const demos = [
     {
@@ -52,7 +55,7 @@ const demoHeader = {
         "\n" +
         "ՍՈՒՅՆ ԲԱԺԱՆՈՐԴԱԳՐՈՒԹՅԱՆ ՊԱՅՄԱՆՆԵՐԸ ԿԱՐԳԱՎՈՐՈՒՄ ԵՆ ԱԼԻՔԻ ԲԱԺԱՆՈՐԴԱԳՐՈՒԹՅԱՆ ԵՎ ՕԳՏԱԳՈՐԾՄԱՆ ՊԱՅՄԱՆՆԵՐԸ ՁԵՐ (ՕԳՏԱԳՈՐԾՈՂՆԵՐԻ) ԿՈՂՄԻՑ:\n" +
         "\n" +
-        "ԱԼԻՔԻՆ ՄԻԱՆԱԼՈՒ ՆՊԱՏԱԿՈՎ ԿԱՏԱՐՎԱԾ ՑԱՆԿԱՑԱԾ ՈՒՂՂԱԿԻ ԿԱՄ ԱՆՈՒՂՂԱԿԻ ԳՈՐԾՈՂՈՒԹՅԱՆ ԴԵՊՔՈՒՄ ԴՈՒՔ ՀԱՍՏԱՏՈՒՄ ԵՔ, ՈՐ ԿԱՐԴԱՑԵԼ ԵՔ ՍՈՒՅՆ ՊԱՅՄԱՆՆԵՐԸ ԵՎ ՀԱՄԱՁԱՅՆ ԵՔ ԴՐԱՆՑ ՀԵՏ:\n" +
+        "ԱԼԻՔԻՆ ՄԻԱՆԱԼՈՒ ՆՊԱՏԱԿՈՎ ԿԱՏԱՐՎԱԾ ՑԱՆԿԱՑԱԾ ՈՒՂՂԱԿԻ Կամ ԱՆՈՒՂՂԱԿԻ ԳՈՐԾՈՂՈՒԹՅԱՆ ԴԵՊՔՈՒՄ ԴՈՒՔ ՀԱՍՏԱՏՈՒՄ ԵՔ, ՈՐ ԿԱՐԴԱՑԵԼ ԵՔ ՍՈՒՅՆ ՊԱՅՄԱՆՆԵՐԸ ԵՎ ՀԱՄԱՁԱՅՆ ԵՔ ԴՐԱՆՑ ՀԵՏ:\n" +
         "\n" +
         "ԵԹԵ ԴՈՒՔ ՀԱՄԱՁԱՅՆ ՉԵՔ ՊԱՅՄԱՆՆԵՐԻՆ, ԽՆԴՐՈՒՄ ԵՆՔ ԴԱԴԱՐԵՑՆԵԼ ԱԼԻՔԻ ՕԳՏԱԳՈՐԾՈՒՄԸ: ԱԼԻՔՈՒՄ ԳՏՆՎԵԼԸ, ՎՃԱՐՈՒՄ ԿԱՏԱՐԵԼԸ` ԱՆԿԱԽ ՁԵՐ ԿՈՂՄԻՑ ՀՐԱՊԱՐԱԿՈՒՄՆԵՐԻՆ ԾԱՆՈԹԱՆԱԼՈՒ, ԱԼԻՔԻՆ ՉՀԵՏԵՎԵԼՈՒ ՀԱՆԳԱՄԱՆՔԻՑ, ՓԱՍՏՈՒՄ ԵՆ ՁԵՐ ԿՈՂՄԻՑ ՊԱՅՄԱՆՆԵՐԻ ԱՆՎԵՐԱՊԱՀ ԸՆԴՈՒՆՈՒՄԸ (ՕՖԵՐՏԱՅԻ ԱԿՑԵՊՏԱՎՈՐՈՒՄԸ):\n"
 }
@@ -63,6 +66,7 @@ const pageContainerDefaultClass =
 const Terms = () => {
 
     const {t} = useTranslation()
+    const navigate = useNavigate();
 
     return (
         <div>
@@ -71,7 +75,6 @@ const Terms = () => {
                 headerStart={
                     <Logo
                         imgClass="max-h-8"
-                        // className={}
                     />
                 }
                 headerEnd={<LanguageSelector/>}
@@ -83,6 +86,17 @@ const Terms = () => {
                         'container mx-auto',
                     )}
                 >
+                    <div className="mb-4">
+                        <Button
+                            variant="plain"
+                            size="sm"
+                            onClick={() => navigate(-1)}
+                            icon={<MdArrowBack />}
+                            iconAlignment="start"
+                        >
+                            {t('Back')}
+                        </Button>
+                    </div>
 
                     <DemoLayout
                         innerFrame={false}
