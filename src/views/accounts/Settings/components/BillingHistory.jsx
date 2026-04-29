@@ -1,18 +1,10 @@
-import Table from '@/components/ui/Table'
+import {useMemo} from 'react'
+import Tag from '@/components/ui/Tag'
 import Badge from '@/components/ui/Badge'
-import {
-    useReactTable,
-    getCoreRowModel,
-    flexRender,
-    createColumnHelper,
-} from '@tanstack/react-table'
-import { NumericFormat } from 'react-number-format'
+import DataTable from '@/components/shared/DataTable'
+import {NumericFormat} from 'react-number-format'
 import dayjs from 'dayjs'
-import Tag from "@/components/ui/Tag/index.jsx";
 import useTranslation from "@/utils/hooks/useTranslation.js";
-import {CiBank} from "react-icons/ci";
-
-const { Tr, Th, Td, THead, TBody } = Table
 
 const statusColor = {
     pending: 'bg-amber-400',
@@ -34,149 +26,113 @@ const purposeColor = {
     bonus: 'bg-green-100 dark:bg-green-200 text-gray-900',
 };
 
-
 const paymentMethods = {
     arca: 'ARCA',
     bank_transfer: 'Bank Transfer'
 };
 
-const columnHelper = createColumnHelper()
-
-const BillingHistory = ({ data = [], ...rest }) => {
+const BillingHistory = ({data = [], ...rest}) => {
     const {t} = useTranslation();
 
-    const columns = [
-        columnHelper.accessor('id', {
-            header: t('Reference'),
-            cell: (props) => {
-                const row = props.row.original
-                return (
-                    <span className="heading-text font-bold cursor-pointer">
-                    {row.uuid}
-                </span>
-                )
+    const columns = useMemo(
+        () => [
+            {
+                header: t('Reference'),
+                accessorKey: 'uuid',
+                // size: 100,
+                cell: (props) => {
+                    const row = props.row.original
+                    return (
+                        <span className="heading-text font-bold cursor-pointer">
+                            {row.uuid}
+                        </span>
+                    )
+                },
             },
-        }),
-        // columnHelper.accessor('type', {
-        //     header: t('Type'),
-        //     cell: (props) => {
-        //         const row = props.row.original
-        //         return <span className="font-semibold">{t(row.type)}</span>
-        //     },
-        // }),
-        columnHelper.accessor('purpose', {
-            header: t('Purpose'),
-            cell: (props) => {
-                const row = props.row.original
-                return (
-                    <div className="flex items-center gap-2">
-                        <div className="flex items-center">
-                            <Tag className={purposeColor[row.purpose]}>
-                                <span>{t(row.purpose)}</span>
-                            </Tag>
+            {
+                header: t('Purpose'),
+                accessorKey: 'purpose',
+                cell: (props) => {
+                    const row = props.row.original
+                    return (
+                        <div className="flex items-center gap-2">
+                            <div className="flex items-center">
+                                <Tag className={purposeColor[row.purpose]}>
+                                    <span className="">{t(row.purpose)}</span>
+                                </Tag>
+                            </div>
                         </div>
-                    </div>
-                )
+                    )
+                },
             },
-        }),
-        columnHelper.accessor('payment_method', {
-            header: t('Payment Method'),
-            cell: (props) => {
-                const row = props.row.original
-                return <span className="font-semibold">{t(paymentMethods[row.payment_method])}</span>
+            {
+                header: t('Payment Method'),
+                accessorKey: 'payment_method',
+                cell: (props) => {
+                    const row = props.row.original
+                    return <span
+                        className="font-semibold">{t(paymentMethods[row.payment_method])}</span>
+                },
             },
-        }),
-        columnHelper.accessor('status', {
-            header: t('Status'),
-            cell: (props) => {
-                const row = props.row.original
-                return (
-                    <div className="flex items-center gap-2">
-                        <Badge className={statusColor[row.status]} />
-                        <span className="heading-text font-bold  capitalize">
-                        {t(row.status)}
-                    </span>
-                    </div>
-                )
+            {
+                header: t('Status'),
+                accessorKey: 'status',
+                cell: (props) => {
+                    const row = props.row.original
+                    return (
+                        <div className="flex items-center gap-1 sm:gap-2">
+                            <Badge className={statusColor[row.status]}/>
+                            <span className="heading-text font-bold capitalize">
+                                {t(row.status)}
+                            </span>
+                        </div>
+                    )
+                },
             },
-        }),
-        columnHelper.accessor('amount', {
-            header: t('Amount'),
-            cell: (props) => {
-                const row = props.row.original;
+            {
+                header: t('Amount'),
+                accessorKey: 'amount',
+                cell: (props) => {
+                    const row = props.row.original;
 
-                return (
-                    <div className="flex items-center">
-                        <NumericFormat
-                            displayType="text"
-                            value={row.amount}
-                            thousandSeparator={true}
-                        />
-                    </div>
-                );
+                    return (
+                        <div className="flex items-center">
+                            <NumericFormat
+                                displayType="text"
+                                value={row.amount}
+                                thousandSeparator={true}
+                                className=" font-semibold"
+                            />
+                        </div>
+                    );
+                },
             },
-        }),
-        columnHelper.accessor('date', {
-            header: t('Date'),
-            cell: (props) => {
-                const row = props.row.original
-                return (
-                    <div className="flex items-center">
-                        {dayjs(row.created_at).format('MM.DD.YYYY')}
-                    </div>
-                )
+            {
+                header: t('Date'),
+                accessorKey: 'created_at',
+                size: 160,
+                cell: (props) => {
+                    const row = props.row.original
+                    return (
+                        <div className="flex items-center">
+                            {dayjs(row.created_at).format('D/MM/YYYY, HH:mm')}
+                        </div>
+                    )
+                },
             },
-        }),
-    ]
-
-    const table = useReactTable({
-        data,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-    })
+        ], // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    )
 
     return (
-        <div {...rest}>
-            <Table>
-                <THead className="bg-transparent!">
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <Tr key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => {
-                                return (
-                                    <Th
-                                        key={header.id}
-                                        colSpan={header.colSpan}
-                                    >
-                                        {flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext(),
-                                        )}
-                                    </Th>
-                                )
-                            })}
-                        </Tr>
-                    ))}
-                </THead>
-                <TBody>
-                    {table.getRowModel().rows.map((row) => {
-                        return (
-                            <Tr key={row.id}>
-                                {row.getVisibleCells().map((cell) => {
-                                    return (
-                                        <Td key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext(),
-                                            )}
-                                        </Td>
-                                    )
-                                })}
-                            </Tr>
-                        )
-                    })}
-                </TBody>
-            </Table>
-        </div>
+        <DataTable
+            columns={columns}
+            data={data}
+            noData={data.length === 0}
+            loading={false}
+            paginate={false}
+            {...rest}
+        />
     )
 }
 

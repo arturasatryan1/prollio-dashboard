@@ -172,8 +172,8 @@ const SettingsSecurity = () => {
                         )}
                     />
                 </FormItem>
-                <div className="flex justify-end">
-                    <Button variant="solid" type="submit">
+                <div className="flex justify-center sm:justify-end">
+                    <Button variant="solid" type="submit" className="w-full sm:w-auto">
                         {t('Update')}
                     </Button>
                 </div>

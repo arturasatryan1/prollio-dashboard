@@ -1,7 +1,5 @@
 import {useEffect, useState} from 'react'
 import Button from '@/components/ui/Button'
-import {useNavigate} from 'react-router'
-import Card from "@/components/ui/Card/index.jsx";
 import {Form, FormItem} from "@/components/ui/Form/index.jsx";
 import {Controller, useForm} from "react-hook-form";
 import Select, {Option as DefaultOption} from '@/components/ui/Select'
@@ -154,89 +152,87 @@ const SettingsBusiness = () => {
 
     return (
         <div className="gap-4">
-            <Card>
-                <h4 className="mb-4">{t('Bank Account Setup')}</h4>
+            <h4 className="mb-4">{t('Bank Account Setup')}</h4>
 
-                {/* Responsive grid */}
-                <div className="grid grid-cols-1 md:grid-cols-10 gap-6 md:gap-10">
+            {/* Responsive grid */}
+            <div className="grid grid-cols-1 md:grid-cols-10 gap-6 md:gap-10">
 
-                    {/* Full width on mobile, half on desktop */}
-                    <Form
-                        onSubmit={handleSubmit(onSubmit)}
-                        className="mt-4 md:mt-8 col-span-1 md:col-span-5"
+                {/* Full width on mobile, half on desktop */}
+                <Form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="mt-4 md:mt-8 col-span-1 md:col-span-5"
+                >
+                    <p className="text-sm text-gray-500 mb-6">
+                        {t('Enter your bank account information to receive earnings. Please make sure the information is accurate.')}
+                    </p>
+
+                    <FormItem
+                        label={t('Account Holder Name')}
+                        invalid={Boolean(errors.holderName)}
                     >
-                        <p className="text-sm text-gray-500 mb-6">
-                            {t('Enter your bank account information to receive earnings. Please make sure the information is accurate.')}
-                        </p>
+                        <Controller
+                            name="holderName"
+                            control={control}
+                            render={({ field }) => (
+                                <Input
+                                    placeholder={t("e.g.") + " Aram Manukyan"}
+                                    {...field}
+                                />
+                            )}
+                        />
+                    </FormItem>
 
-                        <FormItem
-                            label={t('Account Holder Name')}
-                            invalid={Boolean(errors.holderName)}
+                    <FormItem
+                        label={t('Bank Name')}
+                        invalid={Boolean(errors.bankName)}
+                    >
+                        <Controller
+                            name="bankName"
+                            control={control}
+                            render={({ field }) => (
+                                <Select
+                                    searchable
+                                    options={banks}
+                                    value={banks?.filter(
+                                        (option) => option.value === field.value
+                                    )}
+                                    placeholder={t('Select Bank')}
+                                    onChange={(selected) => {
+                                        field.onChange(selected?.value);
+                                    }}
+                                />
+                            )}
+                        />
+                    </FormItem>
+
+                    <FormItem
+                        label={t('Bank Account Number')}
+                        invalid={Boolean(errors.accountNumber)}
+                    >
+                        <Controller
+                            name="accountNumber"
+                            control={control}
+                            render={({ field }) => (
+                                <Input
+                                    placeholder={t("e.g.") + " 123456789012345678"}
+                                    {...field}
+                                />
+                            )}
+                        />
+                    </FormItem>
+
+                    <FormItem>
+                        <Button
+                            block
+                            loading={isSubmitting}
+                            variant="solid"
+                            type="submit"
                         >
-                            <Controller
-                                name="holderName"
-                                control={control}
-                                render={({ field }) => (
-                                    <Input
-                                        placeholder={t("e.g.") + " Aram Manukyan"}
-                                        {...field}
-                                    />
-                                )}
-                            />
-                        </FormItem>
-
-                        <FormItem
-                            label={t('Bank Name')}
-                            invalid={Boolean(errors.bankName)}
-                        >
-                            <Controller
-                                name="bankName"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select
-                                        searchable
-                                        options={banks}
-                                        value={banks?.filter(
-                                            (option) => option.value === field.value
-                                        )}
-                                        placeholder={t('Select Bank')}
-                                        onChange={(selected) => {
-                                            field.onChange(selected?.value);
-                                        }}
-                                    />
-                                )}
-                            />
-                        </FormItem>
-
-                        <FormItem
-                            label={t('Bank Account Number')}
-                            invalid={Boolean(errors.accountNumber)}
-                        >
-                            <Controller
-                                name="accountNumber"
-                                control={control}
-                                render={({ field }) => (
-                                    <Input
-                                        placeholder={t("e.g.") + " 123456789012345678"}
-                                        {...field}
-                                    />
-                                )}
-                            />
-                        </FormItem>
-
-                        <FormItem>
-                            <Button
-                                block
-                                loading={isSubmitting}
-                                variant="solid"
-                                type="submit"
-                            >
-                                {t('Save')}
-                            </Button>
-                        </FormItem>
-                    </Form>
-                </div>
-            </Card>
+                            {t('Save')}
+                        </Button>
+                    </FormItem>
+                </Form>
+            </div>
         </div>
     )
 }

@@ -12,7 +12,7 @@ import {apiGetSettingsProfile, apiUpdateSettingProfile} from '@/services/Acconts
 import useSWR from 'swr'
 import {zodResolver} from '@hookform/resolvers/zod'
 import {Controller, useForm} from 'react-hook-form'
-import {nullable, z} from 'zod'
+import {z} from 'zod'
 import {HiOutlineUser} from 'react-icons/hi'
 import {TbPlus} from 'react-icons/tb'
 import toast from '@/components/ui/toast/index.js'
@@ -134,51 +134,71 @@ const SettingsProfile = () => {
 
     return (
         <>
-            <h5 className="mb-8">{t('Personal information')}</h5>
+            {/*<h5 className="mb-6 sm:mb-8">{t('Personal information')}</h5>*/}
             <Form onSubmit={handleSubmit(onSubmit)}>
                 {/* Avatar upload */}
-                <div className="mb-8">
+                <div className="mb-6 sm:mb-8">
                     <Controller
                         name="avatar"
                         control={control}
-                        render={({field}) => (
-                            <div className="flex items-center gap-4">
-                                <Avatar
-                                    size={90}
-                                    className="border-4 border-white bg-gray-100 text-gray-300 shadow-lg"
-                                    icon={<HiOutlineUser/>}
-                                    src={field.value}
-                                />
-                                <div className="flex items-center gap-2">
-                                    <Upload
-                                        showList={false}
-                                        uploadLimit={1}
-                                        beforeUpload={beforeUpload}
-                                        onChange={(files) => {
-                                            if (files.length) {
-                                                const reader = new FileReader()
-                                                reader.onloadend = () => field.onChange(reader.result)
-                                                reader.readAsDataURL(files[0])
-                                            } else {
-                                                field.onChange('')
-                                            }
+                        render={({field}) => {
+                            const handleFileSelect = (files) => {
+                                const allowedFileType = ['image/jpeg', 'image/png']
+                                for (const file of files || []) {
+                                    if (!allowedFileType.includes(file.type)) {
+                                        toast.push(<Notification type="danger">Please upload a .jpeg or .png file!</Notification>, {placement: 'top-center'})
+                                        return
+                                    }
+                                }
+                                if (files.length) {
+                                    const reader = new FileReader()
+                                    reader.onloadend = () => field.onChange(reader.result)
+                                    reader.readAsDataURL(files[0])
+                                } else {
+                                    field.onChange('')
+                                }
+                            }
+
+                            return (
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-4">
+                                    <Avatar
+                                        size={90}
+                                        className="border-4 border-white bg-gray-100 text-gray-300 shadow-lg mx-auto sm:mx-0 cursor-pointer scale-125 sm:scale-100"
+                                        icon={<HiOutlineUser/>}
+                                        src={field.value}
+                                        onClick={() => {
+                                            const input = document.createElement('input')
+                                            input.type = 'file'
+                                            input.accept = 'image/jpeg,image/png'
+                                            input.onchange = (e) => handleFileSelect(e.target.files)
+                                            input.click()
                                         }}
-                                    >
-                                        <Button variant="solid" size="sm" type="button" icon={<TbPlus/>}>
-                                            {t('Upload')}
+                                    />
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 justify-center sm:justify-start">
+                                        <div className="hidden sm:block">
+                                            <Upload
+                                                showList={false}
+                                                uploadLimit={1}
+                                                beforeUpload={beforeUpload}
+                                                onChange={handleFileSelect}
+                                            >
+                                                <Button variant="solid" size="sm" type="button" icon={<TbPlus/>}>
+                                                    {t('Upload')}
+                                                </Button>
+                                            </Upload>
+                                        </div>
+                                        <Button size="sm" type="button" onClick={() => field.onChange('')} className="w-full sm:w-auto">
+                                            {t('Remove')}
                                         </Button>
-                                    </Upload>
-                                    <Button size="sm" type="button" onClick={() => field.onChange('')}>
-                                        {t('Remove')}
-                                    </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )
+                        }}
                     />
                 </div>
 
                 {/* Name and Email */}
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid md:grid-cols-2 gap-0 md:gap-4">
                     <FormItem
                         label={t('First name')}
                         invalid={!!errors.first_name}
@@ -212,8 +232,8 @@ const SettingsProfile = () => {
                 </FormItem>
 
                 {/* Phone */}
-                <div className="flex items-end gap-4 w-full mb-6">
-                    <FormItem label={t('Phone')} className="w-full" invalid={!!errors.phone}
+                <div className="mb-6">
+                    <FormItem label={t('Phone')} invalid={!!errors.phone}
                               errorMessage={errors.phone?.message}>
                         <Controller
                             name="phone"
@@ -225,8 +245,8 @@ const SettingsProfile = () => {
                     </FormItem>
                 </div>
 
-                <div className="flex justify-end">
-                    <Button variant="solid" type="submit" loading={isSubmitting}>
+                <div className="flex justify-center sm:justify-end">
+                    <Button variant="solid" type="submit" loading={isSubmitting} className="w-full sm:w-auto">
                         {t('Save')}
                     </Button>
                 </div>
