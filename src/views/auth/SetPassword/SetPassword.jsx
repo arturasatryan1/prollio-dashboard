@@ -32,17 +32,18 @@ export const SetPasswordBase = ({signInUrl = '/sign-in'}) => {
         const verifyToken = async () => {
             try {
                 const res = await apiCheckToken({token: tokenFromUrl})
+                setExpert(res)
 
-                const {request, token_valid_until} = res
+                //  const {request, token_valid_until} = res
+                //
+                // if (token_valid_until) {
+                //      setTokenValidUntil(token_valid_until)
+                // } else {
+                //     setError(res.data.message || 'Հղումը Ժամկետանց Է ')
+                // }
 
-                if (token_valid_until) {
-                    setExpert(request)
-                    setTokenValidUntil(token_valid_until)
-                } else {
-                    setError(res.data.message || 'Տոկենն անվավեր է կամ ժամկետն անցել է։')
-                }
             } catch (err) {
-                setError('Սխալ տեղի ունեցավ։ Խնդրում ենք փորձել ավելի ուշ։')
+                setError('Հղումը Ժամկետանց Է')
             } finally {
                 setLoading(false)
             }
