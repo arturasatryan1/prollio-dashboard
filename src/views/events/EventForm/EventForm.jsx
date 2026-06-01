@@ -4,7 +4,7 @@ import BottomStickyBar from '@/components/template/BottomStickyBar'
 import InfoSection from './InfoSection.jsx'
 import ScheduleSection from './ScheduleSection.jsx'
 import {zodResolver} from '@hookform/resolvers/zod'
-import {useForm, useFormContext} from 'react-hook-form'
+import {useForm} from 'react-hook-form'
 import {z} from 'zod'
 
 const promoCodeSchema = z.object({
@@ -16,27 +16,43 @@ const promoCodeSchema = z.object({
     maxUsage: z.string().optional(),
 })
 
-const validationSchema = z.object({
-    title: z.string().min(1, { message: '' }),
-    start: z.date(),
-    end: z.date(),
-    price: z.string().min(1, { message: '' }),
-    channel: z.number().min(1, { message: '' }),
-    description: z.string().min(1, { message: '' }),
-    publish: z.boolean().optional(),
-    promoCodes: z
-        .array(promoCodeSchema)
-        .refine(
-            (promoCodes) => {
-                const codes = promoCodes.map((p) => p.code?.trim().toLowerCase());
-                return new Set(codes).size === codes.length;
-            },
-            {
-                message: 'Promo code values must be unique',
-                path: ['unique'],
+const validationSchema = z
+    .object({
+        title: z.string().min(1, { message: '' }),
+        start: z.date(),
+        end: z.date(),
+        price: z.string().min(1, { message: '' }),
+        channel: z.number().min(1, { message: '' }),
+        description: z.string().min(1, { message: '' }),
+        publish: z.boolean().optional(),
+        isTimed: z.boolean(),
+        duration: z.number().optional(),
+        promoCodes: z
+            .array(promoCodeSchema)
+            .refine(
+                (promoCodes) => {
+                    const codes = promoCodes.map((p) => p.code?.trim().toLowerCase());
+                    return new Set(codes).size === codes.length;
+                },
+                {
+                    message: 'Promo code values must be unique',
+                    path: ['unique'],
+                }
+            ).optional(),
+    })
+    .superRefine((data, ctx) => {
+        // If access is timed, duration must be provided
+        if (data.isTimed) {
+            if (typeof data.duration !== 'number' || isNaN(data.duration)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Duration is required for timed access',
+                    path: ['duration'],
+                })
             }
-        ).optional(),
-})
+        }
+    })
+
 
 const EventForm = (props) => {
     const {
@@ -46,6 +62,14 @@ const EventForm = (props) => {
         children,
         pageTitle = 'Create Event',
     } = props
+
+    const isTimedDefault = defaultValues.isTimed ?? false
+
+    const durationDefault = typeof defaultValues.duration !== 'undefined'
+        ? defaultValues.duration
+        : isTimedDefault
+            ? 10
+            : undefined
 
     const {
         handleSubmit,
@@ -57,6 +81,8 @@ const EventForm = (props) => {
     } = useForm({
         defaultValues: {
             ...defaultValues,
+            isTimed: isTimedDefault,
+            duration: durationDefault,
         },
         resolver: zodResolver(validationSchema),
     })
@@ -76,7 +102,7 @@ const EventForm = (props) => {
                     <div className="gap-4 flex flex-col flex-auto">
                         <InfoSection register={register} control={control} errors={errors} channels={channels} pageTitle={pageTitle}/>
                     </div>
-                    <div className="md:w-[370px] gap-4 flex flex-col">
+                    <div className="md:w-[500px] gap-4 flex flex-col">
                         <ScheduleSection control={control} errors={errors} watch={watch} setValue={setValue}/>
                     </div>
                 </div>

@@ -24,6 +24,7 @@ const Radio = (props) => {
         readOnly,
         ref,
         value,
+        title = null,
         ...rest
     } = props
 
@@ -109,6 +110,10 @@ const Radio = (props) => {
                     {children}
                 </span>
             ) : null}
+
+            {title && (
+                <span>{title}</span>
+            )}
         </label>
     )
 }

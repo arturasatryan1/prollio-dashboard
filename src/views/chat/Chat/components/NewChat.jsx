@@ -226,6 +226,7 @@ const NewChat = ({onClose}) => {
                     <div>
                         <div className="text-center mb-6">
                             <h4 className="mb-1">{t('Subscribers List')}</h4>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{t('Only members who joined via Lead Bot are shown')}</p>
                         </div>
 
                         <div className={'flex flex-col gap-4 md:flex-row md:gap-4'}>
@@ -278,6 +279,7 @@ const NewChat = ({onClose}) => {
                             {/*    </div>*/}
                             {/*</FormItem>*/}
                         </div>
+
                         {/*<DebouceInput*/}
                         {/*    placeholder={t('Quick search...')}*/}
                         {/*    type="text"*/}
@@ -286,9 +288,16 @@ const NewChat = ({onClose}) => {
                         {/*    onChange={(e) => handleInputChange(e.target.value)}*/}
                         {/*/>*/}
                         <div className="mt-5">
-                            <p className="font-semibold uppercase text-xs mb-4">
-                                {leadMemberListTotal} {t('person available')}
-                            </p>
+                            <div className="flex items-center justify-between">
+                                <p className="font-semibold uppercase text-xs">
+                                    {leadMemberListTotal} {t('person available')}
+                                </p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 ml-4">
+                                    {t('Select a member by clicking on them to choose')}
+                                </p>
+                            </div>
+                            <div className="mt-2 mb-2 text-xs text-gray-500 dark:text-gray-400">
+                            </div>
                             <div className="mb-6">
                                 <ScrollBar
                                     className={classNames(
