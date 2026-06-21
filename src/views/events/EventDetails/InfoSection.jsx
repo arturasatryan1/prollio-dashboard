@@ -78,7 +78,7 @@ const InfoSection = ({data = {}, handleCancel}) => {
                         )
                     }
                     {
-                        data.status === 'upcoming' && (
+                        (data.status === 'upcoming' || data.status === 'ongoing') && (
                             <div>
                                 <strong>{t('Share Link')}</strong>
                                 <div className="mt-1 flex items-center gap-2">
